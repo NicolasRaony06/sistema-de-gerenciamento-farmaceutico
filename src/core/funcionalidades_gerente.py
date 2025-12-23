@@ -1,0 +1,1 @@
+#implementacao de classe interceface FuncionalidadesGerente
