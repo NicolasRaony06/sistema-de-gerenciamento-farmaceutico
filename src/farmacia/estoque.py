@@ -1,60 +1,32 @@
-from abc import ABC , abstractmethod
-class Pessoa(ABC):
-    def __init__(self,nome,cpf,data_nascimento):
-        self.nome = nome
-        self.cpf = cpf
-        self.data_nascimento = data_nascimento
-class Funcionario(Pessoa):
-    def registrar_produto(self, estoque, produto, quantidade):
-        estoque.adicionar_produto(produto, quantidade)
 
-    def registrar_venda(self, estoque, produto, quantidade):
-        return estoque.vender_produto(produto, quantidade)
+from .produto import Produto
+from core.funcionario import Funcionario
 
-    def consultar_estoque(self, estoque):
-        return estoque.consultar()
-
-class Produto:
-    def __init__(self,id,nome,preco,fabricante):
-        self.id = id
-        self.nome = nome
-        self.preco = preco
-        self.fabricante = fabricante
-        pass
 class Estoque:
     def __init__(self):
-        self.produtos = {}  # {Produto: quantidade}
+        self.produtos = {}  # chave = id do produto
 
     def adicionar_produto(self, produto, quantidade):
-        if produto in self.produtos:
-            self.produtos[produto] += quantidade
+        if produto.id in self.produtos:
+            self.produtos[produto.id]["quantidade"] += quantidade
         else:
-            self.produtos[produto] = quantidade
+            self.produtos[produto.id] = {
+                "produto": produto,
+                "quantidade": quantidade
+            }
 
-    def vender_produto(self, produto, quantidade):
-        if produto in self.produtos and self.produtos[produto] >= quantidade:
-            self.produtos[produto] -= quantidade
-            return True
+    def vender_produto(self, id_produto, quantidade):
+        if id_produto in self.produtos:
+            if self.produtos[id_produto]["quantidade"] >= quantidade:
+                self.produtos[id_produto]["quantidade"] -= quantidade
+                return True
         return False
 
     def consultar(self):
+        if not self.produtos:
+            return "Estoque vazio"
+
         return {
-            produto.nome: qtd for produto, qtd in self.produtos.items()
+            dados["produto"].nome: dados["quantidade"]
+            for dados in self.produtos.values()
         }
-
-    
-estoque = Estoque()
-
-tadala = Produto('p1', 'tadala', 10.0, 'cimed')
-nebacetin = Produto('p2', 'nebacetin', 8.5, 'cimed')
-
-funcionario = Funcionario('João', '12345678900', '1990-01-01')
-
-funcionario.registrar_produto(estoque, tadala, 5)
-funcionario.registrar_produto(estoque, nebacetin, 3)
-
-print("Estoque inicial:", funcionario.consultar_estoque(estoque))
-
-funcionario.registrar_venda(estoque, tadala, 2)
-
-print("Estoque após venda:", funcionario.consultar_estoque(estoque))
