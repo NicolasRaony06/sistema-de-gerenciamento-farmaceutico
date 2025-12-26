@@ -10,6 +10,7 @@ class Pessoa(ABC):
     def get_cpf(self):
         return self.__cpf
     def set_cpf(self,cpf):
-        pass 
-
-
+        if len(self.get_cpf()) == 11:
+            self.__cpf = cpf
+        else:
+            return 'Cpf inválido'

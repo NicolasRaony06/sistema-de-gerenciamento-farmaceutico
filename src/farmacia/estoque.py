@@ -4,25 +4,29 @@ from core.funcionario import Funcionario
 
 class Estoque:
     def __init__(self):
-        self.produtos = {}  # {Produto: quantidade}
+        self.produtos = {}  # chave = id do produto
 
     def adicionar_produto(self, produto, quantidade):
-        if produto in self.produtos:
-            self.produtos[produto] += quantidade
+        if produto.id in self.produtos:
+            self.produtos[produto.id]["quantidade"] += quantidade
         else:
-            self.produtos[produto] = quantidade
-        print(f'Produto {produto.nome} Registrado!!')
+            self.produtos[produto.id] = {
+                "produto": produto,
+                "quantidade": quantidade
+            }
 
-    def vender_produto(self, produto, quantidade):
-        if produto in self.produtos and self.produtos[produto] >= quantidade:
-            self.produtos[produto] -= quantidade
-            print(f'Produto vendido!!')
-            return True
-        print(f'Produto em Falta')
+    def vender_produto(self, id_produto, quantidade):
+        if id_produto in self.produtos:
+            if self.produtos[id_produto]["quantidade"] >= quantidade:
+                self.produtos[id_produto]["quantidade"] -= quantidade
+                return True
+        return False
+
     def consultar(self):
         if not self.produtos:
-            return f'Estoque vazio'
-        else:
-            return {
-            produto.nome: qtd for produto, qtd in self.produtos.items()
-            }
+            return "Estoque vazio"
+
+        return {
+            dados["produto"].nome: dados["quantidade"]
+            for dados in self.produtos.values()
+        }
