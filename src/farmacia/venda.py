@@ -1,11 +1,11 @@
 #implementacao de classe Venda
-from core.funcionario import Funcionario
+from src.core.funcionario import Funcionario
 from datetime import datetime
 from decimal import Decimal
 
 class Venda:
-    def __init__(self, funcionario: Funcionario):
-        self.__id = 0
+    def __init__(self, id : int, funcionario: Funcionario):
+        self.__id = id
         self.__funcionario = funcionario
         self.__precoTotal = Decimal("0")
         self.__produtos = []
