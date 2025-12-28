@@ -9,12 +9,12 @@ from farmacia.estoque import Estoque
 from farmacia.produto import Produto 
 from core.funcionario import Funcionario
 estoque = Estoque()
-p1 = Produto(1,'dipirona',1,'fabricante')
+p1 = Produto(1,'dipirona',2.3,'fabricante')
 funcionario = Funcionario('João', '12345678900', '1990-01-01','1200','1')
 print(funcionario.get_isautenticado())
-funcionario.adicionar_produto(p1,2,estoque)
+funcionario.adicionar_produto(p1,66,estoque)
 funcionario.vender_produto(1,1,estoque)
-print(funcionario.consultar(estoque))
+funcionario.subTotal(estoque)
 '''estoque = Estoque()
 while True:
         print("\n1 - Registrar produto")
