@@ -18,7 +18,7 @@ class Pessoa(ABC):
         return self.__data_nascimento
     
     def set_cpf(self,cpf):
-        '''Validação do recadrasto de cpf'''
+        '''Validação do recadrasto do CPF'''
         if validar_formato_cpf(cpf):
             self.__cpf = cpf
             print('CPF Recadrastado com sucesso!')
