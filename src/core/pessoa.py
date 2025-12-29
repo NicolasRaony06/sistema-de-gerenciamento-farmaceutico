@@ -1,7 +1,7 @@
 #implementacao de classe abstrata Pessoa
 from datetime import datetime
 from typing import Optional
-from utils.validacoes import validar_formato_cpf
+from src.utils.validacoes import validar_formato_cpf
 from abc import ABC , abstractmethod
 class Pessoa(ABC):
     def __init__(self,nome:str,cpf:str,data_nascimento:Optional[datetime] = None):
