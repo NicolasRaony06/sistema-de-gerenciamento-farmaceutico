@@ -1,6 +1,6 @@
 #implementacao de classe abstrata Funcionario
 from datetime import datetime
-from .pessoa import Pessoa
+from src.core.pessoa import Pessoa
 class Funcionario(Pessoa):
     def __init__(self,nome:str,cpf:str,data_nascimento:datetime,salario_base:float,id:int):
         super().__init__(nome,cpf,data_nascimento)
