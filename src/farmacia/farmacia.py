@@ -13,7 +13,7 @@ class Farmacia:
         self.gerente = None
         self.funcionarios = []
 
-    def __getFreeId(self):
+    def __getIdUnico(self):
         '''Metodo privado que verifica todos os ids existentes de venda e retorna um novo int unico aleatorio.'''
         allIds = []
         for venda in self.__listaVendas:
@@ -30,7 +30,7 @@ class Farmacia:
     
     def criarVenda(self, funcionario: Funcionario):
         '''Cria e retorna um objeto do tipo Venda. Adiciona obejto em Lista de Vendas e retorna seu indice'''
-        venda = Venda(self.__getFreeId(), funcionario)
+        venda = Venda(self.__getIdUnico(), funcionario)
         self.__listaVendas.append(venda)
 
         return self.__listaVendas.index(venda)
