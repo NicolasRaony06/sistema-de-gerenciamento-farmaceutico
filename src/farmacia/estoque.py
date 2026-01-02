@@ -4,3 +4,7 @@ class Estoque:
 
     def get_produtos(self):
         return self.__produtos
+    def cadastrar_produto(self):
+        produto = Produto()
+        self.__produtos.append(produto)
+        print(f"Produto {produto.nome} cadastrado com sucesso.")
