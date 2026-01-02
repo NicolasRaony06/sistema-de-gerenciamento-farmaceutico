@@ -2,11 +2,14 @@
 from datetime import datetime
 from src.core.pessoa import Pessoa
 class Funcionario(Pessoa):
-    def __init__(self,nome:str,cpf:str,data_nascimento:datetime,salario_base:float,id:int):
+    def __init__(self,nome:str,cpf:str,data_nascimento:datetime,salario_base:float,id:int, cargo):
         super().__init__(nome,cpf,data_nascimento)
         self.__salario_base = salario_base
         self.__id = id
         self.__autenticado = True 
+        self.cargo = cargo
+        
+        
     
     def get_salario_base(self):
         '''Retorna salario do funcionario'''

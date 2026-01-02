@@ -1,4 +1,8 @@
 #implementacao de classe Atendente
+from src.core.funcionario import Funcionario
 
-class Atendente:
-    pass
+class Atendente(Funcionario):
+    def __init__(self, nome, cpf, data_nascimento, salario_base, id):
+        super().__init__(nome, cpf, data_nascimento, salario_base, id)
+
+    
