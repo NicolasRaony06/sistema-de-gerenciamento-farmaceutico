@@ -2,10 +2,12 @@
 from src.core.funcionario import Funcionario
 from datetime import datetime
 from decimal import Decimal
+from src.utils.gerador_id import getIdProduto
 
 class Venda:
-    def __init__(self, id : int, funcionario: Funcionario):
-        self.__id = id
+    allIds = []
+    def __init__(self, funcionario: Funcionario):
+        self.__id = getIdProduto(self)
         self.__funcionario = funcionario
         self.__precoTotal = Decimal("0")
         self.__produtos = []
