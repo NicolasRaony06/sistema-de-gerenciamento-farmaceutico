@@ -14,6 +14,9 @@ class Farmacia:
         self._estoque = Estoque()
         self.gerente = None
         self.funcionarios = []
+        self.__idGerentes = 0
+        self.__idAtendentes = 0
+        self.__idVendas = 0
 
     def getListaVendas(self):
         '''Retorna uma lista contendo todos os objetos de Venda registrados'''
@@ -21,18 +24,22 @@ class Farmacia:
     
     def criarVenda(self, funcionario: Funcionario):
         '''Cria um objeto do tipo Venda. Adiciona obejto em Lista de Vendas e retorna seu indice'''
-        venda = Venda(funcionario)
+        self.__idVendas += 1
+        venda = Venda(self.__idVendas, funcionario)
         self.__listaVendas.append(venda)
 
         return self.__listaVendas.index(venda)
      
     def registrarGerente(self, nome, cpf, data_nasc, salario):
         '''Recebe como parametros atributos de um Gerente e cria um novo objeto do tipo Gerente.'''
-        self.gerente = Gerente(nome, cpf, data_nasc, salario)
+        self.__idGerentes += 1
+        self.gerente = Gerente(nome, cpf, data_nasc, salario, self.__idGerentes)
         
     def registrarAtendente(self, nome, cpf, data_nasc, salario):
         '''Recebe como parametros atributos de um Atendente e cria um novo objeto do tipo Atendente. Retorna seu indice na lista de funcionarios.'''
-        atendente = Atendente(nome, cpf, data_nasc, salario)
+        self.__idAtendentes += 1
+        atendente = Atendente(nome, cpf, data_nasc, salario, self.__idAtendentes)
+        
         self.funcionarios.append(atendente)
         return self.funcionarios.index(atendente)
 

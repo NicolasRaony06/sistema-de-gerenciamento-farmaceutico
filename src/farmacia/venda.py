@@ -6,8 +6,8 @@ from src.utils.gerador_id import getIdProduto
 
 class Venda:
     allIds = []
-    def __init__(self, funcionario: Funcionario):
-        self.__id = getIdProduto(self)
+    def __init__(self, id: int, funcionario: Funcionario):
+        self.__id = id
         self.__funcionario = funcionario
         self.__precoTotal = Decimal("0")
         self.__produtos = []
