@@ -6,6 +6,9 @@ class Gerente(Funcionario,FuncionalidadesGerente):
     def __init__(self,nome,cpf,data_nascimento,salario_base, id: int):
         super().__init__(nome,cpf,data_nascimento,salario_base, id)
 
+    def get_bonus(Self):
+        pass
+
     def cadrastar_funcionario(self):
         pass
     def excluir_funcionario(self):

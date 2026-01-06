@@ -1,5 +1,6 @@
 #implementacao de classe abstrata Funcionario
 from datetime import datetime
+from abc import abstractmethod
 from src.core.pessoa import Pessoa
 from src.core.mixins_interfaces.adicionar_produto import Adicionar_ProdutoMixin
 from src.core.mixins_interfaces.vender_produto import Vender_ProdutoMixin
@@ -10,7 +11,12 @@ class Funcionario(Pessoa,Adicionar_ProdutoMixin,Vender_ProdutoMixin):
         self.__salario_base = salario_base
         self.__id = id
         self.__autenticado = True 
-        
+    
+    @abstractmethod
+    def get_bonus(Self): #implementei esse metodo para que de fato classe Funcionario fosse abstrata e não pudesse ser instanciada
+        '''Retorna bonus salarial de acordo com o funcionario'''
+        pass
+
     def get_salario_base(self):
         '''Retorna salario do funcionario'''
         return self.__salario_base
@@ -48,7 +54,6 @@ class Funcionario(Pessoa,Adicionar_ProdutoMixin,Vender_ProdutoMixin):
     def consultar_produto_por_id(self, id_produto,estoque):
         return estoque.consultar_produto_por_id(id_produto)
 
-    
     def consultar_produto_por_nome(self, nome ,estoque):
         return estoque.consultar_produto_por_produto(nome)
 
