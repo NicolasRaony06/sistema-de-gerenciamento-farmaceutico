@@ -1,20 +1,22 @@
 # teste de implementacoes - python -m tests.test_venda
 from datetime import datetime
 from src.farmacia.farmacia import Farmacia
-from src.farmacia.venda import Venda
-from src.core.funcionario import Funcionario
+from src.core.atendente import Atendente
 from src.farmacia.produto import Produto
+from decimal import Decimal, getcontext
 
-func = Funcionario('teste', '055.678.501-08', datetime(2000, 8, 25), 1500.0, 3)
+getcontext().prec = 2
+
+atendente = Atendente('teste', '055.678.501-08', datetime(2000, 8, 25), 1500.0, 3)
 farm = Farmacia("Pague mais")
 
 #teste de id automatico
 print(farm.getListaVendas())
-farm.criarVenda(func)
+farm.criarVenda(atendente)
 # print(farm.getListaVendas()[0].getId())
-# farm.criarVenda(func)
+# farm.criarVenda(atendente)
 # print(farm.getListaVendas()[1].getId())
-# farm.criarVenda(func)
+# farm.criarVenda(atendente)
 # print(farm.getListaVendas()[2].getId())
 
 produto_teste = Produto('Amitril',2.90,'Cimed')
@@ -29,3 +31,9 @@ print(farm.getListaVendas()[0].getProdutos())
 
 farm.getListaVendas()[0].adicionarProduto(produto_teste2, 2)
 print(farm.getListaVendas()[0].getProdutos())
+
+print(farm.getListaVendas()[0].getPrecoTotal()) 
+farm.getListaVendas()[0].setPrecoTotal(atendente) # finalizando venda
+print(farm.getListaVendas()[0].getPrecoTotal()) 
+
+farm.getListaVendas()[0].adicionarProduto(produto_teste2, 2) # testando erro de tentar adicionar produto com venda finalizada
