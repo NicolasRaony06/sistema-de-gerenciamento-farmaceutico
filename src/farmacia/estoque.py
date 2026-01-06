@@ -1,25 +1,34 @@
 class Estoque:
     def __init__(self):
-        self.__produtos = {} # estrutura: {obj_produto: qtd}
+        self.__produtos = {} 
 
     def get_produtos(self):
         return self.__produtos
-    
-    def adicionar_produto(self, produto, quantidade: int):
-        from src.farmacia.produto import Produto
-        if not isinstance(produto, Produto): # isso aqui serve pra evitar problemas de importacao circular
-            raise ValueError("Parametro produto deve ser uma instacia do tipo Produto")
-        
-        for produto_estoque in self.__produtos.keys():
-            if (produto == produto_estoque) or (produto.getId() == produto_estoque.getId()):
-                raise ValueError("Produto já existe em estoque") # aqui verifica ser a referencia ao objeto de produto já tá em estoque.
-            
-        if quantidade < 0:
-            raise ValueError("Quantidade deve ser maior que 0") # essa validação pode ser tirada caso estoque possa ter um produto sem disponibilidade de compra.
-            
-        self.__produtos.update({produto: quantidade}) # adiciona uma nova chave e valor em dicionario de produtos
 
-    def remover_produto(self, id_produto, quantidade): # não mudei nada aqui, mas deve precisar de reajuste
+    def adicionar_produto(self, produto, quantidade: int):
+        p_id = produto.getId()
+        if p_id in self.__produtos:
+            self.__produtos[p_id]["quantidade"] += quantidade
+        else:
+            self.__produtos[p_id] = {
+                "produto": produto,
+                "quantidade": quantidade
+            }
+            
+    def consultar_quantidade_por_id(self, id_produto):
+        if id_produto in self.__produtos:
+            nome = self.__produtos[id_produto]["produto"]
+            quantidade = self.__produtos[id_produto]["quantidade"]
+        return f"ID: {id_produto} | Nome: {nome.nome} | Quantidade: {quantidade}"
+    
+    def consultar_quantidade_por_nome(self, nome):
+        for nome in self.__produtos.values():
+            produto = nome["produto"]
+            quantidade = nome["quantidade"]
+            return f"Quantidade de {produto.nome}: {quantidade:.2f}"
+        return 0
+    
+    def remover_produto(self, id_produto, quantidade): 
         produtos_estoque = self.__produtos
         if id_produto in produtos_estoque:
             if produtos_estoque[id_produto]["quantidade"] >= quantidade:
