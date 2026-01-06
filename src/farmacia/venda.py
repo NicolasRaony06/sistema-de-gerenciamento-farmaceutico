@@ -15,17 +15,37 @@ class Venda:
         self.__logAlteracoes = []
 
     def getId(self):
-        '''Returna ID de venda'''
+        '''Retorna ID de venda'''
         return self.__id
     
     def getFuncionario(self):
-        '''Returna um objeto do tipo Funcionario'''
+        '''Retorna um objeto do tipo Funcionario'''
         return self.__funcionario
     
     def getPrecoTotal(self):
-        '''Returna preco total da Venda'''
+        '''Retorna preco total da Venda'''
         return self.__precoTotal
     
+    def getProdutos(self):
+        '''Retorna lista com tuplas de produtos e suas quantidades'''
+        return self.__produtos
+    
+    def adicionarProduto(self, produto, quantidade : int):
+        '''Adiciona produto em Venda, caso produto ja exista, a sua quantidade e somada. Recebe como parametro um objeto do tipo Produto e uma quantidade inteira.'''
+        from src.farmacia.produto import Produto
+        if not isinstance(produto, Produto):
+            raise ValueError('Metodo deve receber um objeto do tipo Produto')
+        
+        if quantidade < 0:
+            raise ValueError('Quantidade deve ser maior que 0')
+        
+        for index, vendaProduto in enumerate(self.__produtos):
+            if produto.__repr__() in vendaProduto:
+                self.__produtos[index] = (produto, vendaProduto[1] + quantidade)
+                return True
+                
+        self.__produtos.append((produto.__repr__(), quantidade))
+
     def setPrecoTotal(self, funcionario: Funcionario, valor: Decimal):
         '''Setter para alterar preco total da venda. Recebe um objeto do tipo Funcionario e um valor do tipo Decimal. Adiciona a atual modificacao ao Log de Alteracoes'''
         if valor > 0:
