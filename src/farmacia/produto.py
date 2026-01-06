@@ -1,6 +1,6 @@
 from src.utils.gerador_id import getIdProduto
 from decimal import Decimal
-
+from datetime import datetime
 class Produto:
     allIds = []
     def __init__(self, nome : str, preco : Decimal, fabricante : str, id : int = None, logAlteracoes : list = None):
@@ -28,6 +28,8 @@ class Produto:
             raise ValueError('Preco deve ser maior que 0')
         
         self.__preco = preco
+        log = f'Data:{datetime.now()};Gerente:{gerente};Preco:{preco}'
+        self.__logAlteracoes.append(log)
     
     def __repr__(self):
         return f'Produto({self.nome}, {self.__preco}, {self.fabricante}, {self.__id}, {self.__logAlteracoes})'
