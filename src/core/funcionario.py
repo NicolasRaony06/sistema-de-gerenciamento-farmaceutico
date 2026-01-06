@@ -32,10 +32,10 @@ class Funcionario(Pessoa,Adicionar_ProdutoMixin,Vender_ProdutoMixin):
         for dados in produtos_estoque.values():
             produto = dados["produto"]
             quantidade = dados["quantidade"]
-            subtotal = produto.preco * quantidade
+            subtotal = produto.getPreco() * quantidade
             print(f"{produto.nome} - R$ {subtotal:.2f}")
     
-    def consultar(self,estoque):
+    def consultar_estoque(self,estoque):
         if not estoque.get_produtos():
             return "Estoque vazio"
 
@@ -45,4 +45,10 @@ class Funcionario(Pessoa,Adicionar_ProdutoMixin,Vender_ProdutoMixin):
             for dados in estoque.get_produtos().values()
         } 
     
+    def consultar_produto_por_id(self, id_produto,estoque):
+        return estoque.consultar_produto_por_id(id_produto)
+
+    
+    def consultar_produto_por_nome(self, nome ,estoque):
+        return estoque.consultar_produto_por_produto(nome)
 
