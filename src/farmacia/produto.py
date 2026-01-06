@@ -16,4 +16,4 @@ class Produto:
         return self.__preco
     
     def __repr__(self):
-        return f'Produto({self.nome}, {self.__preco}, {self.fabricante})'
+        return f'ID: {self.__id} | Nome: {self.nome} | Preço: {self.__preco} | Fabricante: {self.fabricante}'
