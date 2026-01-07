@@ -1,5 +1,5 @@
 from src.utils.gerador_id import getIdProduto
-from decimal import Decimal
+from decimal import Decimal, ROUND_DOWN
 from datetime import datetime
 
 class Produto:
@@ -17,7 +17,8 @@ class Produto:
     
     def getPreco(self):
         '''Retorna o preco de Produto.'''
-        return self.__preco
+        precoTruncado = self.__preco.quantize(Decimal('0.01'), rounding=ROUND_DOWN)
+        return precoTruncado
     
     def setPreco(self, preco : Decimal, gerente):
         '''Recebe como parametro o novo valor de preco em Decimal e um objeto de Gerente. Altera o preco de Produto.'''
@@ -33,4 +34,4 @@ class Produto:
         self.__logAlteracoes.append(log)
     
     def __repr__(self):
-        return rf'Produto("{self.nome}", {self.__preco}, "{self.fabricante}", {self.__id}, {self.__logAlteracoes})'
+        return rf'Produto("{self.nome}", {self.getPreco()}, "{self.fabricante}", {self.__id}, {self.__logAlteracoes})'
