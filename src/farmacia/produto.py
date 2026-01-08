@@ -1,4 +1,5 @@
 from src.utils.gerador_id import getIdProduto
+from src.utils.validacoes import validar_gerente
 from decimal import Decimal
 from datetime import datetime
 
@@ -22,9 +23,7 @@ class Produto:
     
     def setPreco(self, preco : Decimal, gerente):
         '''Recebe como parametro o novo valor de preco em Decimal e um objeto de Gerente. Altera o preco de Produto.'''
-        from src.core.gerente import Gerente
-        if not isinstance(gerente, Gerente):
-            raise ValueError('Metodo deve receber um objeto do tipo Gerente')
+        validar_gerente(gerente)
         
         if preco < 0:
             raise ValueError('Preco deve ser maior que 0')
