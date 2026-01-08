@@ -2,13 +2,15 @@
 from src.core.pessoa import Pessoa
 from datetime import datetime
 class Cliente(Pessoa):
-    def __init__(self,nome:str,cpf:str, id_cliente:int,data_nascimento=None,):
+    def __init__(self,nome:str,cpf:str, id_cliente:str = None,data_nascimento=None,):
         super().__init__(nome,cpf,data_nascimento)
-        self.__id_cliente = id_cliente
+        self.__id_cliente = id_cliente if id_cliente else cpf
 
     def get_id_cliente (self):
-        self.get_cpf = self.__id_cliente
         return self.__id_cliente
     
     def __str__(self):
         return f'Nome: {self.nome} | Id: {self.get_id_cliente()}'
+    
+    def __repr__(self):
+        return f'Cliente("{self.nome}, "{self.get_cpf()}", "{self.__id_cliente}", "{self.get_data_nascimento()}")'

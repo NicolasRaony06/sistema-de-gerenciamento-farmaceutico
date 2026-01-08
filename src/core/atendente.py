@@ -7,3 +7,6 @@ class Atendente(Funcionario):
 
     def get_bonus(Self):
         pass
+
+    def __repr__(self):
+        return f'Atendente("{self.nome}", {self.get_cpf()}, "{self.get_data_nascimento()}", {self.get_salario_base()}, {self.get_id()})'

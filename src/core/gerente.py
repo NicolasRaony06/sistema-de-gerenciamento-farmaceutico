@@ -15,3 +15,6 @@ class Gerente(Funcionario,FuncionalidadesGerente):
         pass
     def alterar_preco_produto(self):
         pass
+
+    def __repr__(self):
+        return f'Gerente("{self.nome}", {self.get_cpf()}, "{self.get_data_nascimento()}", {self.get_salario_base()}, {self.get_id()})'
