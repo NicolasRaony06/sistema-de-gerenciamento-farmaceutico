@@ -31,8 +31,10 @@ print(farm.getListaVendas()[0].getProdutos())
 farm.getListaVendas()[0].adicionarProduto(produto_teste2, 2)
 print(farm.getListaVendas()[0].getProdutos())
 
-farm.getListaVendas()[0].adicionarCliente(atendente,Cliente('teste', '123.458.136-08', 12))
+cliente = Cliente('teste', '123.458.136-08', 12)
+farm.getListaVendas()[0].adicionarCliente(atendente, cliente)
 print(farm.getListaVendas()[0].getCliente())
+print(cliente.getCompras())
 print(farm.getListaVendas()[0].getLogAlteracoes())
 
 print(farm.getListaVendas()[0].getPrecoTotal()) 
