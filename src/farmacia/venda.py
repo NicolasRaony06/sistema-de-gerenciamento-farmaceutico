@@ -6,10 +6,10 @@ from src.utils.validacoes import validar_cliente, validar_funcionario, validar_p
 
 class Venda:
     allIds = []
-    def __init__(self, id : int, funcionario, cliente = None):
+    def __init__(self, id : int, funcionario):
         self.__id = id
         self.__funcionario = funcionario
-        self.__cliente = cliente
+        self.__cliente = None
         self.__precoTotal = Decimal("0")
         self.__produtos = []
         self.__dataVenda = datetime.now()
@@ -48,6 +48,7 @@ class Venda:
             raise PermissionError('Venda já finalizada. Não é mais possível adicionar cliente')
         
         self.__cliente = cliente
+        self.__cliente._addCompra(self)
         log =(f'Data:{datetime.now()}',f'{funcionario.__repr__()}',f'{cliente.__repr__()}')
         self.__logAlteracoes.append(log)
     
@@ -92,3 +93,6 @@ class Venda:
             subTotal += produto.getPreco() * itemVenda[1]
 
         return subTotal
+    
+    def __repr__(self):
+        return f'Venda({self.__id}, {self.__funcionario.__repr__()})'
