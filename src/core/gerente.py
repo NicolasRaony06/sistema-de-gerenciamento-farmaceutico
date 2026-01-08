@@ -1,6 +1,8 @@
 #implementacao de classe Gerente
 from src.core.funcionario import Funcionario
 from src.core.mixins_interfaces.funcionalidades_gerente import FuncionalidadesGerente
+from decimal import Decimal
+from src.utils.validacoes import validar_produto
 
 class Gerente(Funcionario,FuncionalidadesGerente):
     def __init__(self,nome,cpf,data_nascimento,salario_base, id: int):
@@ -13,8 +15,10 @@ class Gerente(Funcionario,FuncionalidadesGerente):
         pass
     def excluir_funcionario(self):
         pass
-    def alterar_preco_produto(self):
-        pass
-
+    def alterar_preco_produto(self, produto, preco: Decimal,): #precisei implementar para testar algumas coisas em produto
+        '''Alterar preço de produto. Recebe preço em Decimal e objeto de Produto'''
+        validar_produto(produto)
+        produto.setPreco(self, preco)
+        
     def __repr__(self):
         return f'Gerente("{self.nome}", {self.get_cpf()}, "{self.get_data_nascimento()}", {self.get_salario_base()}, {self.get_id()})'
