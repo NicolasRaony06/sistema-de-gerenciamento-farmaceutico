@@ -25,15 +25,15 @@ class Produto:
         '''Retorna lista de tuplas sobre alterações de Produto'''
         return self.__logAlteracoes
     
-    def setPreco(self, preco : Decimal, gerente):
+    def setPreco(self, gerente, preco : Decimal):
         '''Recebe como parametro o novo valor de preco em Decimal e um objeto de Gerente. Altera o preco de Produto.'''
         validar_gerente(gerente)
         
-        if preco < 0:
+        if Decimal(preco) < 0:
             raise ValueError('Preco deve ser maior que 0')
         
-        self.__preco = preco
-        log =(f'Data:{datetime.now()}',f'{gerente.__repr__()}',f'Preco:{preco}')
+        self.__preco = Decimal(preco)
+        log =(f'Data:{datetime.now()}',f'{gerente.__repr__()}',f'Preco:{self.getPreco()}')
         self.__logAlteracoes.append(log)
     
     def __repr__(self):
