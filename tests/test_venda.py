@@ -2,6 +2,7 @@
 from datetime import datetime
 from src.farmacia.farmacia import Farmacia
 from src.core.atendente import Atendente
+from src.core.cliente import Cliente
 from src.farmacia.produto import Produto
 from decimal import Decimal
 
@@ -30,8 +31,16 @@ print(farm.getListaVendas()[0].getProdutos())
 farm.getListaVendas()[0].adicionarProduto(produto_teste2, 2)
 print(farm.getListaVendas()[0].getProdutos())
 
+farm.getListaVendas()[0].adicionarCliente(atendente,Cliente('teste', '123.458.136-08', 12))
+print(farm.getListaVendas()[0].getCliente())
+print(farm.getListaVendas()[0].getLogAlteracoes())
+
 print(farm.getListaVendas()[0].getPrecoTotal()) 
 farm.getListaVendas()[0].setPrecoTotal(atendente) # finalizando venda
 print(farm.getListaVendas()[0].getPrecoTotal()) 
 
 # farm.getListaVendas()[0].adicionarProduto(produto_teste2, 2) # testando erro de tentar adicionar produto com venda finalizada
+
+# farm.getListaVendas()[0].adicionarCliente(atendente,Cliente('teste', '123.458.136-08', 12)) # testando add cliente apos venda finalizada
+
+print(farm.getListaVendas()[0].getLogAlteracoes()) # testando logs
