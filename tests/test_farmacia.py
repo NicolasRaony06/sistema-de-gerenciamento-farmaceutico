@@ -11,8 +11,14 @@ print(farmacia.gerente.get_id())
 farmacia.registrarAtendente("Teste Atendente", '64785412698', '01061999', 1550) # teste registro de Atendente
 print(farmacia.funcionarios[0].get_id())
 
-farmacia.criarVenda(farmacia.funcionarios[0]) # teste criar Venda
-print(farmacia.getListaVendas()[0].getId())
+farmacia.registrarCliente("Teste Cliente", '142.648.139-26') # teste registro cliente
+print(farmacia.getClientes())
+print(farmacia.getClientePorCpf('142.648.139-26')) # teste pegar cliente por cpf
+
+id = farmacia.criarVenda(farmacia.funcionarios[0]) # teste criar Venda
+print(farmacia.getListaVendas())
+
+print(farmacia.getVendaPorId(id)) #teste pegar venda por id
 
 produto1 = Produto("Teste Produto", 14.5, "Tester")
 print(produto1.getId()) 

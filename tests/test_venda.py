@@ -11,7 +11,7 @@ farm = Farmacia("Pague mais")
 
 #teste de id automatico
 print(farm.getListaVendas())
-farm.criarVenda(atendente)
+id = farm.criarVenda(atendente)
 # print(farm.getListaVendas()[0].getId())
 # farm.criarVenda(atendente)
 # print(farm.getListaVendas()[1].getId())
@@ -21,28 +21,28 @@ farm.criarVenda(atendente)
 produto_teste = Produto('Amitril',2.90,'Cimed')
 produto_teste2 = Produto('Cesol',8.25,'Farmacol')
 
-farm.getListaVendas()[0].adicionarProduto(produto_teste, 1)
+farm.getVendaPorId(id).adicionarProduto(produto_teste, 1)
 
-print(farm.getListaVendas()[0].getProdutos())
+print(farm.getVendaPorId(id).getProdutos())
 
-farm.getListaVendas()[0].adicionarProduto(produto_teste, 1)
-print(farm.getListaVendas()[0].getProdutos())
+farm.getVendaPorId(id).adicionarProduto(produto_teste, 1)
+print(farm.getVendaPorId(id).getProdutos())
 
-farm.getListaVendas()[0].adicionarProduto(produto_teste2, 2)
-print(farm.getListaVendas()[0].getProdutos())
+farm.getVendaPorId(id).adicionarProduto(produto_teste2, 2)
+print(farm.getVendaPorId(id).getProdutos())
 
 cliente = Cliente('teste', '123.458.136-08', 12)
-farm.getListaVendas()[0].adicionarCliente(atendente, cliente)
-print(farm.getListaVendas()[0].getCliente())
+farm.getVendaPorId(id).adicionarCliente(atendente, cliente)
+print(farm.getVendaPorId(id).getCliente())
 print(cliente.getCompras())
-print(farm.getListaVendas()[0].getLogAlteracoes())
+print(farm.getVendaPorId(id).getLogAlteracoes())
 
-print(farm.getListaVendas()[0].getPrecoTotal()) 
-farm.getListaVendas()[0].setPrecoTotal(atendente) # finalizando venda
-print(farm.getListaVendas()[0].getPrecoTotal()) 
+print(farm.getVendaPorId(id).getPrecoTotal()) 
+farm.getVendaPorId(id).setPrecoTotal(atendente) # finalizando venda
+print(farm.getVendaPorId(id).getPrecoTotal()) 
 
 # farm.getListaVendas()[0].adicionarProduto(produto_teste2, 2) # testando erro de tentar adicionar produto com venda finalizada
 
 # farm.getListaVendas()[0].adicionarCliente(atendente,Cliente('teste', '123.458.136-08', 12)) # testando add cliente apos venda finalizada
 
-print(farm.getListaVendas()[0].getLogAlteracoes()) # testando logs
+print(farm.getVendaPorId(id).getLogAlteracoes()) # testando logs
