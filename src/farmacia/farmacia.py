@@ -10,21 +10,34 @@ class Farmacia:
         self.nome = nome
         self.__vendas = []
         self._estoque = Estoque()
-        self.gerente = None
-        self.funcionarios = []
+        self.__gerente = None
+        self.__funcionarios = []
         self.__clientes = []
         self.__idGerentes = 0
         self.__idAtendentes = 0
         self.__idVendas = 0
         self.__logAlteracoes = []
 
+    def getGerente(self):
+        '''Retorna um objeto de Gerente.'''
+        return self.__gerente
+    
+    def getFuncionarios(self):
+        '''Retorna uma lista contendo todos os objetos de Funcionarios'''
+        return self.__funcionarios
+
+    def getFuncionarioPorId(self, id):
+        '''Retorna objeto de Atendente caso exista um com o mesmo id recebido.'''
+        for funcionario in self.__funcionarios:
+            if funcionario.get_id() == id:
+                return funcionario
+
     def getListaVendas(self):
-        '''Retorna uma lista contendo todos os objetos de Venda registrados'''
+        '''Retorna uma lista contendo todos os objetos de Venda registrados.'''
         return self.__vendas
     
     def getVendaPorId(self, id):
-        '''Retorna objeto de Venda caso exista uma venda com o mesmo Id'''
-        from src.farmacia.venda import Venda
+        '''Retorna objeto de Venda caso exista uma venda com o mesmo Id.'''
         for venda in self.__vendas:
             if venda.getId() == id:
                 return venda
@@ -64,23 +77,23 @@ class Farmacia:
         '''Recebe como parametros atributos de um Gerente e cria um novo objeto do tipo Gerente.'''
         from src.core.gerente import Gerente
         self.__idGerentes += 1
-        self.gerente = Gerente(nome, cpf, data_nasc, salario, self.__idGerentes)
+        self.__gerente = Gerente(nome, cpf, data_nasc, salario, self.__idGerentes)
 
-        log =(f'registrarGerente()', f'Data:{datetime.now()}',f'{self.gerente.__repr__()}')
+        log =(f'registrarGerente()', f'Data:{datetime.now()}',f'{self.__gerente.__repr__()}')
         self.__logAlteracoes.append(log)
         
     def registrarAtendente(self, nome, cpf, data_nasc, salario):
-        '''Recebe como parametros atributos de um Atendente e cria um novo objeto do tipo Atendente. Retorna seu indice na lista de funcionarios.'''
+        '''Recebe como parametros atributos de um Atendente e cria um novo objeto do tipo Atendente. Retorna seu id.'''
         from src.core.atendente import Atendente
         self.__idAtendentes += 1
         atendente = Atendente(nome, cpf, data_nasc, salario, self.__idAtendentes)
         
-        self.funcionarios.append(atendente)
+        self.__funcionarios.append(atendente)
 
         log =(f'registrarAtendente()', f'Data:{datetime.now()}',f'{atendente.__repr__()}')
         self.__logAlteracoes.append(log)
 
-        return self.funcionarios.index(atendente)
+        return atendente.get_id()
     
     def registrarCliente(self, nome : str, cpf : str, data_nascimento = None):
         '''Recebe como parametros atributos de um Cliente e cria um novo objeto do tipo Cliente. Retorna seu indice na lista de clientes.'''
