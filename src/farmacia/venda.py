@@ -49,7 +49,7 @@ class Venda:
         
         self.__cliente = cliente
         self.__cliente._addCompra(self)
-        log =(f'Data:{datetime.now()}',f'{funcionario.__repr__()}',f'{cliente.__repr__()}')
+        log =(f'adicionarCliente()', f'Data:{datetime.now()}',f'{funcionario.__repr__()}',f'{cliente.__repr__()}')
         self.__logAlteracoes.append(log)
     
     def adicionarProduto(self, produto, quantidade : int):
@@ -77,7 +77,7 @@ class Venda:
             raise PermissionError('Venda já foi finalizada.')
         
         self.__precoTotal = self.__subTotal()
-        log = (f'Data:{datetime.now()}',f'Funcionario:{funcionario.__repr__()}',f'Preco:{self.__precoTotal}')
+        log = (f'setPrecoTotal()', f'Data:{datetime.now()}',f'Funcionario:{funcionario.__repr__()}',f'Preco:{self.__precoTotal}')
         self.__logAlteracoes.append(log)
     
     def __subTotal(self):
