@@ -1,5 +1,6 @@
 #implementacao de classe Farmacia
 from decimal import Decimal
+from datetime import datetime
 from src.farmacia.estoque import Estoque
 from src.utils.validacoes import validar_funcionario
 from random import randint
@@ -15,6 +16,7 @@ class Farmacia:
         self.__idGerentes = 0
         self.__idAtendentes = 0
         self.__idVendas = 0
+        self.__logAlteracoes = []
 
     def getListaVendas(self):
         '''Retorna uma lista contendo todos os objetos de Venda registrados'''
@@ -40,6 +42,10 @@ class Farmacia:
             cpf_cliente = re.sub(r'\D', '', cliente.get_cpf())
             if cpf == cpf_cliente:
                 return cliente
+            
+    def getLogAlteracoes(self):
+        '''Retorna lista de tuplas sobre alterações em Farmacia'''
+        return self.__logAlteracoes
 
     def criarVenda(self, funcionario):
         '''Cria um objeto do tipo Venda. Adiciona obejto em Lista de Vendas e retorna seu indice'''
@@ -49,6 +55,9 @@ class Farmacia:
         venda = Venda(self.__idVendas, funcionario)
         self.__vendas.append(venda)
 
+        log =(f'criarVenda()', f'Data:{datetime.now()}',f'{venda.__repr__()}')
+        self.__logAlteracoes.append(log)
+
         return venda.getId()
      
     def registrarGerente(self, nome, cpf, data_nasc, salario):
@@ -56,6 +65,9 @@ class Farmacia:
         from src.core.gerente import Gerente
         self.__idGerentes += 1
         self.gerente = Gerente(nome, cpf, data_nasc, salario, self.__idGerentes)
+
+        log =(f'registrarGerente()', f'Data:{datetime.now()}',f'{self.gerente.__repr__()}')
+        self.__logAlteracoes.append(log)
         
     def registrarAtendente(self, nome, cpf, data_nasc, salario):
         '''Recebe como parametros atributos de um Atendente e cria um novo objeto do tipo Atendente. Retorna seu indice na lista de funcionarios.'''
@@ -64,6 +76,10 @@ class Farmacia:
         atendente = Atendente(nome, cpf, data_nasc, salario, self.__idAtendentes)
         
         self.funcionarios.append(atendente)
+
+        log =(f'registrarAtendente()', f'Data:{datetime.now()}',f'{atendente.__repr__()}')
+        self.__logAlteracoes.append(log)
+
         return self.funcionarios.index(atendente)
     
     def registrarCliente(self, nome : str, cpf : str, data_nascimento = None):
@@ -72,5 +88,9 @@ class Farmacia:
         cliente = Cliente(nome, cpf, data_nascimento)
 
         self.__clientes.append(cliente)
+
+        log =(f'registrarCliente()', f'Data:{datetime.now()}',f'{cliente.__repr__()}')
+        self.__logAlteracoes.append(log)
+
         return self.__clientes.index(cliente)
 
