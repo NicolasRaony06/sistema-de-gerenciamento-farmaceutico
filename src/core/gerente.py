@@ -10,7 +10,6 @@ class Gerente(Funcionario,FuncionalidadesGerente):
 
     def get_bonus(Self):
         pass
-
     def cadrastar_funcionario(self):
         pass
     def excluir_funcionario(self):
