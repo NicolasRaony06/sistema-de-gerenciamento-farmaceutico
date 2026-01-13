@@ -68,7 +68,12 @@ class Farmacia:
         venda = Venda(self.__idVendas, funcionario)
         self.__vendas.append(venda)
 
-        log =(f'criarVenda()', f'Data:{datetime.now()}',f'{venda.__repr__()}')
+        log =(
+            f'criarVenda()',
+            f'Data:{datetime.now()}',
+            f'{venda.__repr__()}'
+        )
+
         self.__logAlteracoes.append(log)
 
         return venda.getId()
@@ -79,7 +84,11 @@ class Farmacia:
         self.__idGerentes += 1
         self.__gerente = Gerente(nome, cpf, data_nasc, salario, self.__idGerentes)
 
-        log =(f'registrarGerente()', f'Data:{datetime.now()}',f'{self.__gerente.__repr__()}')
+        log =(
+            f'registrarGerente()', 
+            f'Data:{datetime.now()}',
+            f'{self.__gerente.__repr__()}'
+        )
         self.__logAlteracoes.append(log)
         
     def registrarAtendente(self, nome, cpf, data_nasc, salario):
@@ -90,7 +99,12 @@ class Farmacia:
         
         self.__funcionarios.append(atendente)
 
-        log =(f'registrarAtendente()', f'Data:{datetime.now()}',f'{atendente.__repr__()}')
+        log =(
+            f'registrarAtendente()', 
+            f'Data:{datetime.now()}',
+            f'{atendente.__repr__()}'
+        )
+
         self.__logAlteracoes.append(log)
 
         return atendente.get_id()
@@ -102,8 +116,13 @@ class Farmacia:
 
         self.__clientes.append(cliente)
 
-        log =(f'registrarCliente()', f'Data:{datetime.now()}',f'{cliente.__repr__()}')
-        self.__logAlteracoes.append(log)
+        log =(
+            f'registrarCliente()', 
+            f'Data:{datetime.now()}',
+            f'{cliente.__repr__()}'
+        )
 
+        self.__logAlteracoes.append(log)
+        
         return self.__clientes.index(cliente)
 
