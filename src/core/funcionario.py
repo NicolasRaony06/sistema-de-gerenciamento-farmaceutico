@@ -33,7 +33,8 @@ class Funcionario(Pessoa,Adicionar_ProdutoMixin,GerenciarVendaMixin):
     def getVendasRealizadas(self):
         return self.__vendasRealizadas
     
-    def setNovaVenda(self, venda):
+    def setVendaRealizada(self, venda):
+        '''Adiciona nova venda realizada a lista de vendas do funcionario.'''
         self.__vendasRealizadas.append(venda)
     
     def __str__(self):
