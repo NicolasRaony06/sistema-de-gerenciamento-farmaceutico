@@ -3,14 +3,15 @@ from datetime import datetime
 from abc import abstractmethod
 from src.core.pessoa import Pessoa
 from src.core.mixins_interfaces.adicionar_produto import Adicionar_ProdutoMixin
-from src.core.mixins_interfaces.vender_produto import Vender_ProdutoMixin
+from src.core.mixins_interfaces.gerenciar_venda import GerenciarVendaMixin
 
-class Funcionario(Pessoa,Adicionar_ProdutoMixin,Vender_ProdutoMixin):
+class Funcionario(Pessoa,Adicionar_ProdutoMixin,GerenciarVendaMixin):
     def __init__(self, nome:str, cpf:str, data_nascimento:datetime, salario_base:float, id:int):
         super().__init__(nome,cpf,data_nascimento)
         self.__salario_base = salario_base
         self.__id = id
         self.__autenticado = True 
+        self.__vendasRealizadas = []
     
     @abstractmethod
     def get_bonus(Self): #implementei esse metodo para que de fato classe Funcionario fosse abstrata e não pudesse ser instanciada
@@ -28,6 +29,12 @@ class Funcionario(Pessoa,Adicionar_ProdutoMixin,Vender_ProdutoMixin):
     def get_isautenticado(self):
         '''Retorna True para autenticado False para não autenticado'''
         return self.__autenticado
+    
+    def getVendasRealizadas(self):
+        return self.__vendasRealizadas
+    
+    def setNovaVenda(self, venda):
+        self.__vendasRealizadas.append(venda)
     
     def __str__(self):
         return f"Funcionário {self.__id} | Nome: {self.nome} | Cargo: {self.__class__.__name__} | Salário: R$ {self.__salario_base:.2f}"
