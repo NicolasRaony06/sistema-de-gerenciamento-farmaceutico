@@ -10,7 +10,7 @@ farmacia._registrarGerente("Teste Gerente", '598.487.125-08', '02072004', 1899)
 produto_teste = Produto('Amitril',2.90,'Cimed')
 print(produto_teste.getPreco()) # teste de gerador de id
 
-farmacia.gerente.alterar_preco_produto(produto_teste, 2.85)
+farmacia.getGerente().alterar_preco_produto(produto_teste, 2.85)
 print(produto_teste.getPreco())
 print(produto_teste.getLogAlteracoes())
 

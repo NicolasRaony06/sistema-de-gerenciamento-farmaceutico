@@ -7,7 +7,7 @@ from src.farmacia.produto import Produto
 from decimal import Decimal
 
 farmacia = Farmacia("Pague mais")
-id_funcionario1 = farmacia.registrarAtendente('teste', '055.678.501-08', datetime(2000, 8, 25), 1500.0)
+id_funcionario1 = farmacia._registrarAtendente('teste', '055.678.501-08', datetime(2000, 8, 25), 1500.0)
 
 id_venda = farmacia.getFuncionarioPorId(id_funcionario1).registrar_venda(farmacia) # tetse de mixin
 print(farmacia.getListaVendas())
