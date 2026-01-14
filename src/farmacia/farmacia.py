@@ -83,7 +83,7 @@ class Farmacia:
         '''Recebe como parametros atributos de um Gerente e cria um novo objeto do tipo Gerente.'''
         from src.core.gerente import Gerente
         self.__idGerentes += 1
-        self.__gerente = Gerente(nome, cpf, data_nasc, salario, self.__idGerentes)
+        self.__gerente = Gerente(nome, cpf, data_nasc, salario, self.__idGerentes,self)
 
         log =(
             f'registrarGerente()', 
@@ -91,12 +91,13 @@ class Farmacia:
             f'{self.__gerente.__repr__()}'
         )
         self.__logAlteracoes.append(log)
+        return self.__gerente
         
     def registrarAtendente(self, nome, cpf, data_nasc, salario):
         '''Recebe como parametros atributos de um Atendente e cria um novo objeto do tipo Atendente. Retorna seu id.'''
         from src.core.atendente import Atendente
         self.__idAtendentes += 1
-        atendente = Atendente(nome, cpf, data_nasc, salario, self.__idAtendentes)
+        atendente = Atendente(nome, cpf, data_nasc, salario, self.__idAtendentes,self)
         
         self.__funcionarios.append(atendente)
 

@@ -2,8 +2,8 @@
 from src.core.funcionario import Funcionario
 
 class Atendente(Funcionario):
-    def __init__(self, nome, cpf, data_nascimento, salario_base, id: int):
-        super().__init__(nome, cpf, data_nascimento, salario_base, id)
+    def __init__(self, nome, cpf, data_nascimento, salario_base, id: int,farmacia):
+        super().__init__(nome, cpf, data_nascimento, salario_base, id,farmacia)
 
     def get_bonus(Self):
         pass

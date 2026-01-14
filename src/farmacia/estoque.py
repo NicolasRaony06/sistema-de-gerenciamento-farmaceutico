@@ -8,6 +8,7 @@ class Estoque:
         return self.__produtos
 
     def adicionar_produto(self, produto, quantidade: int):
+        validar_produto(produto)
         p_id = produto.getId()
         if p_id in self.__produtos:
             self.__produtos[p_id]["quantidade"] += quantidade
@@ -16,26 +17,24 @@ class Estoque:
                 "produto": produto,
                 "quantidade": quantidade
             }
-    def remover_produto(self, id_produto, quantidade): 
+
+    def remover_produto(self, produto): 
+        '''Remove produto, passando como parametro o objeto produto'''
+        validar_produto(produto)
         produtos_estoque = self.__produtos
-        if id_produto in produtos_estoque:
-            if produtos_estoque[id_produto]["quantidade"] >= quantidade:
-                produtos_estoque[id_produto]["quantidade"] -= quantidade
+        for id_produto , dados in produtos_estoque.items():
+            if dados["produto"] == produto:
+                del produtos_estoque[id_produto]
                 return True
-            else:
-                print('Quantidade insuficiente')
-        else:
-            print('Produto não encontrado.')
         return False       
      
     def consultar_produto_por_id(self, id_produto):
         if id_produto in self.__produtos:
             id = self.__produtos[id_produto]["produto"]
             quantidade = self.__produtos[id_produto]["quantidade"]
-            #return f"ID: {id_produto} | Nome: {id.id} | Quantidade: {quantidade}"
-            print(f'ID: {id.getId()} | Nome: {id.nome}| Quantidade: {quantidade} | Preço: {id.getPreco()} | Fabricante: {id.fabricante}')
+            return id.nome,quantidade #Tupla: (Nome,Quantidade)
         else:
-            print(f'Produto com Id:[{id_produto}] Não encontrado')
+            return False
 
     def consultar_produto_por_nome(self, nome):
         for registro in self.__produtos.values():
@@ -43,10 +42,9 @@ class Estoque:
             quantidade = registro["quantidade"]
 
         if produto.nome == nome:
-            #return f"Quantidade de {produto.getId()}: {quantidade:.2f}"
-            print(f'ID: {produto.getId()} | Nome: {produto.nome}| Quantidade: {quantidade} | Preço: {produto.getPreco()} | Fabricante: {produto.fabricante}')
+            return produto.nome,quantidade #Tupla: (Nome,Quantidade)
         else:
-            print(f'Produto [{nome}] não encontrado')
+            return False
 
     def produto_disponibilidade(self, produto, quantidade):
         '''Checar se produto em quantidade passada está disponível para ser vendido. Retorna valor booleano.'''

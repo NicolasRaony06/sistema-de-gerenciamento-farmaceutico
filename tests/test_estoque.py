@@ -1,10 +1,11 @@
 # teste de implementacoes
 # python -m tests.test_estoque
+from src.farmacia import farmacia
 from src.core.gerente import Gerente
 from src.farmacia.estoque import Estoque
 from src.farmacia.produto import Produto
 estoque = Estoque() 
-g = Gerente('João', '12345678900', '1990-01-01','1200',1)
+g = Gerente('João', '12345678900', '1990-01-01','1200',1,farmacia)
 p1 = Produto('Dipirona-25mg-Comprimido',2.30,'Cimed')
 p2 = Produto('Dorflex-5mg-Comprimido',1.90,'Sanofi')
 print(50*'-')
@@ -18,10 +19,7 @@ print(50*'-')
 print('TESTANDO METODOS DE FUNCIONARIO')
 g.adicionar_produto_estoque(p1,12,estoque)
 g.adicionar_produto_estoque(p2,24,estoque)
-print(f'Estoque Antes da venda: {g.consultar_estoque(estoque)}')
-g.vender_produto(p1.getId(),2,estoque)
-g.vender_produto(p2.getId(),4,estoque)
-print(f'Estoque Depois da venda: {g.consultar_estoque(estoque)}')
-g.consultar_produto_por_id(p1.getId(),estoque)
-estoque.consultar_produto_por_nome('Dorflex-5mg-Comprimido')
-g.subTotal(estoque)
+#print(estoque.produto_disponibilidade(p2.nome,12))
+print(g.consultar_estoque(estoque))
+estoque.remover_produto(p1)
+print(g.consultar_estoque(estoque))

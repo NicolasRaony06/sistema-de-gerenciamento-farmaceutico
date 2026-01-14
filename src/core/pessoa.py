@@ -5,6 +5,9 @@ from src.utils.validacoes import validar_formato_cpf
 from abc import ABC , abstractmethod
 class Pessoa(ABC):
     def __init__(self,nome:str,cpf:str,data_nascimento:Optional[datetime] = None):
+        if not validar_formato_cpf(cpf):
+            raise ValueError ("CPF inválido")
+        
         self.nome = nome
         self.__cpf = cpf
         self.__data_nascimento = data_nascimento or datetime.now()
@@ -25,7 +28,6 @@ class Pessoa(ABC):
         '''Validação do recadrasto do CPF'''
         if validar_formato_cpf(cpf):
             self.__cpf = cpf
-            print('CPF Recadrastado com sucesso!')
-        else:
-            print('CPF com formato inválido') 
+            return True
+        raise ValueError ("CPF inválido")
 

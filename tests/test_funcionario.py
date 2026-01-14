@@ -7,7 +7,18 @@ from src.farmacia.produto import Produto
 from decimal import Decimal
 
 farmacia = Farmacia("Pague mais")
-id_funcionario1 = farmacia.registrarAtendente('teste', '055.678.501-08', datetime(2000, 8, 25), 1500.0)
+A = farmacia.registrarAtendente('a','130.654.134-43',datetime(2000, 8, 25), 1500.0)
+B = farmacia.registrarAtendente('b','130.654.134-43',datetime(2000, 8, 25), 1500.0)
+G = farmacia.registrarGerente('nick','123.122.345-67','1-1-1900',190)
+
+print(farmacia.getFuncionarios())
+G.excluir_funcionario(B)
+print(farmacia.getFuncionarios())
+
+print(farmacia.registrarCliente('Alvim','130.654.134-43','1-1-1990'))
+print(farmacia.registrarCliente('Alvaro','130.654.134-43','1-1-1190'))
+#print(farmacia.getLogAlteracoes())
+'''id_funcionario1 = farmacia.registrarAtendente('teste', '055.678.501-08', datetime(2000, 8, 25), 1500.0)
 
 id_venda = farmacia.getFuncionarioPorId(id_funcionario1).registrar_venda(farmacia) # tetse de mixin
 print(farmacia.getListaVendas())
@@ -26,4 +37,4 @@ print(farmacia.getVendaPorId(id_venda).getCliente())
 print(farmacia.getVendaPorId(id_venda).getPrecoTotal())
 farmacia.getFuncionarioPorId(id_funcionario1).finalizar_venda() # finalizando venda via mixin de funcionario
 print(farmacia.getVendaPorId(id_venda).getPrecoTotal())
-
+'''

@@ -6,10 +6,11 @@ from src.core.mixins_interfaces.adicionar_produto import Adicionar_ProdutoMixin
 from src.core.mixins_interfaces.gerenciar_venda import GerenciarVendaMixin
 
 class Funcionario(Pessoa,Adicionar_ProdutoMixin,GerenciarVendaMixin):
-    def __init__(self, nome:str, cpf:str, data_nascimento:datetime, salario_base:float, id:int):
+    def __init__(self, nome:str, cpf:str, data_nascimento:datetime, salario_base:float, id:int,farmacia):
         super().__init__(nome,cpf,data_nascimento)
         self.__salario_base = salario_base
         self.__id = id
+        self.__farmacia = farmacia
         self.__autenticado = True 
         self.__vendasRealizadas = []
     
@@ -17,7 +18,8 @@ class Funcionario(Pessoa,Adicionar_ProdutoMixin,GerenciarVendaMixin):
     def get_bonus(Self): #implementei esse metodo para que de fato classe Funcionario fosse abstrata e não pudesse ser instanciada
         '''Retorna bonus salarial de acordo com o funcionario'''
         pass
-
+    def getfarmacia(self):
+        return self.__farmacia
     def get_salario_base(self):
         '''Retorna salario do funcionario'''
         return self.__salario_base
@@ -46,11 +48,12 @@ class Funcionario(Pessoa,Adicionar_ProdutoMixin,GerenciarVendaMixin):
             produto = dados["produto"]
             quantidade = dados["quantidade"]
             subtotal = produto.getPreco() * quantidade
-            print(f"{produto.nome} - R$ {subtotal:.2f}")
+            total += subtotal
+        return total #Retorna subtotal do estoque 
     
     def consultar_estoque(self,estoque):
         if not estoque.get_produtos():
-            return "Estoque vazio"
+            return False
 
         return {
         
@@ -62,5 +65,7 @@ class Funcionario(Pessoa,Adicionar_ProdutoMixin,GerenciarVendaMixin):
         return estoque.consultar_produto_por_id(id_produto)
 
     def consultar_produto_por_nome(self, nome ,estoque):
-        return estoque.consultar_produto_por_produto(nome)
-
+        return estoque.consultar_produto_por_nome(nome)
+    
+    #def registrar_cliente(self,nome : str, cpf : str, data_nascimento = None):
+         #self.__farmacia.registrarCliente(nome,cpf,data_nascimento)
