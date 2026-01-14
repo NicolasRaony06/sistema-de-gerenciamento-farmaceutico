@@ -12,6 +12,7 @@ class Gerente(Funcionario,FuncionalidadesGerente):
         pass
     def cadrastar_funcionario(self):
         pass
+    
     def excluir_funcionario(self,funcionario):
         '''Remove o funcionario desejado da lista de funcionarios'''
         # Implementaçao a ser discutida!!
