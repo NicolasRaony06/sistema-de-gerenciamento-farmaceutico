@@ -98,7 +98,7 @@ class Farmacia:
         '''Recebe como parametros atributos de um Atendente e cria um novo objeto do tipo Atendente. Retorna seu id.'''
         from src.core.atendente import Atendente
         self.__idAtendentes += 1
-        atendente = Atendente(nome, cpf, data_nasc, salario, self.__idAtendentes,self)
+        atendente = Atendente(nome, cpf, data_nasc, salario, self.__idAtendentes,self) #Classe farmacia passa a si propia na criacao de atendente, pois dessa forma atendente pode usar metodos de farmacia, sem quebrar encapsulamento
         
         self.__funcionarios.append(atendente)
 
