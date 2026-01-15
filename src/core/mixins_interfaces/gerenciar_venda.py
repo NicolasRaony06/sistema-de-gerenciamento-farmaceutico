@@ -10,10 +10,11 @@ class GerenciarVendaMixin:
             self.getVendasRealizadas()[-1].adicionarProduto(produto, quantidade)
             estoque.remover_produto(produto.getId(), quantidade)
             return True
+        raise ValueError("Produto indisponível no estoque")
 
     def adicionar_cliente_venda(self, cliente):
         '''Adiciona cliente em ultima venda registrada pelo funcionario.'''
-        self.getVendasRealizadas()[-1].adicionarCliente(self, cliente)
+        self.getVendasRealizadas()[-1].adicionarCliente(cliente)
 
     def finalizar_venda(self):
         '''Finaliza ultima venda realizada pelo funcionario.'''

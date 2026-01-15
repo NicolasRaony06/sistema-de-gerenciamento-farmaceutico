@@ -18,15 +18,19 @@ class Estoque:
                 "quantidade": quantidade
             }
 
-    def remover_produto(self, produto, quantidade = None):
-        '''Remove produto, passando como parametro o objeto produto'''
-        validar_produto(produto)
+    def remover_produto(self, id, quantidade = None):
+        '''Recebe um inteiro do Id de Produto e, remove ou reduz sua quantidade do estoque, caso parametro 'quantidade' tenha um valor inteiro positivo.'''
         produtos_estoque = self.__produtos
-        for id_produto , dados in produtos_estoque.items():
-            if dados["produto"] == produto:
-                del produtos_estoque[id_produto]
-                return True
-        return False       
+        for id_produto in produtos_estoque.keys():
+            if id_produto == id:
+                if quantidade > 0:
+                    if self.produto_disponibilidade(produtos_estoque[id]["produto"], quantidade): #dupla verificacao, reutilizando metodo, pra caso seja um valor positivo, porem acima de permitido.
+                        produtos_estoque[id]["quantidade"] -= quantidade
+                        return True
+                    raise ValueError("Produto em quantidade indisponível.")
+                
+                del produtos_estoque[id]
+                return True    
      
     def consultar_produto_por_id(self, id_produto):
         if id_produto in self.__produtos:
@@ -47,7 +51,7 @@ class Estoque:
         return False
 
     def produto_disponibilidade(self, produto, quantidade):
-        '''Checar se produto em quantidade passada está disponível para ser vendido. Retorna valor booleano.'''
+        '''Checa se produto em quantidade passada está disponível para ser vendido. Retorna valor booleano.'''
         validar_produto(produto)
         produto_estoque = self.__produtos.get(produto.getId())
         if produto_estoque:

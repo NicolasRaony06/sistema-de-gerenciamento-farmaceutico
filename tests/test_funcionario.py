@@ -27,7 +27,7 @@ print(farmacia.getFuncionarioPorId(id_funcionario1).getVendasRealizadas()) # ver
 produto1 = Produto("Teste Produto", 14.5, "Tester")
 farmacia._estoque.adicionar_produto(produto1, 3) # teste adicionar produto, esse teste nao inclui gerenciamento de estoque via funcionario
 
-print(farmacia.getFuncionarioPorId(id_funcionario1).adicionar_produto_venda(produto1, 2)) # teste de add produto em venda via mixin, deve retornar True caso tenha sido bem sucedida
+print(farmacia.getFuncionarioPorId(id_funcionario1).adicionar_produto_venda(produto1, 1)) # teste de add produto em venda via mixin, deve retornar True caso tenha sido bem sucedida
 print(farmacia._estoque.get_produtos())
 
 cliente = Cliente('teste', '123.458.136-08', 12)
