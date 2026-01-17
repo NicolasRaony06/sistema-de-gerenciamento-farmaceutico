@@ -1,7 +1,9 @@
 from tkinter import *
+from tkinter import messagebox
 from src.farmacia.farmacia import Farmacia
 from src.farmacia.produto import Produto
 from decimal import Decimal
+from datetime import datetime
 
 class Interface:
     def __init__(self):
@@ -43,6 +45,17 @@ class Interface:
         
         self.root.mainloop()
 
+    def __temFarmacia(self):
+        if not self.farmacia:
+            messagebox.showinfo("Farmácia não registrada.", "É necessário criar farmácia primeiro.")
+            self.root.destroy()
+            self.interface()
+        return True
+    
+    def __campoVazioMessagem(self, funcao):
+        messagebox.showerror("Erro de Valor", f"Campo não pode estar vázio.")
+        funcao()
+
     def __botaoRegistrar(self, texto, funcao):
         botao_registrar = Button(
             self.root, 
@@ -58,6 +71,7 @@ class Interface:
         self.root = Tk()
         self.root.geometry("500x300")
         self.root.title('Registrar Farmácia')
+
         campo_nome = Entry(self.root, width=25, borderwidth=1)
         campo_nome.grid(row=0, column=0, columnspan=2)
 
@@ -78,18 +92,13 @@ class Interface:
         self.root = Tk()
         self.root.geometry("500x300")
         self.root.title('Registrar Atendente')
-
-        if not self.farmacia:
-            msg = Message(self.root, text='Farmacia não registrada!')
-            msg.grid(row=0, column=0)
-            self.root.after(3000, self.root.destroy)
-            return 
+        self.__temFarmacia()
 
         Label(self.root, text="Nome:").grid(row=0)
         campo_nome = Entry(self.root, width=25, borderwidth=1)
         campo_nome.grid(row=0, column=1, columnspan=2)
 
-        Label(self.root, text="Cpf:").grid(row=1)
+        Label(self.root, text="CPF:").grid(row=1)
         campo_cpf = Entry(self.root, width=25, borderwidth=1)
         campo_cpf.grid(row=1, column=1, columnspan=2)
 
@@ -102,18 +111,16 @@ class Interface:
         campo_salario.grid(row=3, column=1, columnspan=2)
 
         def instanciar():
-            nome = campo_nome.get()
+            nome = campo_nome.get() if campo_nome.get() else self.__campoVazioMessagem(self.registrarAtendente)
             cpf = campo_cpf.get()
-            data_nascimento = campo_dataNasc.get()
-            salario = Decimal(campo_salario.get())
+            data_nascimento = datetime.strptime(campo_dataNasc.get(), "%d-%m-%Y") if campo_dataNasc.get() else None
+            salario = campo_salario.get()
 
             try:
-                self.farmacia._registrarAtendente(nome, cpf, data_nascimento, salario)
+                self.farmacia._registrarAtendente(nome, cpf, data_nascimento, Decimal(salario))
             except Exception as erro:
-                msg = Message(self.root, text=f'{erro}')
-                msg.grid(row=0, column=0)
-                self.root.after(3000, self.root.destroy)
-                return 
+                messagebox.showerror("Erro ao tentar registrar Atendente.", f"{erro}")
+                self.registrarAtendente()
             
             campo_nome.delete(0, END)
             campo_cpf.delete(0, END)
@@ -131,24 +138,18 @@ class Interface:
         self.root = Tk()
         self.root.geometry("500x300")
         self.root.title('Registrar Gerente')
-
-        if not self.farmacia:
-            msg = Message(self.root, text='Farmacia não registrada!')
-            msg.grid(row=0, column=0)
-            self.root.after(3000, self.root.destroy)
-            return
+        self.__temFarmacia()
         
         if self.farmacia.getGerente():
-            msg = Message(self.root, text='Gerente já registrado!')
-            msg.grid(row=0, column=0)
-            self.root.after(3000, self.root.destroy)
-            return 
+            messagebox.showinfo("Gerente já registrado", "Gerente só pode ser registrado uma única vez.")
+            self.root.destroy()
+            self.interface()
 
         Label(self.root, text="Nome:").grid(row=0)
         campo_nome = Entry(self.root, width=25, borderwidth=1)
         campo_nome.grid(row=0, column=1, columnspan=2)
 
-        Label(self.root, text="Cpf:").grid(row=1)
+        Label(self.root, text="CPF:").grid(row=1)
         campo_cpf = Entry(self.root, width=25, borderwidth=1)
         campo_cpf.grid(row=1, column=1, columnspan=2)
 
@@ -161,18 +162,16 @@ class Interface:
         campo_salario.grid(row=3, column=1, columnspan=2)
 
         def instanciar():
-            nome = campo_nome.get()
+            nome = campo_nome.get() if campo_nome.get() else self.__campoVazioMessagem(self.registrarGerente)
             cpf = campo_cpf.get()
-            data_nascimento = campo_dataNasc.get()
-            salario = Decimal(campo_salario.get())
+            data_nascimento = datetime.strptime(campo_dataNasc.get(), "%d-%m-%Y") if campo_dataNasc.get() else None
+            salario = campo_salario.get()
 
             try:
-                self.farmacia._registrarGerente(nome, cpf, data_nascimento, salario)
+                self.farmacia._registrarGerente(nome, cpf, data_nascimento, Decimal(salario))
             except Exception as erro:
-                msg = Message(self.root, text=f'{erro}')
-                msg.grid(row=0, column=0)
-                self.root.after(3000, self.root.destroy)
-                return 
+                messagebox.showerror("Erro ao tentar registrar Gerente.", f"{erro}")
+                self.registrarGerente()
             
             campo_nome.delete(0, END)
             campo_cpf.delete(0, END)
@@ -191,12 +190,7 @@ class Interface:
         self.root = Tk()
         self.root.geometry("500x300")
         self.root.title('Registrar Produto')
-
-        if not self.farmacia:
-            msg = Message(self.root, text='Farmacia não registrada!')
-            msg.grid(row=0, column=0)
-            self.root.after(3000, self.root.destroy)
-            return
+        self.__temFarmacia()
 
         Label(self.root, text="Nome:").grid(row=0)
         campo_nome = Entry(self.root, width=25, borderwidth=1)
@@ -215,18 +209,16 @@ class Interface:
         campo_qtd.grid(row=3, column=1, columnspan=2)
 
         def instanciar():
-            nome = campo_nome.get()
-            fabricante = campo_fabricante.get()
-            preco = Decimal(campo_preco.get())
-            quantidade = int(campo_qtd.get())
+            nome = campo_nome.get() if campo_nome.get() else self.__campoVazioMessagem(self.registrarProduto)
+            fabricante = campo_fabricante.get() if campo_fabricante.get() else self.__campoVazioMessagem(self.registrarProduto)
+            preco = campo_preco.get()
+            quantidade = campo_qtd.get()
 
             try:
-                self.farmacia._estoque.adicionar_produto(Produto(nome, preco, fabricante), quantidade)
+                self.farmacia._estoque.adicionar_produto(Produto(nome, Decimal(preco), fabricante), int(quantidade))
             except Exception as erro:
-                msg = Message(self.root, text=f'{erro}')
-                msg.grid(row=0, column=0)
-                self.root.after(3000, self.root.destroy)
-                return 
+                messagebox.showerror("Erro ao tentar registrar Produto.", f"{erro}")
+                self.registrarProduto()
             
             campo_nome.delete(0, END)
             campo_fabricante.delete(0, END)
