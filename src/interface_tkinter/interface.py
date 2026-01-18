@@ -301,6 +301,7 @@ class Interface:
         self.__root.geometry("500x300")
         self.__root.title('Registrar Produto')
         self.__temFarmacia()
+        self.__autenticacaoValidacao()
 
         Label(self.__root, text="Nome:").grid(row=0)
         campo_nome = Entry(self.__root, width=25, borderwidth=1)
