@@ -30,6 +30,13 @@ class Interface:
             pady=10, 
             command=self.registrarGerente).grid(row=0, column=1)
         
+        botao_logout = Button(
+            self.__root, 
+            text="Logout", 
+            padx=10, 
+            pady=10, 
+            command=self.logout).grid(row=0, column=2)
+        
         botao_registrarAtendente = Button(
             self.__root, 
             text="Registrar Atendente", 
@@ -43,7 +50,7 @@ class Interface:
             padx=10, 
             pady=10, 
             command=self.registrarProduto).grid(row=2, column=1)
-        
+
         self.__root.mainloop()
 
     def __temFarmacia(self):
@@ -78,6 +85,70 @@ class Interface:
             pady=10, 
             command=funcao)
         return botao_registrar
+    
+    def logout(self):
+        '''Reseta valor de idFuncionarioLogado para None.'''      
+        if not self.__idFuncionarioLogado:
+            messagebox.showinfo("Logout interrompido", f"Você não está logado.")
+            return
+        
+        # if self.__usuarioTipoGerente(): só quando implementar desautenticar() em funcionario
+        #     self.__farmacia.getGerente().desautenticar() 
+        #     self.__idFuncionarioLogado = None
+
+        self.__farmacia.getFuncionarioPorId(self.__idFuncionarioLogado).desautenticar() 
+        self.__idFuncionarioLogado = None
+
+        messagebox.showinfo("Logout Sucesso", f"Você foi deslogado do sistema.")
+
+    def login(self):
+        '''Atribui um Id a idFuncionarioLogado.'''
+        if self.__idFuncionarioLogado:
+            messagebox.showinfo("Login interrompido", f"Você já está logado.")
+            return
+        
+        from src.farmacia.farmacia import Farmacia
+        self.__root.destroy()
+        self.__root = Tk()
+        self.__root.geometry("500x300")
+        self.__root.title('Login')
+
+        Label(self.__root, text="Id de Funcionário:").grid(row=0)
+        campo_id = Entry(self.__root, width=25, borderwidth=1)
+        campo_id.grid(row=0, column=0, columnspan=2)
+
+        Label(self.__root, text="Senha:").grid(row=1)
+        campo_senha = Entry(self.__root, width=25, borderwidth=1)
+        campo_senha.grid(row=1, column=0, columnspan=2)
+
+        def instanciar():
+            id = campo_id.get() if campo_id.get() else self.__campoVazioMessagem(self.login)
+            senha = campo_senha.get() if campo_senha.get() else self.__campoVazioMessagem(self.login)
+            
+            try:
+                funcionario = self.__farmacia.getFuncionarioPorId(int(id))
+            except Exception as erro:
+                messagebox.showerror("Erro ao tentar logar.", f"{erro}")
+                self.login()
+
+            if not funcionario:
+                messagebox.showerror("Login erro.", f"Funcionario com Id: {id} não encontrado.")
+                self.login()
+
+            try:
+                funcionario.setAutenticacao(int(id), senha)
+            except Exception as erro:
+                messagebox.showerror("Erro ao tentar logar.", f"{erro}")
+                self.login()
+            
+            self.__idFuncionarioLogado = int(id)
+
+
+        self.__botaoRegistrar('Logar', instanciar).grid(row=2, column=0)
+
+        self.__root.mainloop()
+
+                 
 
     def registrarFarmacia(self):
         from src.farmacia.farmacia import Farmacia
@@ -86,11 +157,12 @@ class Interface:
         self.__root.geometry("500x300")
         self.__root.title('Registrar Farmácia')
 
+        Label(self.__root, text="Nome da Farmácia:").grid(row=0)
         campo_nome = Entry(self.__root, width=25, borderwidth=1)
         campo_nome.grid(row=0, column=0, columnspan=2)
 
         def instanciar():
-            nome = campo_nome.get()
+            nome = campo_nome.get() if campo_nome.get() else self.__campoVazioMessagem(self.registrarFarmacia)
             if nome:
                 self.__farmacia = Farmacia(nome)
                 campo_nome.delete(0, END)
@@ -133,13 +205,11 @@ class Interface:
             salario = campo_salario.get()
 
             try:
-                id = self.__farmacia.getGerente().cadrastar_funcionario(nome, cpf, data_nascimento, Decimal(salario))
+                self.__farmacia.getGerente().cadrastar_funcionario(nome, cpf, data_nascimento, Decimal(salario))
             except Exception as erro:
                 messagebox.showerror("Erro ao tentar registrar Atendente.", f"{erro}")
                 self.registrarAtendente()
-            print(self.__idFuncionarioLogado)
-            self.__idFuncionarioLogado = id # !!!!!!! remover
-            print(self.__idFuncionarioLogado)
+
             campo_nome.delete(0, END)
             campo_cpf.delete(0, END)
             campo_dataNasc.delete(0, END)
