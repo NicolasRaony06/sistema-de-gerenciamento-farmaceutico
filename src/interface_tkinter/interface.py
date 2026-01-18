@@ -30,12 +30,19 @@ class Interface:
             pady=10, 
             command=self.registrarGerente).grid(row=0, column=1)
         
+        botao_login = Button(
+            self.__root, 
+            text="Login", 
+            padx=10, 
+            pady=10, 
+            command=self.login).grid(row=0, column=2)
+
         botao_logout = Button(
             self.__root, 
             text="Logout", 
             padx=10, 
             pady=10, 
-            command=self.logout).grid(row=0, column=2)
+            command=self.logout).grid(row=0, column=3)
         
         botao_registrarAtendente = Button(
             self.__root, 
@@ -60,8 +67,8 @@ class Interface:
             self.interface()
         return True
     
-    def __campoVazioMessagem(self, funcao):
-        messagebox.showerror("Erro de Valor", f"Campo não pode estar vázio.")
+    def __campoVazioMessagem(self, funcao, campo = ''):
+        messagebox.showerror("Erro de Valor", f"Campo {campo} não pode estar vázio.")
         funcao()
 
     def __autenticacaoValidacao(self):
@@ -76,6 +83,7 @@ class Interface:
             messagebox.showerror("Erro de Autenticação", f"É preciso estar logado como Gerente para conseguir prosseguir.")
             self.__root.destroy()
             self.interface()
+        return True
 
     def __botaoRegistrar(self, texto, funcao):
         botao_registrar = Button(
@@ -92,10 +100,12 @@ class Interface:
             messagebox.showinfo("Logout interrompido", f"Você não está logado.")
             return
         
-        # if self.__usuarioTipoGerente(): só quando implementar desautenticar() em funcionario
-        #     self.__farmacia.getGerente().desautenticar() 
-        #     self.__idFuncionarioLogado = None
-
+        if self.__usuarioTipoGerente():
+            self.__farmacia.getGerente().desautenticar() 
+            self.__idFuncionarioLogado = None
+            messagebox.showinfo("Logout Sucesso", f"Você foi deslogado do sistema.")
+            return
+            
         self.__farmacia.getFuncionarioPorId(self.__idFuncionarioLogado).desautenticar() 
         self.__idFuncionarioLogado = None
 
@@ -103,11 +113,11 @@ class Interface:
 
     def login(self):
         '''Atribui um Id a idFuncionarioLogado.'''
+        self.__temFarmacia()
         if self.__idFuncionarioLogado:
             messagebox.showinfo("Login interrompido", f"Você já está logado.")
             return
         
-        from src.farmacia.farmacia import Farmacia
         self.__root.destroy()
         self.__root = Tk()
         self.__root.geometry("500x300")
@@ -115,18 +125,20 @@ class Interface:
 
         Label(self.__root, text="Id de Funcionário:").grid(row=0)
         campo_id = Entry(self.__root, width=25, borderwidth=1)
-        campo_id.grid(row=0, column=0, columnspan=2)
+        campo_id.grid(row=0, column=1, columnspan=2)
 
         Label(self.__root, text="Senha:").grid(row=1)
         campo_senha = Entry(self.__root, width=25, borderwidth=1)
-        campo_senha.grid(row=1, column=0, columnspan=2)
+        campo_senha.grid(row=1, column=1, columnspan=2)
 
         def instanciar():
-            id = campo_id.get() if campo_id.get() else self.__campoVazioMessagem(self.login)
-            senha = campo_senha.get() if campo_senha.get() else self.__campoVazioMessagem(self.login)
+            id = campo_id.get() if campo_id.get() else self.__campoVazioMessagem(self.login, 'id')
+            senha = campo_senha.get() if campo_senha.get() else self.__campoVazioMessagem(self.login, 'senha')
             
             try:
                 funcionario = self.__farmacia.getFuncionarioPorId(int(id))
+                if self.__farmacia.getGerente().get_id() == int(id):
+                    funcionario = self.__farmacia.getGerente()                
             except Exception as erro:
                 messagebox.showerror("Erro ao tentar logar.", f"{erro}")
                 self.login()
@@ -142,13 +154,13 @@ class Interface:
                 self.login()
             
             self.__idFuncionarioLogado = int(id)
-
+            messagebox.showinfo("Login Sucesso", f"Login feito com sucesso. {funcionario.nome}")
+            self.__root.destroy()
+            self.interface()
 
         self.__botaoRegistrar('Logar', instanciar).grid(row=2, column=0)
 
         self.__root.mainloop()
-
-                 
 
     def registrarFarmacia(self):
         from src.farmacia.farmacia import Farmacia
@@ -157,15 +169,19 @@ class Interface:
         self.__root.geometry("500x300")
         self.__root.title('Registrar Farmácia')
 
+        if self.__farmacia:
+            messagebox.showinfo("Farmácia Info", "Farmácia já foi criada.")
+            self.__root.destroy()
+            self.interface()
+
         Label(self.__root, text="Nome da Farmácia:").grid(row=0)
         campo_nome = Entry(self.__root, width=25, borderwidth=1)
-        campo_nome.grid(row=0, column=0, columnspan=2)
+        campo_nome.grid(row=0, column=1, columnspan=2)
 
         def instanciar():
-            nome = campo_nome.get() if campo_nome.get() else self.__campoVazioMessagem(self.registrarFarmacia)
+            nome = campo_nome.get() if campo_nome.get() else self.__campoVazioMessagem(self.registrarFarmacia, 'nome')
             if nome:
                 self.__farmacia = Farmacia(nome)
-                campo_nome.delete(0, END)
                 self.__root.destroy()
                 self.interface()
 
@@ -199,10 +215,10 @@ class Interface:
         campo_salario.grid(row=3, column=1, columnspan=2)
 
         def instanciar():
-            nome = campo_nome.get() if campo_nome.get() else self.__campoVazioMessagem(self.registrarAtendente)
+            nome = campo_nome.get() if campo_nome.get() else self.__campoVazioMessagem(self.registrarAtendente, 'nome')
             cpf = campo_cpf.get()
             data_nascimento = datetime.strptime(campo_dataNasc.get(), "%d-%m-%Y") if campo_dataNasc.get() else None
-            salario = campo_salario.get()
+            salario = campo_salario.get() if campo_salario.get() else self.__campoVazioMessagem(self.registrarAtendente, 'salario')
 
             try:
                 self.__farmacia.getGerente().cadrastar_funcionario(nome, cpf, data_nascimento, Decimal(salario))
@@ -254,11 +270,11 @@ class Interface:
         campo_senha.grid(row=4, column=1, columnspan=2)
 
         def instanciar():
-            nome = campo_nome.get() if campo_nome.get() else self.__campoVazioMessagem(self.registrarGerente)
+            nome = campo_nome.get() if campo_nome.get() else self.__campoVazioMessagem(self.registrarGerente, 'nome')
             cpf = campo_cpf.get()
             data_nascimento = datetime.strptime(campo_dataNasc.get(), "%d-%m-%Y") if campo_dataNasc.get() else None
-            salario = campo_salario.get()
-            senha = campo_senha.get() if campo_senha.get() else self.__campoVazioMessagem(self.registrarGerente)
+            salario = campo_salario.get() if campo_salario.get() else self.__campoVazioMessagem(self.registrarGerente, 'salario')
+            senha = campo_senha.get() if campo_senha.get() else self.__campoVazioMessagem(self.registrarGerente, 'senha')
 
             try:
                 self.__farmacia._registrarGerente(nome, cpf, data_nascimento, Decimal(salario), senha)
@@ -303,8 +319,8 @@ class Interface:
         campo_qtd.grid(row=3, column=1, columnspan=2)
 
         def instanciar():
-            nome = campo_nome.get() if campo_nome.get() else self.__campoVazioMessagem(self.registrarProduto)
-            fabricante = campo_fabricante.get() if campo_fabricante.get() else self.__campoVazioMessagem(self.registrarProduto)
+            nome = campo_nome.get() if campo_nome.get() else self.__campoVazioMessagem(self.registrarProduto, 'nome')
+            fabricante = campo_fabricante.get() if campo_fabricante.get() else self.__campoVazioMessagem(self.registrarProduto, 'fabricante')
             preco = campo_preco.get()
             quantidade = campo_qtd.get()
 
