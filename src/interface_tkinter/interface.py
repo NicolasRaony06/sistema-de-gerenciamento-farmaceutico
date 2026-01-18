@@ -12,22 +12,38 @@ class Interface:
         self.__idFuncionarioLogado = None
     
     def interface(self):
+        try:
+            self.__root.destroy()
+        except:
+            pass
+
+        if not self.__farmacia:
+            self.registrarFarmacia()
+            return
+        
+        if not self.__farmacia.getGerente():
+            self.registrarGerente()
+            return
+
         self.__root = Tk()
         self.__root.geometry("500x300")
         self.__root.title('Interface')
 
-        if not self.__farmacia:
-            self.registrarFarmacia()
-        
-        if not self.__farmacia.getGerente():
-            self.registrarGerente()
-
-        self.__botaoRegistrar("Login", self.login).grid(row=0, column=2)
-        self.__botaoRegistrar("Logout", self.logout).grid(row=0, column=3)
-        self.__botaoRegistrar("Registrar Atendente", self.registrarAtendente).grid(row=2, column=0)
-        self.__botaoRegistrar("RegistrarProduto", self.registrarProduto).grid(row=2, column=1)
+        self.__botaoPadrao("Login", self.login).grid(row=0, column=0)
+        self.__botaoPadrao("Logout", self.logout).grid(row=0, column=1)
+        self.__botaoPadrao("Registrar Atendente", self.registrarAtendente).grid(row=2, column=0)
+        self.__botaoPadrao("Registrar Produto", self.registrarProduto).grid(row=2, column=1)
+        self.__botaoPadrao("Consultar Estoque", self.consultarEstoque).grid(row=3, column=1)
 
         self.__root.mainloop()
+
+    def __inciarRoot(self):
+        try:
+            self.__root.destroy()
+        except:
+            pass
+        self.__root = Tk()
+        self.__root.geometry("500x300")
 
     def __temFarmacia(self):
         if not self.__farmacia:
@@ -54,14 +70,14 @@ class Interface:
             self.interface()
         return True
 
-    def __botaoRegistrar(self, texto, funcao):
-        botao_registrar = Button(
+    def __botaoPadrao(self, texto, funcao):
+        botao_padrao = Button(
             self.__root, 
             text=texto, 
             padx=10, 
             pady=10, 
             command=funcao)
-        return botao_registrar
+        return botao_padrao
     
     def logout(self):
         '''Reseta valor de idFuncionarioLogado para None.'''      
@@ -87,9 +103,7 @@ class Interface:
             messagebox.showinfo("Login interrompido", f"Você já está logado.")
             return
         
-        self.__root.destroy()
-        self.__root = Tk()
-        self.__root.geometry("500x300")
+        self.__inciarRoot()
         self.__root.title('Login')
 
         Label(self.__root, text="Id de Funcionário:").grid(row=0)
@@ -127,15 +141,13 @@ class Interface:
             self.__root.destroy()
             self.interface()
 
-        self.__botaoRegistrar('Logar', instanciar).grid(row=2, column=0)
+        self.__botaoPadrao('Logar', instanciar).grid(row=2, column=0)
 
         self.__root.mainloop()
 
     def registrarFarmacia(self):
         from src.farmacia.farmacia import Farmacia
-        self.__root.destroy()
-        self.__root = Tk()
-        self.__root.geometry("500x300")
+        self.__inciarRoot()
         self.__root.title('Registrar Farmácia')
 
         if self.__farmacia:
@@ -154,14 +166,12 @@ class Interface:
                 self.__root.destroy()
                 self.interface()
 
-        self.__botaoRegistrar('Registrar Farmácia', instanciar).grid(row=1, column=0)
+        self.__botaoPadrao('Registrar Farmácia', instanciar).grid(row=1, column=0)
 
         self.__root.mainloop()
 
     def registrarAtendente(self):
-        self.__root.destroy()
-        self.__root = Tk()
-        self.__root.geometry("500x300")
+        self.__inciarRoot()
         self.__root.title('Registrar Atendente')
         self.__temFarmacia()
         self.__autenticacaoValidacao()
@@ -202,14 +212,12 @@ class Interface:
             self.__root.destroy()
             self.interface()
 
-        self.__botaoRegistrar('Registrar Atendente', instanciar).grid(row=4, column=1)
+        self.__botaoPadrao('Registrar Atendente', instanciar).grid(row=4, column=1)
 
         self.__root.mainloop()
 
     def registrarGerente(self):
-        self.__root.destroy()
-        self.__root = Tk()
-        self.__root.geometry("500x300")
+        self.__inciarRoot()
         self.__root.title('Registrar Gerente')
         self.__temFarmacia()
         
@@ -259,15 +267,13 @@ class Interface:
             self.__root.destroy()
             self.interface()
 
-        self.__botaoRegistrar('Registrar Gerente', instanciar).grid(row=5, column=1)
+        self.__botaoPadrao('Registrar Gerente', instanciar).grid(row=5, column=1)
 
         self.__root.mainloop()
 
     def registrarProduto(self):
         '''Cria objeto de produto e já adiciona em estoque''' # por enquanto fica essa solução apra produto
-        self.__root.destroy()
-        self.__root = Tk()
-        self.__root.geometry("500x300")
+        self.__inciarRoot()
         self.__root.title('Registrar Produto')
         self.__temFarmacia()
         self.__autenticacaoValidacao()
@@ -306,7 +312,23 @@ class Interface:
             self.__root.destroy()
             self.interface()
 
-        self.__botaoRegistrar('Registrar Produto', instanciar).grid(row=4, column=1)
+        self.__botaoPadrao('Registrar Produto', instanciar).grid(row=4, column=1)
+
+        self.__root.mainloop()
+
+    def consultarEstoque(self):
+        self.__inciarRoot()
+        self.__root.title('Consultar estoque')
+        self.__temFarmacia()
+        self.__autenticacaoValidacao()
+
+        self.__botaoPadrao("Voltar", self.interface).grid(row=0, column=0)
+
+        produtos = self.__farmacia.getGerente().consultar_estoque()
+        row_ = 1
+        for produto, qtd in produtos.items():
+            Label(self.__root, text=f"{produto} | Quantidade: {qtd}").grid(row=row_)
+            row_ += 1
 
         self.__root.mainloop()
 
