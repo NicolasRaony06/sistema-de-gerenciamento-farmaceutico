@@ -325,8 +325,15 @@ class Interface:
         self.__temFarmacia()
         self.__autenticacaoValidacao()
 
-        self.__botaoPadrao("Voltar", self.interface).grid(row=0, column=0)
+        def consultar(): # em progresso
+            print('aaa')
 
+        consultar_por_nome = Entry(self.__root, width=25, borderwidth=1) # em progresso
+        consultar_por_nome.grid(row=0, column=0, columnspan=1) # em progresso
+        self.__botaoPadrao("Consultar", consultar).grid(row=0, column=2) # em progresso
+        self.__botaoPadrao("Voltar", self.interface).grid(row=0, column=3)
+
+        # em progresso
         produtos = self.__farmacia.getFuncionarioPorId(self.__idFuncionarioLogado).consultar_estoque()
         row_ = 1
         for produto, qtd in produtos.items():
