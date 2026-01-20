@@ -74,7 +74,7 @@ class Funcionario(Pessoa,GerenciarEstoqueMixin,GerenciarVendaMixin):
         return f"ID {self.__id} | Nome: {self.nome} | Cargo: {self.__class__.__name__} | Salário: R$ {self.__salario_base:.2f}"
     
     def subTotal(self, estoque):
-        produtos_estoque = estoque.get_produtos()
+        produtos_estoque = estoque.get_produtos(self)
         total = 0
         for dados in produtos_estoque.values():
             produto = dados["produto"]
@@ -82,4 +82,3 @@ class Funcionario(Pessoa,GerenciarEstoqueMixin,GerenciarVendaMixin):
             subtotal = produto.getPreco() * quantidade
             total += subtotal
         return total #Retorna subtotal do estoque 
-    
