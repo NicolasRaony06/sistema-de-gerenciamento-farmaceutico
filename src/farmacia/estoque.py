@@ -6,10 +6,12 @@ class Estoque:
         self.__produtos = {}
 
     def get_produtos(self, funcionario):
+        '''Recebe um objeto de funcionario para validação e retorna um dicionario contendo produtos e suas quantidades.'''
         validar_funcionario(funcionario) # adicionei funcionario para servir de controle, e forçar que apenas via funcionario seja possivel consultar estoque
         return self.__produtos
 
     def adicionar_produto(self, funcionario, produto, quantidade: int):
+        '''Recebe um objeto de funcionario para validação, um objeto de produto e sua quantidade. Adiciona novo objeto em estoque ou se caso já existir em estoque, apenas aumenta quantidade em estoque.'''
         validar_funcionario(funcionario) # adicionei funcionario para servir de controle, e forçar que apenas via funcionario seja possivel adicionar em estoque
         validar_produto(produto)
         p_id = produto.getId()
@@ -22,7 +24,7 @@ class Estoque:
             }
 
     def remover_produto(self, funcionario, id, quantidade = None):
-        '''Recebe um inteiro do Id de Produto e, remove ou reduz sua quantidade do estoque, caso parametro 'quantidade' tenha um valor inteiro positivo.'''
+        '''Recebe um objeto de funcionario para validação, um inteiro do Id de Produto e, remove ou reduz sua quantidade do estoque, caso parametro 'quantidade' tenha um valor inteiro positivo.'''
         validar_funcionario(funcionario) # adicionei funcionario para servir de controle, e forçar que apenas via funcionario seja possivel remover em estoque
 
         produtos_estoque = self.__produtos
@@ -38,7 +40,7 @@ class Estoque:
                 return True    
      
     def consultar_produto_por_id(self, funcionario, id_produto):
-        '''Recebe id do produto e caso produto exista, retorna o seu objeto e quantidade em estoque.'''
+        '''Recebe um objeto de funcionario para validação, id do produto e caso produto exista, retorna o seu objeto e quantidade em estoque.'''
         validar_funcionario(funcionario) # adicionei funcionario para servir de controle, e forçar que apenas via funcionario seja possivel consultar estoque
 
         if id_produto in self.__produtos:
@@ -49,7 +51,7 @@ class Estoque:
         #     return False
 
     def consultar_produto_por_nome(self, funcionario, nome):
-        '''Recebe nome do produto e caso produto exista, retorna o seu objeto e quantidade em estoque.'''
+        '''Recebe um objeto de funcionario para validação, nome do produto e caso produto exista, retorna o seu objeto e quantidade em estoque.'''
         validar_funcionario(funcionario) # adicionei funcionario para servir de controle, e forçar que apenas via funcionario seja possivel consultar estoque
 
         for registro in self.__produtos.values():
