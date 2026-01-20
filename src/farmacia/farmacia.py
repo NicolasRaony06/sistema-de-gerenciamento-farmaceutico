@@ -2,7 +2,7 @@
 from decimal import Decimal
 from datetime import datetime
 from src.farmacia.estoque import Estoque
-from src.utils.validacoes import validar_funcionario
+from src.utils.validacoes import validar_funcionario , validar_gerente
 
 class Farmacia:
     def __init__(self, nome : str):
@@ -81,6 +81,7 @@ class Farmacia:
         return venda.getId()
         #return venda
     
+    
     def _registrarGerente(self, nome, cpf, data_nasc, salario, senha):
         '''Recebe como parametros atributos de um Gerente e cria um novo objeto do tipo Gerente.'''
         from src.core.gerente import Gerente
@@ -97,6 +98,7 @@ class Farmacia:
         
     def _registrarAtendente(self, gerente, nome : str , cpf : str, data_nasc : datetime , salario : Decimal, senha):
         '''Recebe como parametros um objeto de Gerente para controle e atributos de um Atendente, e cria um novo objeto do tipo Atendente. Retorna seu id.'''
+        validar_gerente(gerente)
         from src.core.atendente import Atendente
         self.__idFuncionarios += 1
         atendente = Atendente(nome, cpf, data_nasc, salario, self.__idFuncionarios,self, senha)

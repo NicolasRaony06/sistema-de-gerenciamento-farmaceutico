@@ -2,11 +2,10 @@
 from datetime import datetime
 from abc import abstractmethod
 from src.core.pessoa import Pessoa
-from src.core.mixins_interfaces.adicionar_produto import AdicionarProdutoMixin
+from src.core.mixins_interfaces.gerenciar_estoque import GerenciarEstoqueMixin
 from src.core.mixins_interfaces.gerenciar_venda import GerenciarVendaMixin
-from src.core.mixins_interfaces.registrar_cliente import RegistrarClienteMixin
 
-class Funcionario(Pessoa,AdicionarProdutoMixin,GerenciarVendaMixin,RegistrarClienteMixin):
+class Funcionario(Pessoa,GerenciarEstoqueMixin,GerenciarVendaMixin):
     def __init__(self, nome:str, cpf:str, data_nascimento:datetime, salario_base:float, id:int,farmacia, senha:str):
 
         super().__init__(nome,cpf,data_nascimento)
@@ -22,12 +21,14 @@ class Funcionario(Pessoa,AdicionarProdutoMixin,GerenciarVendaMixin,RegistrarClie
     def get_bonus(Self): #implementei esse metodo para que de fato classe Funcionario fosse abstrata e não pudesse ser instanciada
         '''Retorna bonus salarial de acordo com o funcionario'''
         pass
+
     def getFarmacia(self):
         return self.__farmacia
     
     def get_salario_base(self):
         '''Retorna salario do funcionario'''
         return self.__salario_base
+    
     
     def get_id(self):
         '''Retorna Id do funcionario'''
@@ -82,30 +83,3 @@ class Funcionario(Pessoa,AdicionarProdutoMixin,GerenciarVendaMixin,RegistrarClie
             subtotal = produto.getPreco() * quantidade
             total += subtotal
         return total #Retorna subtotal do estoque 
-    
-    def consultar_estoque(self):
-        # if not estoque.get_produtos():
-        #     return False
-
-        # return {
-        
-        #     dados["produto"].nome: dados["quantidade"]
-        #     for dados in estoque.get_produtos().values()
-        # } 
-
-        # tiver mudar para usar em interface
-        return {
-            dados["produto"]: dados["quantidade"]
-            for dados in self.__farmacia._estoque.get_produtos(self).values()
-        } 
-    
-    def consultar_produto_por_id(self, id_produto):
-        '''Recebe id do produto e retorna seu objeto e quantidade em estoque.'''
-        return self.__farmacia._estoque.consultar_produto_por_id(self, id_produto)
-
-    def consultar_produto_por_nome(self, nome):
-        '''Recebe nome do produto e retorna seu objeto e quantidade em estoque.'''
-        return self.__farmacia._estoque.consultar_produto_por_nome(self, nome)
-    
-    #def registrar_cliente(self,nome : str, cpf : str, data_nascimento = None):
-         #self.__farmacia.registrarCliente(nome,cpf,data_nascimento)
