@@ -81,6 +81,7 @@ class Farmacia:
         return venda.getId()
         #return venda
     
+    
     def _registrarGerente(self, nome, cpf, data_nasc, salario, senha):
         '''Recebe como parametros atributos de um Gerente e cria um novo objeto do tipo Gerente.'''
         from src.core.gerente import Gerente
