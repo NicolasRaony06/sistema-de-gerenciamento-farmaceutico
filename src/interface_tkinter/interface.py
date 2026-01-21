@@ -37,55 +37,6 @@ class Interface:
 
         self.__root.mainloop()
 
-    def __inciarRoot(self):
-        try:
-            self.__root.destroy()
-        except:
-            pass
-        self.__root = Tk()
-        self.__root.geometry("500x300")
-
-    def __temFarmacia(self):
-        if not self.__farmacia:
-            messagebox.showinfo("Farmácia não registrada.", "É necessário criar farmácia primeiro.")
-            self.__root.destroy()
-            self.interface()
-        return True
-    
-    def __campoVazioMessagem(self, funcao, campo = ''):
-        messagebox.showerror("Erro de Valor", f"Campo {campo} não pode estar vázio.")
-        funcao()
-
-    def __autenticacaoValidacao(self):
-        if not self.__idFuncionarioLogado:
-            messagebox.showerror("Erro de Autenticação", f"É preciso estar logado para conseguir prosseguir.")
-            self.__root.destroy()
-            self.interface()
-
-    def __usuarioTipoGerente(self):
-        idGerente = self.__farmacia.getGerente().get_id()
-        if not self.__idFuncionarioLogado == idGerente:
-            messagebox.showerror("Erro de Autenticação", f"É preciso estar logado como Gerente para conseguir prosseguir.")
-            self.__root.destroy()
-            self.interface()
-        return True
-
-    def __botaoPadrao(self, texto, funcao, padx=10, pady=10):
-        botao_padrao = Button(
-            self.__root, 
-            text=texto, 
-            padx=padx, 
-            pady=pady, 
-            command=funcao)
-        return botao_padrao
-    
-    def __removerWidgets(self, widgets):
-        for widget in widgets:
-            try:
-                widget.destroy()
-            except:
-                continue
-    
     def logout(self):
         '''Reseta valor de idFuncionarioLogado para None.'''      
         if not self.__idFuncionarioLogado:
@@ -336,12 +287,24 @@ class Interface:
         self.__autenticacaoValidacao()
         produto_labels = []
 
-        def removerProduto(id_produto):
+        def removerProduto(id_produto, produto_label, botao_remover):
+            verificacao = messagebox.askyesno("Remover Produto", "Você realmente deseja remover produto?")
+
+            if not verificacao:
+                self.consultarEstoque()
+                return
             
-            self.__farmacia.getFuncionarioPorId(self.__idFuncionarioLogado).remover_produto(id_produto)
-            # except Exception as erro:
-            #     messagebox.showerror("Erro ao tentar remover Produto.", f"{erro}")
-            #     self.consultarEstoque()
+            try:
+                self.__farmacia.getFuncionarioPorId(self.__idFuncionarioLogado).remover_produto(id_produto)
+            except Exception as erro:
+                messagebox.showerror("Erro ao tentar remover Produto.", f"{erro}")
+                self.consultarEstoque()
+
+            try:
+                produto_label.destroy()
+                botao_remover.destroy()
+            except:
+                return
 
         def consultar():
             consultar_por = menu.get()
@@ -383,10 +346,62 @@ class Interface:
         for produto, qtd in produtos.items():
             produto_label = Label(self.__root, text=f"{produto} | Quantidade: {qtd}")
             produto_label.grid(row=row_, column=0, columnspan=3)
-            self.__botaoPadrao("Remover", lambda: removerProduto(produto.getId()), pady=4).grid(row=row_, column=4)
+            botao_remover = self.__botaoPadrao("Remover", lambda: removerProduto(produto.getId(), produto_label, botao_remover), pady=4)
+            botao_remover.grid(row=row_, column=4)
             produto_labels.append(produto_label)
             row_ += 1
             
         self.__root.mainloop()
+
+
+    def __inciarRoot(self):
+        try:
+            self.__root.destroy()
+        except:
+            pass
+        self.__root = Tk()
+        self.__root.geometry("500x300")
+
+    def __temFarmacia(self):
+        if not self.__farmacia:
+            messagebox.showinfo("Farmácia não registrada.", "É necessário criar farmácia primeiro.")
+            self.__root.destroy()
+            self.interface()
+        return True
+    
+    def __campoVazioMessagem(self, funcao, campo = ''):
+        messagebox.showerror("Erro de Valor", f"Campo {campo} não pode estar vázio.")
+        funcao()
+
+    def __autenticacaoValidacao(self):
+        if not self.__idFuncionarioLogado:
+            messagebox.showerror("Erro de Autenticação", f"É preciso estar logado para conseguir prosseguir.")
+            self.__root.destroy()
+            self.interface()
+
+    def __usuarioTipoGerente(self):
+        idGerente = self.__farmacia.getGerente().get_id()
+        if not self.__idFuncionarioLogado == idGerente:
+            messagebox.showerror("Erro de Autenticação", f"É preciso estar logado como Gerente para conseguir prosseguir.")
+            self.__root.destroy()
+            self.interface()
+        return True
+
+    def __botaoPadrao(self, texto, funcao, padx=10, pady=10):
+        botao_padrao = Button(
+            self.__root, 
+            text=texto, 
+            padx=padx, 
+            pady=pady, 
+            command=funcao)
+        return botao_padrao
+    
+    def __removerWidgets(self, widgets):
+        for widget in widgets:
+            try:
+                widget.destroy()
+            except:
+                continue
+    
 
     
