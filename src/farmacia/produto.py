@@ -42,5 +42,8 @@ class Produto:
         )
         self.__logAlteracoes.append(log)
     
+    def __str__(self):
+        return f'Produto: id={self.__id}, nome={self.nome}, preço={self.getPreco()}, fabricante={self.fabricante}'
+
     def __repr__(self):
         return rf'Produto("{self.nome}", {self.getPreco()}, "{self.fabricante}", {self.__id}, {self.__logAlteracoes})'
