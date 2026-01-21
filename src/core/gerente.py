@@ -9,8 +9,9 @@ class Gerente(Funcionario,FuncionalidadesGerente):
     def __init__(self,nome,cpf,data_nascimento,salario_base, id: int,farmacia, senha: str):
         super().__init__(nome,cpf,data_nascimento,salario_base, id,farmacia, senha)
 
-    def get_bonus(Self):
-        pass
+    def get_bonus(self):
+        '''Recebe bonus de 10% em cima do bonus base de funcionario.'''
+        return super().get_bonus() * 0,1        
 
     def cadrastar_funcionario(self, nome : str , cpf : str, data_nasc : datetime , salario : Decimal):
         '''Cadrasta funcionario e retorna o objeto criado'''

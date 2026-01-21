@@ -16,11 +16,9 @@ class Funcionario(Pessoa,GerenciarEstoqueMixin,GerenciarVendaMixin):
         self.__autenticado = False 
         self.__vendasRealizadas = []
         
-    
-    @abstractmethod
-    def get_bonus(Self): #implementei esse metodo para que de fato classe Funcionario fosse abstrata e não pudesse ser instanciada
-        '''Retorna bonus salarial de acordo com o funcionario'''
-        pass
+    def get_bonus(self):
+        '''Retorna um bonus salarial base'''
+        return self.__salario_base * 0.01
 
     def getFarmacia(self): 
         '''Retorna objeto farmacia '''
