@@ -30,7 +30,7 @@ class Estoque:
         produtos_estoque = self.__produtos
         for id_produto in produtos_estoque.keys():
             if id_produto == id:
-                if quantidade > 0:
+                if quantidade and quantidade > 0:
                     if self.produto_disponibilidade(produtos_estoque[id]["produto"], quantidade): #dupla verificacao, reutilizando metodo, pra caso seja um valor positivo, porem acima de permitido.
                         produtos_estoque[id]["quantidade"] -= quantidade
                         return True
