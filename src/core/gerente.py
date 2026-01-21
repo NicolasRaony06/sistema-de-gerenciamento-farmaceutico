@@ -21,7 +21,7 @@ class Gerente(Funcionario,FuncionalidadesGerente):
     def excluir_funcionario(self,funcionario):
         '''Remove o funcionario desejado da lista de funcionarios'''
         # Implementaçao a ser discutida!!
-        validar_funcionario(funcionario)
+        validar_funcionario(funcionario) #Valida se foi passado um objeto funcionario
         lista = self.getfarmacia().getFuncionarios()
         if funcionario in lista:
             lista.remove(funcionario)
@@ -30,7 +30,7 @@ class Gerente(Funcionario,FuncionalidadesGerente):
 
     def alterar_preco_produto(self, produto, preco: Decimal,): #precisei implementar para testar algumas coisas em produto
         '''Alterar preço de produto. Recebe preço em Decimal e objeto de Produto'''
-        validar_produto(produto)
+        validar_produto(produto) #Valida se foi passado um objeto funcionario
         produto.setPreco(self, preco)
         
     def __repr__(self):
