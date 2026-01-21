@@ -17,7 +17,7 @@ class Funcionario(Pessoa,GerenciarEstoqueMixin,GerenciarVendaMixin):
         self.__vendasRealizadas = []
         
     def get_bonus(self):
-        '''Retorna um bonus salarial base'''
+        '''Retorna um bonus salarial base de 1%'''
         return self.__salario_base * 0.01
 
     def getFarmacia(self): 

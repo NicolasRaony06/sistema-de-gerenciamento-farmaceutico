@@ -6,8 +6,8 @@ class Atendente(Funcionario):
         super().__init__(nome, cpf, data_nascimento, salario_base, id,farmacia, senha)
 
     def get_bonus(Self):
-        '''Recebe bonus de 1.5% em cima do bonus base de funcionario.'''
-        return super().get_bonus() * 0.015
+        '''Recebe bonus de 1.5% a mais além do bonus base de funcionario.'''
+        return super().get_bonus() + (super().get_bonus() * 0.015)
 
     def __repr__(self):
         return f'Atendente("{self.nome}", {self.get_cpf()}, "{self.get_data_nascimento()}", {self.get_salario_base()}, {self.get_id()})'
