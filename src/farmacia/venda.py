@@ -25,7 +25,7 @@ class Venda:
     
     def getPrecoTotal(self):
         '''Retorna preço total da Venda'''
-        return self.__precoTotal
+        return self.__precoTotal.quantize(Decimal('0.01'))
     
     def getProdutos(self):
         '''Retorna lista com tuplas de produtos e suas quantidades'''
