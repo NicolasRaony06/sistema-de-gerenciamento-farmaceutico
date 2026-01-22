@@ -32,6 +32,7 @@ class Interface:
         self.__botaoPadrao("Login", self.login).grid(row=0, column=0)
         self.__botaoPadrao("Logout", self.logout).grid(row=0, column=1)
         self.__botaoPadrao("Registrar Atendente", self.registrarAtendente).grid(row=2, column=0)
+        self.__botaoPadrao("Registrar Repositor", self.registrarRepositor).grid(row=3, column=0)
         self.__botaoPadrao("Registrar Produto", self.registrarProduto).grid(row=2, column=1)
         self.__botaoPadrao("Consultar Estoque", self.consultarEstoque).grid(row=3, column=1)
 
@@ -77,9 +78,7 @@ class Interface:
             senha = campo_senha.get() if campo_senha.get() else self.__campoVazioMessagem(self.login, 'senha')
             
             try:
-                funcionario = self.__farmacia.getFuncionarioPorId(int(id))
-                # if self.__farmacia.getGerente().get_id() == int(id):
-                #     funcionario = self.__farmacia.getGerente()                
+                funcionario = self.__farmacia.getFuncionarioPorId(int(id))            
             except Exception as erro:
                 messagebox.showerror("Erro ao tentar logar.", f"{erro}")
                 self.login()
@@ -126,54 +125,6 @@ class Interface:
                 self.interface()
 
         self.__botaoPadrao('Registrar Farmácia', instanciar).grid(row=1, column=1)
-
-        self.__root.mainloop()
-
-    def registrarAtendente(self):
-        self.__inciarRoot()
-        self.__root.title('Registrar Atendente')
-        self.__temFarmacia()
-        self.__autenticacaoValidacao()
-        self.__usuarioTipoGerente()
-
-        Label(self.__root, text="Nome:").grid(row=0)
-        campo_nome = Entry(self.__root, width=25, borderwidth=1)
-        campo_nome.grid(row=0, column=1, columnspan=2)
-
-        Label(self.__root, text="CPF:").grid(row=1)
-        campo_cpf = Entry(self.__root, width=25, borderwidth=1)
-        campo_cpf.grid(row=1, column=1, columnspan=2)
-
-        Label(self.__root, text="Data de Nascimento:").grid(row=2)
-        campo_dataNasc = Entry(self.__root, width=25, borderwidth=1)
-        Label(self.__root, text="Ex.: 00-00-0000").grid(row=2, column=3)
-        campo_dataNasc.grid(row=2, column=1, columnspan=2)
-
-        Label(self.__root, text="Salario:").grid(row=3)
-        campo_salario = Entry(self.__root, width=25, borderwidth=1)
-        campo_salario.grid(row=3, column=1, columnspan=2)
-
-        def instanciar():
-            nome = campo_nome.get() if campo_nome.get() else self.__campoVazioMessagem(self.registrarAtendente, 'nome')
-            cpf = campo_cpf.get()
-            data_nascimento = datetime.strptime(campo_dataNasc.get(), "%d-%m-%Y") if campo_dataNasc.get() else None
-            salario = campo_salario.get() if campo_salario.get() else self.__campoVazioMessagem(self.registrarAtendente, 'salario')
-
-            try:
-                self.__farmacia.getGerente().cadrastar_funcionario(nome, cpf, data_nascimento, Decimal(salario))
-            except Exception as erro:
-                messagebox.showerror("Erro ao tentar registrar Atendente.", f"{erro}")
-                self.registrarAtendente()
-
-            campo_nome.delete(0, END)
-            campo_cpf.delete(0, END)
-            campo_dataNasc.delete(0, END)
-            campo_salario.delete(0, END)
-            self.__root.destroy()
-            self.interface()
-
-        self.__botaoPadrao('Registrar Atendente', instanciar).grid(row=4, column=1)
-        self.__botaoPadrao("Voltar", self.interface).grid(row=4, column=2)
 
         self.__root.mainloop()
 
@@ -233,6 +184,102 @@ class Interface:
 
         self.__root.mainloop()
 
+    def registrarAtendente(self):
+        self.__inciarRoot()
+        self.__root.title('Registrar Atendente')
+        self.__temFarmacia()
+        self.__autenticacaoValidacao()
+        self.__usuarioTipoGerente()
+
+        Label(self.__root, text="Nome:").grid(row=0)
+        campo_nome = Entry(self.__root, width=25, borderwidth=1)
+        campo_nome.grid(row=0, column=1, columnspan=2)
+
+        Label(self.__root, text="CPF:").grid(row=1)
+        campo_cpf = Entry(self.__root, width=25, borderwidth=1)
+        campo_cpf.grid(row=1, column=1, columnspan=2)
+
+        Label(self.__root, text="Data de Nascimento:").grid(row=2)
+        campo_dataNasc = Entry(self.__root, width=25, borderwidth=1)
+        Label(self.__root, text="Ex.: 00-00-0000").grid(row=2, column=3)
+        campo_dataNasc.grid(row=2, column=1, columnspan=2)
+
+        Label(self.__root, text="Salario:").grid(row=3)
+        campo_salario = Entry(self.__root, width=25, borderwidth=1)
+        campo_salario.grid(row=3, column=1, columnspan=2)
+
+        def instanciar():
+            nome = campo_nome.get() if campo_nome.get() else self.__campoVazioMessagem(self.registrarAtendente, 'nome')
+            cpf = campo_cpf.get()
+            data_nascimento = datetime.strptime(campo_dataNasc.get(), "%d-%m-%Y") if campo_dataNasc.get() else None
+            salario = campo_salario.get() if campo_salario.get() else self.__campoVazioMessagem(self.registrarAtendente, 'salario')
+
+            try:
+                self.__farmacia.getGerente().cadrastar_funcionario('atendente', nome, cpf, data_nascimento, Decimal(salario))
+            except Exception as erro:
+                messagebox.showerror("Erro ao tentar registrar Atendente.", f"{erro}")
+                self.registrarAtendente()
+
+            campo_nome.delete(0, END)
+            campo_cpf.delete(0, END)
+            campo_dataNasc.delete(0, END)
+            campo_salario.delete(0, END)
+            self.__root.destroy()
+            self.interface()
+
+        self.__botaoPadrao('Registrar Atendente', instanciar).grid(row=4, column=1)
+        self.__botaoPadrao("Voltar", self.interface).grid(row=4, column=2)
+
+        self.__root.mainloop()
+
+    def registrarRepositor(self):
+        self.__inciarRoot()
+        self.__root.title('Registrar Repositor')
+        self.__temFarmacia()
+        self.__autenticacaoValidacao()
+        self.__usuarioTipoGerente()
+
+        Label(self.__root, text="Nome:").grid(row=0)
+        campo_nome = Entry(self.__root, width=25, borderwidth=1)
+        campo_nome.grid(row=0, column=1, columnspan=2)
+
+        Label(self.__root, text="CPF:").grid(row=1)
+        campo_cpf = Entry(self.__root, width=25, borderwidth=1)
+        campo_cpf.grid(row=1, column=1, columnspan=2)
+
+        Label(self.__root, text="Data de Nascimento:").grid(row=2)
+        campo_dataNasc = Entry(self.__root, width=25, borderwidth=1)
+        Label(self.__root, text="Ex.: 00-00-0000").grid(row=2, column=3)
+        campo_dataNasc.grid(row=2, column=1, columnspan=2)
+
+        Label(self.__root, text="Salario:").grid(row=3)
+        campo_salario = Entry(self.__root, width=25, borderwidth=1)
+        campo_salario.grid(row=3, column=1, columnspan=2)
+
+        def instanciar():
+            nome = campo_nome.get() if campo_nome.get() else self.__campoVazioMessagem(self.registrarAtendente, 'nome')
+            cpf = campo_cpf.get()
+            data_nascimento = datetime.strptime(campo_dataNasc.get(), "%d-%m-%Y") if campo_dataNasc.get() else None
+            salario = campo_salario.get() if campo_salario.get() else self.__campoVazioMessagem(self.registrarAtendente, 'salario')
+
+            try:
+                self.__farmacia.getGerente().cadrastar_funcionario('repositor', nome, cpf, data_nascimento, Decimal(salario))
+            except Exception as erro:
+                messagebox.showerror("Erro ao tentar registrar Repositor.", f"{erro}")
+                self.registrarAtendente()
+
+            campo_nome.delete(0, END)
+            campo_cpf.delete(0, END)
+            campo_dataNasc.delete(0, END)
+            campo_salario.delete(0, END)
+            self.__root.destroy()
+            self.interface()
+
+        self.__botaoPadrao('Registrar Repositor', instanciar).grid(row=4, column=1)
+        self.__botaoPadrao("Voltar", self.interface).grid(row=4, column=2)
+
+        self.__root.mainloop()
+
     def registrarProduto(self):
         '''Cria objeto de produto e já adiciona em estoque''' # por enquanto fica essa solução apra produto
         self.__inciarRoot()
@@ -284,7 +331,7 @@ class Interface:
         self.__inciarRoot(tamanho="800x400")
         self.__root.title('Consultar estoque')
         self.__temFarmacia()
-        self.__autenticacaoValidacao()
+        self.__usuarioTipoGerenteOuRepositor()
         produto_labels = []
         botoes_remover = []
 
@@ -307,8 +354,13 @@ class Interface:
 
                 produto_label = Label(self.__root, text=f"{produto[0]} | Quantidade: {produto[1]}")
                 produto_label.grid(row=2, column=0, columnspan=3)
-                botao_remover = self.__botaoPadrao("Remover", lambda: self.__removerProduto(produto[0].getId(), produto_label, botao_remover), pady=4)
-                botao_remover.grid(row=2, column=4)
+
+                botao_editar_preco = self.__botaoPadrao("Edit Preço", lambda: self.__editarPrecoProduto(produto[0]), pady=2, padx=6)
+                botao_editar_preco.grid(row=2, column=4)
+
+                botao_remover = self.__botaoPadrao("Remover", lambda: self.__removerProduto(produto[0].getId(), produto_label, botao_remover, botao_editar_preco), pady=4)
+                botao_remover.grid(row=2, column=5)
+
                 produto_labels.append(produto_label)
                 return
             return
@@ -335,15 +387,15 @@ class Interface:
             botao_editar_preco = self.__botaoPadrao("Edit Preço", lambda: self.__editarPrecoProduto(produto), pady=2, padx=6)
             botao_editar_preco.grid(row=row_, column=4)
 
-            botao_remover = self.__botaoPadrao("Remover", lambda: self.__removerProduto(produto.getId(), produto_label, botao_remover), pady=2)
+            botao_remover = self.__botaoPadrao("Remover", lambda: self.__removerProduto(produto.getId(), produto_label, botao_remover, botao_editar_preco), pady=2)
             botao_remover.grid(row=row_, column=5)
 
             produto_labels.append(produto_label)
             botoes_remover.append(botao_remover)
+            botoes_remover.append(botao_editar_preco)
             row_ += 1
             
         self.__root.mainloop()
-
 
     def __inciarRoot(self, tamanho = "500x300"):
         try:
@@ -371,9 +423,25 @@ class Interface:
             self.interface()
 
     def __usuarioTipoGerente(self):
-        idGerente = self.__farmacia.getGerente().get_id()
-        if not self.__idFuncionarioLogado == idGerente:
+        funcionario = self.__farmacia.getFuncionarioPorId(self.__idFuncionarioLogado)
+        if not funcionario.__class__.__name__ == 'Gerente':
             messagebox.showerror("Erro de Autenticação", f"É preciso estar logado como Gerente para conseguir prosseguir.")
+            self.__root.destroy()
+            self.interface()
+        return True
+    
+    def __usuarioTipoGerenteOuRepositor(self):
+        funcionario = self.__farmacia.getFuncionarioPorId(self.__idFuncionarioLogado)
+        if not (funcionario.__class__.__name__ == 'Gerente' or funcionario.__class__.__name__ == 'Repositor'):
+            messagebox.showerror("Erro de Autenticação", f"É preciso estar logado como Gerente ou Repositor para conseguir prosseguir.")
+            self.__root.destroy()
+            self.interface()
+        return True
+    
+    def __usuarioTipoGerenteOuAtendente(self):
+        funcionario = self.__farmacia.getFuncionarioPorId(self.__idFuncionarioLogado)
+        if not (funcionario.__class__.__name__ == 'Gerente' or funcionario.__class__.__name__ == 'Atendente'):
+            messagebox.showerror("Erro de Autenticação", f"É preciso estar logado como Gerente ou Atendente para conseguir prosseguir.")
             self.__root.destroy()
             self.interface()
         return True
@@ -394,7 +462,7 @@ class Interface:
             except:
                 continue
 
-    def __removerProduto(self, id_produto, produto_label, botao_remover):
+    def __removerProduto(self, id_produto, produto_label, botao_remover, botao_editar_preco):
             verificacao = messagebox.askyesno("Remover Produto", f"Você realmente deseja remover produto, id={id_produto}?")
 
             if not verificacao:
@@ -410,23 +478,33 @@ class Interface:
             try:
                 produto_label.destroy()
                 botao_remover.destroy()
+                botao_editar_preco.destroy()
             except:
                 return
             
     def __editarPrecoProduto(self, produto):
+        self.__inciarRoot()
+        self.__root.title('Editar Preço')
+        self.__temFarmacia()
         self.__usuarioTipoGerente()
 
-        Label(self.__root, text=f"Alterar preço do produto. Preço Atual: {produto.getPreco()}")
-        campo_preco = Entry(self.__root, width=25, borderwidth=1)
-        campo_preco.grid(row=1, column=0, columnspan=1)
+        def setPreco():
+            try:
+                self.__farmacia.getFuncionarioPorId(self.__idFuncionarioLogado).alterar_preco_produto(produto, Decimal(campo_preco.get()))
+            except Exception as erro:
+                messagebox.showerror("Erro ao tentar remover Produto.", f"{erro}")
+                self.__editarPrecoProduto(produto)
+                return
+            self.consultarEstoque()
 
-        try:
-            self.__farmacia.getFuncionarioPorId(self.__idFuncionarioLogado).alterar_preco_produto(self, produto, Decimal(campo_preco.get()))
-        except Exception as erro:
-            messagebox.showerror("Erro ao tentar remover Produto.", f"{erro}")
-            self.__editarPrecoProduto(produto)
-            return
-        return
+        Label(self.__root, text=f"Alterar preço do produto. Preço Atual: {produto.getPreco()}").grid(row=0, columnspan=3)
+        Label(self.__root, text=f"Novo Preço:").grid(row=1)
+        campo_preco = Entry(self.__root, width=25, borderwidth=1)
+        campo_preco.grid(row=1, column=1, columnspan=1)
+
+        self.__botaoPadrao("Alterar", setPreco, pady=4).grid(row=2, column=1)
+
+        self.__root.mainloop()
 
 
     

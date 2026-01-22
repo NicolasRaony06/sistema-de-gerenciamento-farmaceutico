@@ -25,11 +25,16 @@ class Gerente(Funcionario,FuncionalidadesGerente,GerenciarEstoqueMixin,Gerenciar
         '''Adiciona nova venda realizada a lista de vendas do funcionario.'''
         self.__vendasRealizadas.append(venda)
 
-    def cadrastar_funcionario(self, nome : str , cpf : str, data_nasc : datetime , salario : Decimal):
-        '''Cadrasta funcionario e retorna o objeto criado'''
+    def cadrastar_funcionario(self, tipo_funcionario : str,  nome : str , cpf : str, data_nasc : datetime, salario : Decimal):
+        '''Recebe como um dos parametros se o método deve cadastrar um Atendente('atendente') ou Repositor('repositor'). Cadrasta funcionario e retorna o id do objeto criado'''
         from random import randint
-        senha = str(randint(10000, 99999))
-        return self.getFarmacia()._registrarAtendente(self,nome,cpf,data_nasc,salario,senha)
+
+        if tipo_funcionario == 'atendente':
+            return self.getFarmacia()._registrarAtendente(self,nome,cpf,data_nasc,salario,cpf)
+        elif tipo_funcionario == 'repositor':
+            return self.getFarmacia()._registrarRepositor(self,nome,cpf,data_nasc,salario,cpf)
+            
+        raise ValueError("Parametro tipo_funcionario deve receber um dos dois valores: atendente ou repositor")
     
     def excluir_funcionario(self,funcionario):
         '''Remove o funcionario desejado da lista de funcionarios'''
@@ -48,6 +53,9 @@ class Gerente(Funcionario,FuncionalidadesGerente,GerenciarEstoqueMixin,Gerenciar
     def alterar_preco_produto(self, produto, preco: Decimal): #precisei implementar para testar algumas coisas em produto
         '''Alterar preço de produto. Recebe preço em Decimal e objeto de Produto'''
         validar_produto(produto) #Valida se foi passado um objeto funcionario
+        if not produto.getId() in self.getFarmacia()._estoque.get_produtos(self):
+            raise ValueError("Produto não existe em estoque")
+        
         produto.setPreco(self, preco)
         
     def __repr__(self):
