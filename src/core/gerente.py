@@ -10,11 +10,20 @@ class Gerente(Funcionario,FuncionalidadesGerente,GerenciarEstoqueMixin,Gerenciar
     def __init__(self,nome,cpf,data_nascimento,salario_base, id: int,farmacia, senha: str):
         super().__init__(nome,cpf,data_nascimento,salario_base, id,farmacia, senha)
         self.__porcentagemBonusGerente = 0.1
+        self.__vendasRealizadas = []
 
     def get_bonus(self):
         '''Recebe bonus de 10% do salario base acrescentado ao bonus base de funcionario.'''
         calculo = super().get_bonus() + (self.get_salario_base() * Decimal(self.__porcentagemBonusGerente))
-        return calculo.quantize(Decimal('0.01'))   
+        return calculo.quantize(Decimal('0.01'))
+    
+    def getVendasRealizadas(self):
+        '''Retorna lista de vendas realizadas'''
+        return self.__vendasRealizadas
+    
+    def setVendaRealizada(self, venda):
+        '''Adiciona nova venda realizada a lista de vendas do funcionario.'''
+        self.__vendasRealizadas.append(venda)
 
     def cadrastar_funcionario(self, nome : str , cpf : str, data_nasc : datetime , salario : Decimal):
         '''Cadrasta funcionario e retorna o objeto criado'''
