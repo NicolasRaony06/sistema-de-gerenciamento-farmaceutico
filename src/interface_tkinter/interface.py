@@ -307,8 +307,13 @@ class Interface:
 
                 produto_label = Label(self.__root, text=f"{produto[0]} | Quantidade: {produto[1]}")
                 produto_label.grid(row=2, column=0, columnspan=3)
-                botao_remover = self.__botaoPadrao("Remover", lambda: self.__removerProduto(produto[0].getId(), produto_label, botao_remover), pady=4)
-                botao_remover.grid(row=2, column=4)
+
+                botao_editar_preco = self.__botaoPadrao("Edit Preço", lambda: self.__editarPrecoProduto(produto[0]), pady=2, padx=6)
+                botao_editar_preco.grid(row=2, column=4)
+
+                botao_remover = self.__botaoPadrao("Remover", lambda: self.__removerProduto(produto[0].getId(), produto_label, botao_remover, botao_editar_preco), pady=4)
+                botao_remover.grid(row=2, column=5)
+
                 produto_labels.append(produto_label)
                 return
             return
@@ -335,15 +340,15 @@ class Interface:
             botao_editar_preco = self.__botaoPadrao("Edit Preço", lambda: self.__editarPrecoProduto(produto), pady=2, padx=6)
             botao_editar_preco.grid(row=row_, column=4)
 
-            botao_remover = self.__botaoPadrao("Remover", lambda: self.__removerProduto(produto.getId(), produto_label, botao_remover), pady=2)
+            botao_remover = self.__botaoPadrao("Remover", lambda: self.__removerProduto(produto.getId(), produto_label, botao_remover, botao_editar_preco), pady=2)
             botao_remover.grid(row=row_, column=5)
 
             produto_labels.append(produto_label)
             botoes_remover.append(botao_remover)
+            botoes_remover.append(botao_editar_preco)
             row_ += 1
             
         self.__root.mainloop()
-
 
     def __inciarRoot(self, tamanho = "500x300"):
         try:
@@ -394,7 +399,7 @@ class Interface:
             except:
                 continue
 
-    def __removerProduto(self, id_produto, produto_label, botao_remover):
+    def __removerProduto(self, id_produto, produto_label, botao_remover, botao_editar_preco):
             verificacao = messagebox.askyesno("Remover Produto", f"Você realmente deseja remover produto, id={id_produto}?")
 
             if not verificacao:
@@ -410,24 +415,33 @@ class Interface:
             try:
                 produto_label.destroy()
                 botao_remover.destroy()
+                botao_editar_preco.destroy()
             except:
                 return
             
     def __editarPrecoProduto(self, produto):
+        self.__inciarRoot()
+        self.__root.title('Editar Preço')
+        self.__temFarmacia()
         self.__usuarioTipoGerente()
 
+        def setPreco():
+            try:
+                self.__farmacia.getFuncionarioPorId(self.__idFuncionarioLogado).alterar_preco_produto(produto, Decimal(campo_preco.get()))
+            except Exception as erro:
+                messagebox.showerror("Erro ao tentar remover Produto.", f"{erro}")
+                self.__editarPrecoProduto(produto)
+                return
+            self.consultarEstoque()
 
-        Label(self.__root, text=f"Alterar preço do produto. Preço Atual: {produto.getPreco()}")
+        Label(self.__root, text=f"Alterar preço do produto. Preço Atual: {produto.getPreco()}").grid(row=0, columnspan=1)
+        Label(self.__root, text=f"Novo Preço:").grid(row=1)
         campo_preco = Entry(self.__root, width=25, borderwidth=1)
-        campo_preco.grid(row=1, column=0, columnspan=1)
+        campo_preco.grid(row=1, column=1, columnspan=1)
 
-        try:
-            self.__farmacia.getFuncionarioPorId(self.__idFuncionarioLogado).alterar_preco_produto(self, produto, Decimal(campo_preco.get()))
-        except Exception as erro:
-            messagebox.showerror("Erro ao tentar remover Produto.", f"{erro}")
-            self.__editarPrecoProduto(produto)
-            return
-        return
+        self.__botaoPadrao("Alterar", setPreco).grid(row=2, column=1)
+
+        self.__root.mainloop()
 
 
     
