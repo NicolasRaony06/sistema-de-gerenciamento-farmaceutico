@@ -47,6 +47,10 @@ class Atendente(Funcionario,GerenciarVendaMixin):
             raise ValueError("Porcentagem deve ser maior que zero")
 
         self.__porcetagemComissaoVenda = porcentagem / 100
+        
+    def registrarCliente(self, nome : str, cpf : str, data_nascimento = None):
+        '''Recebe atributos de cliente, registra um novo cliente em farmacia e retorna seu id'''
+        return self.getFarmacia()._registrarCliente(self, nome, cpf, data_nascimento)
 
     def __repr__(self):
         return f'Atendente("{self.nome}", {self.get_cpf()}, "{self.get_data_nascimento()}", {self.get_salario_base()}, {self.get_id()})'

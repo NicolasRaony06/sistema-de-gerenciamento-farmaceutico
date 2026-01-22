@@ -41,6 +41,10 @@ class Gerente(Funcionario,FuncionalidadesGerente,GerenciarEstoqueMixin,Gerenciar
             return True
         return False
 
+    def registrarCliente(self, nome : str, cpf : str, data_nascimento = None):
+        '''Recebe atributos de cliente, registra um novo cliente em farmacia e retorna seu id'''
+        return self.getFarmacia()._registrarCliente(self, nome, cpf, data_nascimento)
+
     def alterar_preco_produto(self, produto, preco: Decimal): #precisei implementar para testar algumas coisas em produto
         '''Alterar preço de produto. Recebe preço em Decimal e objeto de Produto'''
         validar_produto(produto) #Valida se foi passado um objeto funcionario
