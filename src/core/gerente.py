@@ -31,7 +31,7 @@ class Gerente(Funcionario,FuncionalidadesGerente):
             return True
         return False
 
-    def alterar_preco_produto(self, produto, preco: Decimal,): #precisei implementar para testar algumas coisas em produto
+    def alterar_preco_produto(self, produto, preco: Decimal): #precisei implementar para testar algumas coisas em produto
         '''Alterar preço de produto. Recebe preço em Decimal e objeto de Produto'''
         validar_produto(produto) #Valida se foi passado um objeto funcionario
         produto.setPreco(self, preco)
