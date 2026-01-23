@@ -55,7 +55,7 @@ def listar_medicamentos():
     input("\nPressione Enter para voltar ao menu...")
 
 def buscar_medicamento_id():
-    print("\n--- BUSCAR MEDICAMENTO ---")
+    print("\n--- BUSCAR PRODUTO POR ID ---")
     id = int(input("Digite o Id do Produto: "))
     if gerente.consultar_produto_por_id(id) is None:
         print("Produto não encontrado")
@@ -65,12 +65,21 @@ def buscar_medicamento_id():
     input("\nPressione Enter para voltar ao menu...")
 
 def buscar_medicamento_nome():
-    print("\n--- REALIZAR VENDA ---")
+    print("\n--- BUSCAR PRODUTO POR NOME ---")
     nome = str(input("Digite o Nome do Produto: "))
     if gerente.consultar_produto_por_nome(nome) is None:
         print("Produto não encontrado")
     else:
         print(gerente.consultar_produto_por_nome(nome))
+    input("\nPressione Enter para voltar ao menu...")
+def cadrastar_funcionario():
+    print("\n--- CADRASTAR FUNCIONÁRIO ---")
+    nome  = str(input("Digite o nome do funcionário: "))
+    cpf = str(input("Digite o Cpf do funcionário: "))
+    date = str("Data de nascimento do funcionário: ")
+    salario = Decimal(input("Salário do funcionário: "))
+    gerente.cadrastar_funcionario(nome,cpf,date,salario)
+    print(gerente.consultar_lista_funcionario())
     input("\nPressione Enter para voltar ao menu...")
 
 def menu():
@@ -85,8 +94,8 @@ def menu():
     print("[4] - Consultar Estoque")
     print("[5] - Buscar Produto por Id")
     print("[6] - Buscar Produto por Nome")
-    print("[7] - Excluir Funcionário")
-    print("[8] - Cadrastar Funcionário")
+    print("[7] - Cadrastar Funcionário")
+    print("[8] - Excluir Funcionário")
     print("[0] - Sair")
     print("="*30)
 
@@ -104,6 +113,12 @@ def main():
             alterar_preco_produto()
         elif opcao == '4':
             listar_medicamentos()
+        elif opcao == '5':
+            buscar_medicamento_id()
+        elif opcao == '6':
+            buscar_medicamento_nome()
+        elif opcao == '7':
+           cadrastar_funcionario()
         elif opcao == '0':
             print("\nSaindo do sistema... Até logo!")
             break
