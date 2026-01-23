@@ -29,26 +29,29 @@ def cadrastar_produto():
     gerente.adicionar_produto_estoque(p1,qntd) 
     input("\nPressione Enter para voltar ao menu...") 
 
-def alterar_preco_produto():
-        print("\n--- ALTERAR PREÇO ---") 
-        id_produto = int(input("Digite o ID do produto: "))
-        novo_preco = Decimal(input("Digite o novo preço: "))
-
-        produto, _ = gerente.consultar_produto_por_id(id_produto)
-
-        gerente.alterar_preco_produto(produto, novo_preco)
-        input("\nPressione Enter para voltar ao menu...") 
-
 def remover_produto():
     print("\n--- REMOVER PRODUTO ---") 
     id = int(input("Digite o Id do Produto: "))
     gerente.remover_produto(id)
     input("\nPressione Enter para voltar ao menu...") 
 
+def alterar_preco_produto():
+        print("\n--- ALTERAR PREÇO ---") 
+        id_produto = int(input("Digite o ID do produto: "))
+        novo_preco = Decimal(input("Digite o novo preço: "))
+
+        produto , _ = gerente.consultar_produto_por_id(id_produto)
+
+        gerente.alterar_preco_produto(produto, novo_preco)
+        input("\nPressione Enter para voltar ao menu...") 
+
+
 def listar_medicamentos():
     print("\n--- ESTOQUE ATUAL ---")
-    print("          NOME | PREÇO | FABRICANTE | ID")
-    print(gerente.consultar_estoque())
+    if  not  gerente.consultar_estoque() :
+        print("Estoque Vazio!")
+    else:
+        print(gerente.consultar_estoque())
     input("\nPressione Enter para voltar ao menu...")
 
 def buscar_medicamento_id():
