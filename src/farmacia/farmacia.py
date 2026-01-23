@@ -62,7 +62,7 @@ class Farmacia:
         return self.__logAlteracoes
 
     def _criarVenda(self, funcionario):
-        '''Cria um objeto do tipo Venda. Adiciona obejto em Lista de Vendas e retorna seu indice'''
+        '''Cria um objeto do tipo Venda. Adiciona objeto em Lista de Vendas e retorna seu id'''
         from src.farmacia.venda import Venda
         validar_funcionario(funcionario)
         
@@ -80,6 +80,12 @@ class Farmacia:
         self.__logAlteracoes.append(log)
 
         return venda.getId()   
+    
+    def removerVenda(self, funcionario, id_venda = int):
+        '''Remove venda da lista de vendas de farmacia caso venda ainda não tenha sido finalizada. Recebe id da venda e objeto de funcionario como parametro para validação.'''
+        validar_funcionario(funcionario)
+        
+        self.__vendas.remove(self.getVendaPorId(id_venda))
 
     def _registrarGerente(self, nome, cpf, data_nasc, salario, senha):
         '''Recebe como parametros atributos de um Gerente e cria um novo objeto do tipo Gerente.'''
