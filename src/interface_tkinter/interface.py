@@ -125,7 +125,7 @@ class Interface:
                 self.interface()
 
         self.__botaoPadrao('Registrar Farmácia', instanciar).grid(row=1, column=1)
-
+        
         self.__root.mainloop()
 
     def registrarGerente(self):
