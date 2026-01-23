@@ -15,7 +15,7 @@ Desenvolver um sistema de gerenciamento farmacêutico com foco educacional, apli
 ## 🧑‍💻 Equipe
 
 - **Nicolas Raony** – Desenvolvedor e mantenedor do repositório  
-- **João Alvim** – Desenvolvimento e apoio ([GitHub](https://github.com/rootAlvim))  
+- **Francisco Alvaro** – Desenvolvimento e apoio ([GitHub](https://github.com/rootAlvim))  
 - **Arthur Turizzi** – Desenvolvimento e apoio ([GitHub](https://github.com/Aruturiz))
 
 ---
