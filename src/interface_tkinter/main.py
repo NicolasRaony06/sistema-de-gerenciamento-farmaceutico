@@ -2,7 +2,7 @@
 
 from src.interface_tkinter.interface import Interface
 
-interface = Interface()
+interface = Interface("Pague menos")
 
 interface.interface()
 

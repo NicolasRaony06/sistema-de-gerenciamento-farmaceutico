@@ -6,9 +6,9 @@ from decimal import Decimal
 from datetime import datetime
 
 class Interface:
-    def __init__(self):
+    def __init__(self, nome_farmacia: str):
         self.__root = None
-        self.__farmacia = None
+        self.__farmacia = Farmacia(nome_farmacia)
         self.__idFuncionarioLogado = None
     
     def interface(self):
@@ -285,7 +285,7 @@ class Interface:
         self.__inciarRoot()
         self.__root.title('Registrar Produto')
         self.__temFarmacia()
-        self.__autenticacaoValidacao()
+        self.__usuarioTipoGerenteOuRepositor()
 
         Label(self.__root, text="Nome:").grid(row=0)
         campo_nome = Entry(self.__root, width=25, borderwidth=1)
