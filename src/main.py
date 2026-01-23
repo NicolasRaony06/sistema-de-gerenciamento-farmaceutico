@@ -1,4 +1,5 @@
 import os
+from datetime import datetime
 import time
 #python -m src.main 
 from decimal import Decimal
@@ -72,16 +73,27 @@ def buscar_medicamento_nome():
     else:
         print(gerente.consultar_produto_por_nome(nome))
     input("\nPressione Enter para voltar ao menu...")
+
 def cadrastar_funcionario():
     print("\n--- CADRASTAR FUNCIONÁRIO ---")
     nome  = str(input("Digite o nome do funcionário: "))
     cpf = str(input("Digite o Cpf do funcionário: "))
-    date = str("Data de nascimento do funcionário: ")
+    date = input("Data de nascimento do funcionário (dd-mm-aaaa): ")
+    date_format  = datetime.strptime(date, "%d-%m-%Y").date() #Tira as horas/minutos/segundos
     salario = Decimal(input("Salário do funcionário: "))
-    gerente.cadrastar_funcionario(nome,cpf,date,salario)
+    gerente.cadrastar_funcionario(nome,cpf,date_format,salario)
+    print("Funcionário Cadrastado!")
+    input("\nPressione Enter para voltar ao menu...")
+def excluir_funcionario():
+    print("\n--- EXCLUIR FUNCIONÁRIO ---")
+    id = int(input("Digite o Id do funcionário: "))
+    fun = gerente.getFarmacia().getFuncionarioPorId(id)
+    gerente.excluir_funcionario(fun)
+    input("\nPressione Enter para voltar ao menu...")
+def listar_funcionarios():
+    print("\n--- LISTAGEM DE TODOS OS FUNCIONÁRIOS---")
     print(gerente.consultar_lista_funcionario())
     input("\nPressione Enter para voltar ao menu...")
-
 def menu():
     """Exibe as opções para o usuário."""
     limpar_tela()
@@ -96,6 +108,7 @@ def menu():
     print("[6] - Buscar Produto por Nome")
     print("[7] - Cadrastar Funcionário")
     print("[8] - Excluir Funcionário")
+    print("[9] - Lista de  Funcionários")
     print("[0] - Sair")
     print("="*30)
 
@@ -119,6 +132,10 @@ def main():
             buscar_medicamento_nome()
         elif opcao == '7':
            cadrastar_funcionario()
+        elif opcao == '8':
+            excluir_funcionario()
+        elif opcao == '9':
+            listar_funcionarios()
         elif opcao == '0':
             print("\nSaindo do sistema... Até logo!")
             break
