@@ -25,7 +25,7 @@ class Gerente(Funcionario,FuncionalidadesGerente):
         '''Remove o funcionario desejado da lista de funcionarios'''
         # Implementaçao a ser discutida!!
         validar_funcionario(funcionario) #Valida se foi passado um objeto funcionario
-        lista = self.getfarmacia().getFuncionarios()
+        lista = self.getFarmacia().getFuncionarios()
         if funcionario in lista:
             lista.remove(funcionario)
             return True
