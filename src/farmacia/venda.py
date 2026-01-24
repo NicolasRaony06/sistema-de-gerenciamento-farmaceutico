@@ -76,6 +76,25 @@ class Venda:
                 
         self.__produtos.append((produto.__repr__(), quantidade))
 
+    def removerProduto(self, funcionario, produto, quantidade: int = None):
+        '''Recebe objeto de funcionario para validação, produto e um inteiro para quantidade. Caso quantidade não seja passada, produto é removido por completo de venda.'''
+        validar_funcionario(funcionario)
+        validar_produto(produto)
+        for index, itemVenda in enumerate(self.__produtos):
+            if not produto.__repr__() in itemVenda:
+                raise ValueError("Produto não está adicionado em venda")
+        
+            if not quantidade:
+                self.__produtos.remove(itemVenda)
+                return True
+            
+            if  quantidade > itemVenda[1]:
+                self.__produtos[index] = (produto.__repr__(), 0)
+                return True
+            
+            self.__produtos[index] = (produto.__repr__(), itemVenda[1] - quantidade)
+            return True
+
     def finalizarVenda(self, funcionario):
         '''Altera preco total da venda com base em produtos já adicionados e suas quantidades. Recebe um objeto do tipo Funcionario. Esse metodo sinaliza a finalização da compra.'''
         validar_funcionario(funcionario)
