@@ -80,6 +80,9 @@ class Venda:
         '''Recebe objeto de funcionario para validação, produto e um inteiro para quantidade. Caso quantidade não seja passada, produto é removido por completo de venda.'''
         validar_funcionario(funcionario)
         validar_produto(produto)
+        if self.__precoTotal:
+            raise PermissionError("Venda já foi finalizada. Não é mais possível produto")
+
         for index, itemVenda in enumerate(self.__produtos):
             if not produto.__repr__() in itemVenda:
                 raise ValueError("Produto não está adicionado em venda")

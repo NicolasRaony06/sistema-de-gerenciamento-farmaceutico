@@ -12,6 +12,10 @@ class GerenciarVendaMixin:
             return True
         raise ValueError("Produto indisponível no estoque")
 
+    def remover_produto_venda(self, produto, quantidade: int = None):
+        '''Recebe objeto de produto e um inteiro para quantidade. Caso quantidade não seja passada, produto é removido por completo de venda.'''
+        return self.getVendasRealizadas()[-1].removerProduto(self, produto, quantidade)
+
     def adicionar_cliente_venda(self, cliente):
         '''Adiciona cliente em ultima venda registrada pelo funcionario.'''
         self.getVendasRealizadas()[-1].adicionarCliente(self, cliente)
