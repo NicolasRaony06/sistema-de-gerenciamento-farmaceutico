@@ -2,7 +2,7 @@
 from datetime import datetime
 from decimal import Decimal, ROUND_DOWN
 from src.utils.gerador_id import getIdProduto
-from src.utils.validacoes import validar_cliente, validar_produto
+from src.utils.validacoes import validar_cliente, validar_produto, validar_funcionario
 
 class Venda:
     allIds = []
@@ -39,8 +39,9 @@ class Venda:
         '''Retorna cliente caso exista em Venda'''
         return self.__cliente
     
-    def adicionarCliente(self, cliente):
-        '''Adiciona um cliente em Venda. Recebe objeto de cliente.'''
+    def adicionarCliente(self, funcionario, cliente):
+        '''Adiciona um cliente em Venda. Recebe objeto de funcionario e de cliente.'''
+        validar_funcionario(funcionario)
         validar_cliente(cliente)
 
         if self.__precoTotal :
@@ -57,8 +58,9 @@ class Venda:
 
         self.__logAlteracoes.append(log)
     
-    def adicionarProduto(self, produto, quantidade : int):
-        '''Adiciona produto em Venda, caso produto já exista, a sua quantidade é somada. Recebe como parâmetro um objeto do tipo Produto e uma quantidade inteira. Não é possível adicionar produto se venda tiver sido finalizada'''
+    def adicionarProduto(self, funcionario, produto, quantidade : int):
+        '''Adiciona produto em Venda, caso produto já exista, a sua quantidade é somada. Recebe como parâmetro objeto de funcionario, um objeto do tipo Produto e uma quantidade inteira. Não é possível adicionar produto se venda tiver sido finalizada'''
+        validar_funcionario(funcionario)
         validar_produto(produto) 
         
         if self.__precoTotal :
@@ -74,8 +76,10 @@ class Venda:
                 
         self.__produtos.append((produto.__repr__(), quantidade))
 
-    def finalizarVenda(self):
+    def finalizarVenda(self, funcionario):
         '''Altera preco total da venda com base em produtos já adicionados e suas quantidades. Recebe um objeto do tipo Funcionario. Esse metodo sinaliza a finalização da compra.'''
+        validar_funcionario(funcionario)
+        
         if self.__precoTotal :
             raise PermissionError("Venda já finalizada")
 

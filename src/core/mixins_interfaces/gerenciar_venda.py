@@ -7,14 +7,14 @@ class GerenciarVendaMixin:
         '''Adiciona produto em venda, ultima realizada por funcionario, caso produto esteja disponivel no estoque.'''
         estoque = self.getFarmacia()._estoque
         if estoque.produto_disponibilidade(produto, quantidade):
-            self.getVendasRealizadas()[-1].adicionarProduto(produto, quantidade)
+            self.getVendasRealizadas()[-1].adicionarProduto(self, produto, quantidade)
             estoque.remover_produto(self, produto.getId(), quantidade)
             return True
         raise ValueError("Produto indisponível no estoque")
 
     def adicionar_cliente_venda(self, cliente):
         '''Adiciona cliente em ultima venda registrada pelo funcionario.'''
-        self.getVendasRealizadas()[-1].adicionarCliente(cliente)
+        self.getVendasRealizadas()[-1].adicionarCliente(self, cliente)
 
     def remover_venda(self, id_venda):
         '''Remove venda da lista de vendas de farmacia caso venda ainda não tenha sido finalizada. Recebe id da venda.'''
@@ -22,5 +22,5 @@ class GerenciarVendaMixin:
 
     def finalizar_venda(self):
         '''Finaliza ultima venda realizada pelo funcionario.'''
-        self.getVendasRealizadas()[-1].finalizarVenda()
+        self.getVendasRealizadas()[-1].finalizarVenda(self)
         
