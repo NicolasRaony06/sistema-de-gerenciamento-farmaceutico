@@ -401,7 +401,11 @@ class Interface:
             if id_venda:
                 _row = 4
                 for produto in self.__farmacia.getVendaPorId(id_venda).getProdutos():
-                    Label(self.__root, text=f'{produto[0].__str__()} | {produto[1]}').grid(row=_row, column=2, padx=(10, 0))
+                    produto_label = Label(self.__root, text=f'{produto[0].__str__()} | {produto[1]}')
+                    produto_label.grid(row=_row, column=2, padx=(10, 0))
+
+                    botao_remover = self.__botaoPadrao("Remover", lambda: removerProduto(produto[0], produto_label, botao_remover))
+                    botao_remover.grid(row=_row, column=3)
                     _row += 1
 
         def adicionarProduto():
@@ -441,6 +445,28 @@ class Interface:
             campo_produto.delete(0, END)
             campo_qtd.delete(0, END)
             campo_qtd.insert(0, 1)
+
+        def removerProduto(produto, produto_label, botao_remover):
+            from src.farmacia.produto import Produto
+            print(type(produto))
+            produto = eval(produto.__repr__())
+            print(type(produto))
+            verificacao = messagebox.askyesno("Remover Produto", f"Você realmente deseja remover produto, id={produto.getId()}?")
+
+            if not verificacao:
+                return
+            
+            try:
+                self.__farmacia.getFuncionarioPorId(self.__idFuncionarioLogado).remover_produto_venda(produto)
+            except Exception as erro:
+                messagebox.showerror("Erro ao tentar remover Produto.", f"{erro}")
+                return
+
+            try:
+                produto_label.destroy()
+                botao_remover.destroy()
+            except:
+                return
 
         def voltar():
             self.__farmacia.getFuncionarioPorId(self.__idFuncionarioLogado).remover_venda(id_venda) 
