@@ -164,7 +164,7 @@ class Interface:
         def instanciar():
             nome = campo_nome.get() if campo_nome.get() else self.__campoVazioMessagem(self.registrarGerente, 'nome')
             cpf = campo_cpf.get()
-            data_nascimento = datetime.strptime(campo_dataNasc.get(), "%d-%m-%Y") if campo_dataNasc.get() else None
+            data_nascimento = datetime.strptime(self.dataNascimentoRegex(campo_dataNasc.get()), "%d%m%Y") if campo_dataNasc.get() else None
             salario = campo_salario.get() if campo_salario.get() else self.__campoVazioMessagem(self.registrarGerente, 'salario')
             senha = campo_senha.get() if campo_senha.get() else self.__campoVazioMessagem(self.registrarGerente, 'senha')
 
@@ -213,7 +213,7 @@ class Interface:
         def instanciar():
             nome = campo_nome.get() if campo_nome.get() else self.__campoVazioMessagem(self.registrarAtendente, 'nome')
             cpf = campo_cpf.get()
-            data_nascimento = datetime.strptime(campo_dataNasc.get(), "%d-%m-%Y") if campo_dataNasc.get() else None
+            data_nascimento = datetime.strptime(self.dataNascimentoRegex(campo_dataNasc.get()), "%d-%m-%Y") if campo_dataNasc.get() else None
             salario = campo_salario.get() if campo_salario.get() else self.__campoVazioMessagem(self.registrarAtendente, 'salario')
 
             try:
@@ -260,7 +260,7 @@ class Interface:
         def instanciar():
             nome = campo_nome.get() if campo_nome.get() else self.__campoVazioMessagem(self.registrarRepositor, 'nome')
             cpf = campo_cpf.get()
-            data_nascimento = datetime.strptime(campo_dataNasc.get(), "%d-%m-%Y") if campo_dataNasc.get() else None
+            data_nascimento = datetime.strptime(self.dataNascimentoRegex(campo_dataNasc.get()), "%d-%m-%Y") if campo_dataNasc.get() else None
             salario = campo_salario.get() if campo_salario.get() else self.__campoVazioMessagem(self.registrarRepositor, 'salario')
 
             try:
@@ -303,7 +303,7 @@ class Interface:
         def instanciar():
             nome = campo_nome.get() if campo_nome.get() else self.__campoVazioMessagem(self.registrarCliente, 'nome')
             cpf = campo_cpf.get()
-            data_nascimento = datetime.strptime(campo_dataNasc.get(), "%d-%m-%Y") if campo_dataNasc.get() else None
+            data_nascimento = datetime.strptime(self.dataNascimentoRegex(campo_dataNasc.get()), "%d-%m-%Y") if campo_dataNasc.get() else None
 
             try:
                 self.__farmacia.getFuncionarioPorId(self.__idFuncionarioLogado).registrarCliente(nome, cpf, data_nascimento)
@@ -512,6 +512,11 @@ class Interface:
             self.__root.destroy()
             self.interface()
 
+    def dataNascimentoRegex(self, data_nascimento):
+        import re
+        data_nascimento = re.sub(r'[-/\.]','', data_nascimento)
+        return data_nascimento
+        
     def __usuarioTipoGerente(self):
         funcionario = self.__farmacia.getFuncionarioPorId(self.__idFuncionarioLogado)
         if not funcionario.__class__.__name__ == 'Gerente':
