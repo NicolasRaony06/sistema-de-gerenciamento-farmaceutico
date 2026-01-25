@@ -21,11 +21,11 @@ def limpar_tela():
     os.system('cls' if os.name == 'nt' else 'clear')
 
 def cadrastar_produto():
-    print("\n--- CADASTRAR NOVO MEDICAMENTO ---") 
+    print("\n--- CADASTRAR NOVO PRODUTO ---") 
     nome = input("Nome: ") 
     preco = input("Preço: ") 
     fabricante = input("Fabricante: ") 
-    qntd = input("Quantidade: ") 
+    qntd = int(input("Quantidade: ") )
     p1 = Produto(nome,preco,fabricante) 
     gerente.adicionar_produto_estoque(p1,qntd) 
     input("\nPressione Enter para voltar ao menu...") 
@@ -40,14 +40,11 @@ def alterar_preco_produto():
         print("\n--- ALTERAR PREÇO ---") 
         id_produto = int(input("Digite o ID do produto: "))
         novo_preco = Decimal(input("Digite o novo preço: "))
-
         produto , _ = gerente.consultar_produto_por_id(id_produto)
-
         gerente.alterar_preco_produto(produto, novo_preco)
         input("\nPressione Enter para voltar ao menu...") 
 
-
-def listar_medicamentos():
+def listar_produtos():
     print("\n--- ESTOQUE ATUAL ---")
     if  not  gerente.consultar_estoque() :
         print("Estoque Vazio!")
@@ -55,7 +52,7 @@ def listar_medicamentos():
         print(gerente.consultar_estoque())
     input("\nPressione Enter para voltar ao menu...")
 
-def buscar_medicamento_id():
+def buscar_produto_id():
     print("\n--- BUSCAR PRODUTO POR ID ---")
     id = int(input("Digite o Id do Produto: "))
     if gerente.consultar_produto_por_id(id) is None:
@@ -65,7 +62,7 @@ def buscar_medicamento_id():
 
     input("\nPressione Enter para voltar ao menu...")
 
-def buscar_medicamento_nome():
+def buscar_produto_nome():
     print("\n--- BUSCAR PRODUTO POR NOME ---")
     nome = str(input("Digite o Nome do Produto: "))
     if gerente.consultar_produto_por_nome(nome) is None:
@@ -94,11 +91,19 @@ def listar_funcionarios():
     print("\n--- LISTAGEM DE TODOS OS FUNCIONÁRIOS---")
     print(gerente.consultar_lista_funcionario())
     input("\nPressione Enter para voltar ao menu...")
+def vender_produto():
+    id =  int(input('ID: '))
+    p1 , _ = gerente.consultar_produto_por_id(id) 
+    venda = gerente.registrar_venda()
+    gerente.adicionar_produto_venda(id,12)
+    gerente.finalizar_venda(venda)
+    input("\nPressione Enter para voltar ao menu...")
 def menu():
     """Exibe as opções para o usuário."""
     limpar_tela()
     print("="*30)
     print(" SISTEMA DE FARMÁCIA v1.0 ")
+    print(" AREA DO GERENTE ")
     print("="*30)
     print("[1] - Cadastrar Produto")
     print("[2] - Remover Produto")
@@ -109,6 +114,7 @@ def menu():
     print("[7] - Cadrastar Funcionário")
     print("[8] - Excluir Funcionário")
     print("[9] - Lista de  Funcionários")
+    print("[10] - Vender Produto")
     print("[0] - Sair")
     print("="*30)
 
@@ -125,17 +131,19 @@ def main():
         elif opcao == '3':
             alterar_preco_produto()
         elif opcao == '4':
-            listar_medicamentos()
+            listar_produtos()
         elif opcao == '5':
-            buscar_medicamento_id()
+            buscar_produto_id()
         elif opcao == '6':
-            buscar_medicamento_nome()
+            buscar_produto_nome()
         elif opcao == '7':
            cadrastar_funcionario()
         elif opcao == '8':
             excluir_funcionario()
         elif opcao == '9':
             listar_funcionarios()
+        elif opcao == '10':
+            vender_produto()
         elif opcao == '0':
             print("\nSaindo do sistema... Até logo!")
             break
