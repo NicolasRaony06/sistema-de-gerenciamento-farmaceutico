@@ -1,4 +1,3 @@
-
 # ---------------- IMPORTS ----------------
 import os
 import time
@@ -173,3 +172,40 @@ def menu():
     print("=" * 30)
 
 
+# ---------------- MAIN ----------------
+def main():
+    while True:
+        menu()
+        opcao = input("Escolha uma opção: ")
+
+        if opcao == '1':
+            cadrastar_produto()
+        elif opcao == '2':
+            remover_produto()
+        elif opcao == '3':
+            alterar_preco_produto()
+        elif opcao == '4':
+            listar_produtos()
+        elif opcao == '5':
+            buscar_produto_id()
+        elif opcao == '6':
+            buscar_produto_nome()
+        elif opcao == '7':
+            cadrastar_funcionario()
+        elif opcao == '8':
+            excluir_funcionario()
+        elif opcao == '9':
+            listar_funcionarios()
+        elif opcao == '10':
+            vender_produto()
+        elif opcao == '0':
+            print("\nSaindo do sistema... Até logo!")
+            break
+        else:
+            print("\nOpção inválida!")
+            time.sleep(1)
+
+
+# ---------------- PONTO DE ENTRADA ----------------
+if __name__ == "__main__":
+    main()
