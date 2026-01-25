@@ -79,7 +79,7 @@ class Farmacia:
 
         self.__logAlteracoes.append(log)
 
-        return venda.getId()   
+        return venda
 
     
     def _removerVenda(self, funcionario, id_venda: int):
@@ -127,7 +127,7 @@ class Farmacia:
         self.__logAlteracoes.append(log)
 
 
-        return atendente.get_id()
+        return atendente
     
     def _registrarRepositor(self, gerente, nome : str , cpf : str, data_nasc : datetime, salario : Decimal, senha):
         '''Recebe como parametros um objeto de Gerente para controle e atributos de um Atendente, e cria um novo objeto do tipo Atendente. Retorna seu id.'''
@@ -147,7 +147,7 @@ class Farmacia:
 
         self.__logAlteracoes.append(log)
 
-        return repositor.get_id()
+        return repositor
 
     
     def _registrarCliente(self, funcionario, nome : str, cpf : str, data_nascimento = None):
@@ -166,7 +166,7 @@ class Farmacia:
 
         self.__logAlteracoes.append(log)
         
-        return cliente.get_cpf()
+        return cliente
 
 
 

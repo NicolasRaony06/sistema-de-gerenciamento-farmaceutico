@@ -62,7 +62,7 @@ def alterar_preco_produto():
     id_produto = int(input("Digite o ID do produto: "))
     novo_preco = Decimal(input("Digite o novo preço: "))
 
-    produto, _ = gerente.consultar_produto_por_id(id_produto)
+    produto , _ = gerente.consultar_produto_por_id(id_produto)
     gerente.alterar_preco_produto(produto, novo_preco)
 
     input("\nPressione Enter para voltar ao menu...")
@@ -114,8 +114,8 @@ def cadrastar_funcionario():
     data_nascimento = datetime.strptime(data_str, "%d-%m-%Y").date()
 
     salario = Decimal(input("Salário do funcionário: "))
-
-    gerente.cadrastar_funcionario(nome, cpf, data_nascimento, salario)
+    cargo = str(input("Digite o cargo do funcionário: (atendente/repositor): "))
+    gerente.cadrastar_funcionario(cargo,nome, cpf, data_nascimento, salario)
 
     print("Funcionário cadastrado!")
     input("\nPressione Enter para voltar ao menu...")
@@ -140,14 +140,40 @@ def listar_funcionarios():
 
 # ---------------- VENDAS ----------------
 def vender_produto():
-    id_produto = int(input("ID do produto: "))
-
-    produto, _ = gerente.consultar_produto_por_id(id_produto)
     venda = gerente.registrar_venda()
 
-    gerente.adicionar_produto_venda(id_produto, 12)
-    gerente.finalizar_venda(venda)
+    while True:
+        id_produto = int(input("ID do produto (0 para finalizar): "))
 
+        if id_produto == 0:
+            break
+
+        quantidade = int(input("Quantidade: "))
+
+        try:
+            # busca no estoque
+            produto, qtd_estoque = gerente.consultar_produto_por_id(id_produto)
+
+            if quantidade > qtd_estoque:
+                print("Quantidade insuficiente em estoque")
+                continue
+
+            # adiciona na venda
+            gerente.adicionar_produto_venda(produto,quantidade)
+
+
+            print("Produto adicionado à venda!")
+
+        except ValueError as e:
+            print(f"Erro: {e}")
+
+    gerente.finalizar_venda()
+    print("ITENS DA VENDA:")
+    for item in venda.getProdutos():
+        print(item)
+    print("PREÇO TOTAL")
+    print(venda.getPrecoTotal())
+    
     input("\nPressione Enter para voltar ao menu...")
 
 

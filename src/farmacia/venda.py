@@ -114,17 +114,17 @@ class Venda:
         '''Altera preco total da venda com base em produtos já adicionados e suas quantidades. Recebe um objeto do tipo Funcionario. Esse metodo sinaliza a finalização da compra.'''
         validar_funcionario(funcionario)
         
-
         if self.__precoTotal :
             raise PermissionError("Venda já finalizada")
 
-        total = Decimal("0")
-        for produto, quantidade in self.__produtos:
-            total += produto.getPreco() * quantidade
+        self.__precoTotal = self.__subTotal()
+        log = (
+            f'finalizarVenda()', 
+            f'Data:{datetime.now()}',
+            f'Preco:{self.__precoTotal}')
 
-        self.__precoTotal = total
-        self.__logAlteracoes.append(("venda_finalizada", datetime.now(), total))
-        
+        self.__logAlteracoes.append(log)
+    
     def __subTotal(self):
         '''Método privado para calcular subtotal da venda.'''
         from src.farmacia.produto import Produto
@@ -148,4 +148,4 @@ class ItemVenda:
         return self.preco * Decimal(self.quantidade)
     
     def __str__(self):
-        return f'Produto: Id={self.id} | Nome={self.nome} | Preço={self.preco} | Quantidade={self.quantidade}'
+        return f'Produto: Id={self.id} | Nome={self.nome} | Preço={self.preco} | Quantidade={self.quantidade} | SubTotal: {self.subTotal()}'

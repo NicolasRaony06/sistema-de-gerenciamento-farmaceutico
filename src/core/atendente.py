@@ -57,4 +57,4 @@ class Atendente(Funcionario,GerenciarVendaMixin):
         return self.getFarmacia()._registrarCliente(self, nome, cpf, data_nascimento)
 
     def __repr__(self):
-        return f'Atendente("{self.nome}", {self.get_cpf()}, "{self.get_data_nascimento()}", {self.get_salario_base()}, {self.get_id()})'
+        return f'Atendente("{self.nome}", {self.get_cpf()}, "{self.get_data_nascimento()}", {self.get_salario_base()}, {self.get_id()} )'

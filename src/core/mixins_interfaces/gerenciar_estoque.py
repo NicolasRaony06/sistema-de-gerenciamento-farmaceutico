@@ -14,7 +14,8 @@ class GerenciarEstoqueMixin:
         return {
         
             dados["produto"]: dados["quantidade"]
-            for dados in estoque.get_produtos(self).values()
+            for dados in estoque.get_produtos(self).values() 
+            
         }
     
     def consultar_produto_por_id(self, id_produto):

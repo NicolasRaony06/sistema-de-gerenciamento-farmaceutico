@@ -24,7 +24,8 @@ class Funcionario(Pessoa):
     def get_salario_base(self):
         '''Retorna salario do funcionario'''
         return self.__salario_base.quantize(Decimal('0.01'))
-    
+    def getsenha(self):
+        return self.__senha
     def get_id(self):
         '''Retorna Id do funcionario'''
         return self.__id
