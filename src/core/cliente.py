@@ -20,10 +20,6 @@ class Cliente(Pessoa):
         '''Retorna lista de compras'''
         return self.__compras
 
-    def _addCompra(self, compra):
-        '''Método protegido usado por Venda automaticamente quando cliente é adicionado.'''
-        self.__compras.append(compra)
-    
     def __str__(self):
         return f'Nome: {self.nome} | Id: {self.get_id_cliente()}'
     

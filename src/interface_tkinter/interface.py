@@ -21,6 +21,7 @@ class Interface:
             self.registrarFarmacia()
             return
         
+        
         if not self.__farmacia.getGerente():
             self.registrarGerente()
             return

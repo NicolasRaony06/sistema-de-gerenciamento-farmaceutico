@@ -80,6 +80,7 @@ class Farmacia:
         self.__logAlteracoes.append(log)
 
         return venda.getId()   
+
     
     def _removerVenda(self, funcionario, id_venda: int):
         '''Remove venda da lista de vendas de farmacia caso venda ainda não tenha sido finalizada. Recebe id da venda e objeto de funcionario como parametro para validação.'''
@@ -104,7 +105,9 @@ class Farmacia:
         )
         
         self.__logAlteracoes.append(log)
-        
+
+        return self.__gerente
+
     def _registrarAtendente(self, gerente, nome : str , cpf : str, data_nasc : datetime , salario : Decimal, senha):
         '''Recebe como parametros um objeto de Gerente para controle e atributos de um Atendente, e cria um novo objeto do tipo Atendente. Retorna seu id.'''
         validar_gerente(gerente)
@@ -122,6 +125,7 @@ class Farmacia:
         )
 
         self.__logAlteracoes.append(log)
+
 
         return atendente.get_id()
     
@@ -144,6 +148,7 @@ class Farmacia:
         self.__logAlteracoes.append(log)
 
         return repositor.get_id()
+
     
     def _registrarCliente(self, funcionario, nome : str, cpf : str, data_nascimento = None):
         '''Recebe como parametros um objeto de Funcionario e atributos de um Cliente, e cria um novo objeto do tipo Cliente. Retorna Id do novo cliente.'''
@@ -162,5 +167,6 @@ class Farmacia:
         self.__logAlteracoes.append(log)
         
         return cliente.get_cpf()
+
 
 

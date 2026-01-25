@@ -48,7 +48,7 @@ class Venda:
             raise PermissionError('Venda já finalizada. Não é mais possível adicionar cliente')
         
         self.__cliente = cliente
-        self.__cliente._addCompra(self)
+        
 
         log =(
             f'adicionarCliente()', 
@@ -58,6 +58,7 @@ class Venda:
 
         self.__logAlteracoes.append(log)
     
+
     def adicionarProduto(self, funcionario, produto, quantidade : int):
         '''Adiciona produto em Venda, caso produto já exista, a sua quantidade é somada. Recebe como parâmetro objeto de funcionario, um objeto do tipo Produto e uma quantidade inteira. Não é possível adicionar produto se venda tiver sido finalizada'''
         validar_funcionario(funcionario)
@@ -113,17 +114,17 @@ class Venda:
         '''Altera preco total da venda com base em produtos já adicionados e suas quantidades. Recebe um objeto do tipo Funcionario. Esse metodo sinaliza a finalização da compra.'''
         validar_funcionario(funcionario)
         
+
         if self.__precoTotal :
             raise PermissionError("Venda já finalizada")
 
-        self.__precoTotal = self.__subTotal()
-        log = (
-            f'finalizarVenda()', 
-            f'Data:{datetime.now()}',
-            f'Preco:{self.__precoTotal}')
+        total = Decimal("0")
+        for produto, quantidade in self.__produtos:
+            total += produto.getPreco() * quantidade
 
-        self.__logAlteracoes.append(log)
-    
+        self.__precoTotal = total
+        self.__logAlteracoes.append(("venda_finalizada", datetime.now(), total))
+        
     def __subTotal(self):
         '''Método privado para calcular subtotal da venda.'''
         from src.farmacia.produto import Produto
