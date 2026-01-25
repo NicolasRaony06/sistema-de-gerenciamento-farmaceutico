@@ -11,7 +11,7 @@ class Venda:
         self.__funcionario = funcionario
         self.__cliente = None
         self.__precoTotal = Decimal("0")
-        self.__produtos = []
+        self.__itens = []
         self.__dataVenda = datetime.now()
         self.__logAlteracoes = []
 
@@ -28,8 +28,8 @@ class Venda:
         return self.__precoTotal.quantize(Decimal('0.01'))
     
     def getProdutos(self):
-        '''Retorna lista com tuplas de produtos e suas quantidades'''
-        return self.__produtos
+        '''Retorna lista com objetos de ItemVenda contendo dados dos produtos e suas quantidades.'''
+        return self.__itens
     
     def getLogAlteracoes(self):
         '''Retorna lista de tuplas sobre alterações de Venda'''
@@ -69,35 +69,43 @@ class Venda:
         if int(quantidade) <= 0:
             raise ValueError('Quantidade deve ser maior que 0')
         
-        for index, itemVenda in enumerate(self.__produtos):
-            if produto.__repr__() in itemVenda:
-                self.__produtos[index] = (produto.__repr__(), itemVenda[1] + quantidade)
-                return True
+        self.__itens.append(
+            ItemVenda(
+                produto.getId(),
+                produto.nome,
+                produto.getPreco(),
+                int(quantidade)
+            )
+        )
+
+        # for index, itemVenda in enumerate(self.__produtos):
+        #     if produto.__repr__() in itemVenda:
+        #         self.__produtos[index] = (produto.__repr__(), itemVenda[1] + quantidade)
+        #         return True
                 
-        self.__produtos.append((produto.__repr__(), quantidade))
+        # self.__produtos.append((produto.__repr__(), quantidade))
 
     def removerProduto(self, funcionario, produto, quantidade: int = None):
         '''Recebe objeto de funcionario para validação, produto e um inteiro para quantidade. Caso quantidade não seja passada, produto é removido por completo de venda.'''
         validar_funcionario(funcionario)
         validar_produto(produto)
         if self.__precoTotal:
-            raise PermissionError("Venda já foi finalizada. Não é mais possível produto")
+            raise PermissionError("Venda já foi finalizada. Não é mais possível remover produto")
 
-        for index, itemVenda in enumerate(self.__produtos):
-            if not produto.__repr__() in itemVenda:
-                raise ValueError("Produto não está adicionado em venda")
-        
-            if not quantidade:
-                self.__produtos.remove(itemVenda)
+        for itemVenda in self.__itens:   
+            if produto.getId() == itemVenda.id:
+                if not quantidade:
+                    self.__itens.remove(itemVenda)
+                    return True
+                
+                if quantidade > itemVenda.quantidade:
+                    itemVenda.quantidade = 0
+                    return True
+                
+                itemVenda.quantidade - quantidade
                 return True
-            
-            if  quantidade > itemVenda[1]:
-                self.__produtos[index] = (produto.__repr__(), 0)
-                return True
-            
-            self.__produtos[index] = (produto.__repr__(), itemVenda[1] - quantidade)
-            return True
-
+        raise ValueError("Produto não está adicionado em venda")
+    
     def finalizarVenda(self, funcionario):
         '''Altera preco total da venda com base em produtos já adicionados e suas quantidades. Recebe um objeto do tipo Funcionario. Esse metodo sinaliza a finalização da compra.'''
         validar_funcionario(funcionario)
@@ -117,15 +125,20 @@ class Venda:
         '''Método privado para calcular subtotal da venda.'''
         from src.farmacia.produto import Produto
         subTotal = Decimal(0)
-        for itemVenda in self.__produtos:
-            try:
-                produto = eval(itemVenda[0])
-            except Exception as erro:
-                raise TypeError(f"Erro ao instanciar Produto: {erro}")
-
-            subTotal += produto.getPreco() * itemVenda[1]
-
+        for itemVenda in self.__itens:
+            subTotal += itemVenda.subTotal()
         return subTotal
         
     def __repr__(self):
         return f'Venda({self.__id}, {self.__funcionario.__repr__()})'
+    
+class ItemVenda:
+    def __init__(self, id: int, nome: str, preco: Decimal, quantidade: int):
+        self.id = id
+        self.nome = nome
+        self.preco = Decimal(preco).quantize(Decimal('0.01'))
+        self.quantidade = quantidade
+
+    def subTotal(self):
+        '''Retorna o subtotal do item, multiplicando preço do produto por sua quantidade.'''
+        return self.preco * Decimal(self.quantidade)
