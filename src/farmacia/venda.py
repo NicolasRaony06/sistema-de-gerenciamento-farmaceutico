@@ -47,7 +47,7 @@ class Venda:
             raise PermissionError('Venda já finalizada. Não é mais possível adicionar cliente')
         
         self.__cliente = cliente
-        self.__cliente._addCompra(self)
+        
 
         log =(
             f'adicionarCliente()', 
@@ -57,36 +57,39 @@ class Venda:
 
         self.__logAlteracoes.append(log)
     
-    def adicionarProduto(self, produto, quantidade : int):
-        '''Adiciona produto em Venda, caso produto já exista, a sua quantidade é somada. Recebe como parâmetro um objeto do tipo Produto e uma quantidade inteira. Não é possível adicionar produto se venda tiver sido finalizada'''
-        validar_produto(produto) 
-        
-        if self.__precoTotal :
-            raise PermissionError('Venda já finalizada. Não é mais possível adicionar produtos')
-        
-        if int(quantidade) <= 0:
-            raise ValueError('Quantidade deve ser maior que 0')
-        
-        for index, itemVenda in enumerate(self.__produtos):
-            if produto.__repr__() in itemVenda:
-                self.__produtos[index] = (produto.__repr__(), itemVenda[1] + quantidade)
-                return True
-                
-        self.__produtos.append((produto.__repr__(), quantidade))
+    def adicionarProduto(self, produto, quantidade: int):
+        if self.__precoTotal:
+            raise PermissionError("Venda já finalizada")
+
+        if quantidade <= 0:
+            raise ValueError("Quantidade inválida")
+
+        item = {
+            "id": produto.getId(),
+            "nome": produto.getNome(),
+            "preco_unitario": produto.getPreco(),  # ← preço congelado
+            "quantidade": quantidade
+        }
+
+    # verifica se produto já existe na venda
+        for registro in self.__produtos:
+            if registro["id"] == item["id"]:
+                registro["quantidade"] += quantidade
+                return
+
+        self.__produtos.append(item)
 
     def finalizarVenda(self):
-        '''Altera preco total da venda com base em produtos já adicionados e suas quantidades. Recebe um objeto do tipo Funcionario. Esse metodo sinaliza a finalização da compra.'''
         if self.__precoTotal :
             raise PermissionError("Venda já finalizada")
 
-        self.__precoTotal = self.__subTotal()
-        log = (
-            f'finalizarVenda()', 
-            f'Data:{datetime.now()}',
-            f'Preco:{self.__precoTotal}')
+        total = Decimal("0")
+        for produto, quantidade in self.__produtos:
+            total += produto.getPreco() * quantidade
 
-        self.__logAlteracoes.append(log)
-    
+        self.__precoTotal = total
+        self.__logAlteracoes.append(("venda_finalizada", datetime.now(), total))
+        
     def __subTotal(self):
         '''Método privado para calcular subtotal da venda.'''
         from src.farmacia.produto import Produto
