@@ -400,19 +400,17 @@ class Interface:
         def show_produtos():
             if id_venda:
                 _row = 4
-                for produto in self.__farmacia.getVendaPorId(id_venda).getProdutos():
-                    produto_label = Label(self.__root, text=f'{produto[0].__str__()} | {produto[1]}')
+                for itemVenda in self.__farmacia.getVendaPorId(id_venda).getProdutos():
+                    produto_label = Label(self.__root, text=itemVenda)
                     produto_label.grid(row=_row, column=2, padx=(10, 0))
 
-                    botao_remover = self.__botaoPadrao("Remover", lambda: removerProduto(produto[0], produto_label, botao_remover))
+                    botao_remover = self.__botaoPadrao("Remover", lambda: removerProduto(itemVenda, produto_label, botao_remover))
                     botao_remover.grid(row=_row, column=3)
                     _row += 1
 
         def adicionarProduto():
             funcionario = self.__farmacia.getFuncionarioPorId(self.__idFuncionarioLogado)
             campo_menu = menu.get()
-
-            print(funcionario.getVendasRealizadas())
             
             if campo_menu == 'Id':
                 try:
@@ -446,18 +444,14 @@ class Interface:
             campo_qtd.delete(0, END)
             campo_qtd.insert(0, 1)
 
-        def removerProduto(produto, produto_label, botao_remover):
-            from src.farmacia.produto import Produto
-            print(type(produto))
-            produto = eval(produto.__repr__())
-            print(type(produto))
-            verificacao = messagebox.askyesno("Remover Produto", f"Você realmente deseja remover produto, id={produto.getId()}?")
+        def removerProduto(itemVenda, produto_label, botao_remover):
+            verificacao = messagebox.askyesno("Remover Produto", f"Você realmente deseja remover produto, id={itemVenda.id}?")
 
             if not verificacao:
                 return
             
             try:
-                self.__farmacia.getFuncionarioPorId(self.__idFuncionarioLogado).remover_produto_venda(produto)
+                self.__farmacia.getFuncionarioPorId(self.__idFuncionarioLogado).remover_produto_venda(itemVenda.id)
             except Exception as erro:
                 messagebox.showerror("Erro ao tentar remover Produto.", f"{erro}")
                 return

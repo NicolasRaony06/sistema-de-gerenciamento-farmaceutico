@@ -90,15 +90,14 @@ class Venda:
                 
         # self.__produtos.append((produto.__repr__(), quantidade))
 
-    def removerProduto(self, funcionario, produto, quantidade: int = None):
-        '''Recebe objeto de funcionario para validação, produto e um inteiro para quantidade. Caso quantidade não seja passada, produto é removido por completo de venda.'''
+    def removerProduto(self, funcionario, id_produto: int, quantidade: int = None):
+        '''Recebe objeto de funcionario para validação, Id de produto e um inteiro para quantidade. Caso quantidade não seja passada, produto é removido por completo de venda.'''
         validar_funcionario(funcionario)
-        validar_produto(produto)
         if self.__precoTotal:
             raise PermissionError("Venda já foi finalizada. Não é mais possível remover produto")
 
         for itemVenda in self.__itens:   
-            if produto.getId() == itemVenda.id:
+            if int(id_produto) == itemVenda.id:
                 if not quantidade:
                     self.__itens.remove(itemVenda)
                     return True
