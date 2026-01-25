@@ -69,6 +69,11 @@ class Venda:
         if int(quantidade) <= 0:
             raise ValueError('Quantidade deve ser maior que 0')
         
+        for itemVenda in self.__itens:   
+            if produto.getId() == itemVenda.id:
+                itemVenda.quantidade += quantidade
+                return True
+
         self.__itens.append(
             ItemVenda(
                 produto.getId(),
@@ -99,10 +104,9 @@ class Venda:
                     return True
                 
                 if quantidade > itemVenda.quantidade:
-                    itemVenda.quantidade = 0
-                    return True
+                    raise ValueError("Quantidade excede valor disponível para remoção")
                 
-                itemVenda.quantidade - quantidade
+                itemVenda.quantidade = itemVenda.quantidade - quantidade
                 return True
         raise ValueError("Produto não está adicionado em venda")
     
@@ -142,3 +146,6 @@ class ItemVenda:
     def subTotal(self):
         '''Retorna o subtotal do item, multiplicando preço do produto por sua quantidade.'''
         return self.preco * Decimal(self.quantidade)
+    
+    def __str__(self):
+        return f'Produto: Id={self.id} | Nome={self.nome} | Preço={self.preco} | Quantidade={self.quantidade}'
