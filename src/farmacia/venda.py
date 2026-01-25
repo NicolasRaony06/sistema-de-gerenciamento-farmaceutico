@@ -83,13 +83,6 @@ class Venda:
             )
         )
 
-        # for index, itemVenda in enumerate(self.__produtos):
-        #     if produto.__repr__() in itemVenda:
-        #         self.__produtos[index] = (produto.__repr__(), itemVenda[1] + quantidade)
-        #         return True
-                
-        # self.__produtos.append((produto.__repr__(), quantidade))
-
     def removerProduto(self, funcionario, id_produto: int, quantidade: int = None):
         '''Recebe objeto de funcionario para validação, Id de produto e um inteiro para quantidade. Caso quantidade não seja passada, produto é removido por completo de venda.'''
         validar_funcionario(funcionario)
@@ -115,6 +108,9 @@ class Venda:
         
         if self.__precoTotal :
             raise PermissionError("Venda já finalizada")
+        
+        if not self.__subTotal():
+            raise ValueError("Venda precisa de pelo menos um produto para ser finalizada")
 
         self.__precoTotal = self.__subTotal()
         log = (
