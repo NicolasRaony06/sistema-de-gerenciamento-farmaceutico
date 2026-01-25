@@ -44,7 +44,7 @@ class Gerente(Funcionario,FuncionalidadesGerente,GerenciarEstoqueMixin,Gerenciar
         '''Remove o funcionario desejado da lista de funcionarios'''
         # Implementaçao a ser discutida!!
         validar_funcionario(funcionario) #Valida se foi passado um objeto funcionario
-        lista = self.getfarmacia().getFuncionarios()
+        lista = self.getFarmacia().getFuncionarios()
         if funcionario in lista:
             lista.remove(funcionario)
             return True
@@ -62,6 +62,8 @@ class Gerente(Funcionario,FuncionalidadesGerente,GerenciarEstoqueMixin,Gerenciar
         
         produto.setPreco(self, preco)
         
+    def consultar_lista_funcionario(self):
+        return self.getFarmacia().getFuncionarios()
     def __repr__(self):
         return f'Gerente("{self.nome}", {self.get_cpf()}, "{self.get_data_nascimento()}", {self.get_salario_base()}, {self.get_id()})'
 
