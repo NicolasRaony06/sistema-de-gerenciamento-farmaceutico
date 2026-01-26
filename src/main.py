@@ -28,7 +28,6 @@ gerente = farmacia._registrarGerente(
     123
 )
 
-
 # ---------------- FUNÇÕES AUXILIARES ----------------
 def limpar_tela():
     """Limpa o console."""
@@ -78,30 +77,28 @@ def listar_produtos():
     input("\nPressione Enter para voltar ao menu...")
 
 
-def buscar_produto_id():
-    print("\n--- BUSCAR PRODUTO POR ID ---")
-    id_produto = int(input("Digite o Id do Produto: "))
+def buscar_produto():
+    print("\n--- BUSCAR PRODUTO ---")
+    opc = input("Deseja consultar produto por: (Id)/(Nome)")
+    if opc == "Id":
+        id_produto = int(input("Digite o Id do Produto: "))
 
-    resultado = gerente.consultar_produto_por_id(id_produto)
-    if resultado is None:
-        print("Produto não encontrado")
+        resultado = gerente.consultar_produto_por_id(id_produto)
+        if resultado is None:
+            print("Produto não encontrado")
+        else:
+            print(resultado)
+    elif opc == "Nome":
+        nome = input("Digite o Nome do Produto: ")
+        resultado = gerente.consultar_produto_por_nome(nome)
+        if resultado is None:
+            print("Produto não encontrado")
+        else:
+            print(resultado)
     else:
-        print(resultado)
-
+        print("Opção Incorreta")
     input("\nPressione Enter para voltar ao menu...")
 
-
-def buscar_produto_nome():
-    print("\n--- BUSCAR PRODUTO POR NOME ---")
-    nome = input("Digite o Nome do Produto: ")
-
-    resultado = gerente.consultar_produto_por_nome(nome)
-    if resultado is None:
-        print("Produto não encontrado")
-    else:
-        print(resultado)
-
-    input("\nPressione Enter para voltar ao menu...")
 
 
 # ---------------- FUNCIONÁRIOS ----------------
@@ -152,6 +149,7 @@ def vender_produto():
             cliente = gerente.registrarCliente(nome,cpf,data_nas)
             gerente.adicionar_cliente_venda(cliente)
         else:
+            cliente = farmacia.getClientePorCpf(cpf)
             gerente.adicionar_cliente_venda(cliente)
     while True:
         id_produto = int(input("ID do produto (0 para finalizar): "))
@@ -192,26 +190,58 @@ def vender_produto():
 
     input("\nPressione Enter para voltar ao menu...")
 
+def info_gerais():
 
+    limpar_tela()
+    print("-" * 45)
+    print(f"| {'FICHA DO GERENTE':^41} |") # ^ centraliza
+    print("-" * 45)
+    print(f"| {'CAMPO':<15} | {'DADOS':<23} |") # < alinha à esquerda
+    print("-" * 45)
+    print(f'| {'ID':<15} | {gerente.get_id():<23} |')
+    print(f'| {'NOME':<15} | {gerente.nome:<23} |')
+    print(f'| {'CPF':<15} | {gerente.get_cpf():<23} |')
+    print(f'| {'NASCIMENTO':<15} | {gerente.get_data_nascimento():<23} |')
+    print(f'| {'SALÁRIO':<15} | {gerente.get_salario_base():<23} |')
+    print(f'| {'NÚMERO DE VENDAS':<15}| {len(gerente.getVendasRealizadas()):<23} |')
+    print("-" * 45)
+    input("\nPressione Enter para voltar ao menu...")
 # ---------------- MENU ----------------
 def menu():
+
     limpar_tela()
-    print("=" * 30)
-    print(" SISTEMA DE FARMÁCIA v1.0 ")
-    print(" ÁREA DO GERENTE ")
-    print("=" * 30)
-    print("[1]  - Cadastrar Produto")
-    print("[2]  - Remover Produto")
-    print("[3]  - Alterar Preço de Produto")
-    print("[4]  - Consultar Estoque")
-    print("[5]  - Buscar Produto por Id")
-    print("[6]  - Buscar Produto por Nome")
-    print("[7]  - Cadastrar Funcionário")
-    print("[8]  - Excluir Funcionário")
-    print("[9]  - Listar Funcionários")
-    print("[10] - Vender Produto")
-    print("[0]  - Sair")
-    print("=" * 30)
+    
+    # Códigos de Cores
+    VERDE = '\033[92m'
+    AZUL = '\033[94m'
+    AMARELO = '\033[93m'
+    VERMELHO = '\033[91m'
+    RESET = '\033[0m'
+    NEGRITO = '\033[1m'
+
+    print(f"{AZUL}=" * 40)
+    print(f"{NEGRITO}  SISTEMA DE FARMÁCIA v1.0  {RESET}")
+    print(f"{AZUL}=" * 40 + f"{RESET}")
+
+    print(f"\n{AMARELO}--- PRODUTOS ---{RESET}")
+    print(" [1]  Cadastrar Produto")
+    print(" [2]  Remover Produto")
+    print(" [3]  Alterar Preço")
+    print(" [4]  Consultar Estoque")
+    print(" [5]  Buscar Produto")
+
+    print(f"\n{AMARELO}--- FUNCIONÁRIOS ---{RESET}")
+    print(" [6]  Cadastrar Funcionário")
+    print(" [7]  Excluir Funcionário")
+    print(" [8]  Listar Funcionários")
+
+    print(f"\n{AMARELO}--- CAIXA ---{RESET}")
+    print(" [9]  Vender Produto")
+    print(" [10] Informações Gerais")
+
+    print("-" * 40)
+    print(f" {VERMELHO}[0]  Sair{RESET}")
+    print("-" * 40)
 
 
 # ---------------- MAIN ----------------
@@ -229,17 +259,17 @@ def main():
         elif opcao == '4':
             listar_produtos()
         elif opcao == '5':
-            buscar_produto_id()
+            buscar_produto()
         elif opcao == '6':
-            buscar_produto_nome()
-        elif opcao == '7':
             cadrastar_funcionario()
-        elif opcao == '8':
+        elif opcao == '7':
             excluir_funcionario()
-        elif opcao == '9':
+        elif opcao == '8':
             listar_funcionarios()
-        elif opcao == '10':
+        elif opcao == '9':
             vender_produto()
+        elif opcao == '10':
+            info_gerais()
         elif opcao == '0':
             print("\nSaindo do sistema... Até logo!")
             break
@@ -251,3 +281,4 @@ def main():
 # ---------------- PONTO DE ENTRADA ----------------
 if __name__ == "__main__":
     main()
+
