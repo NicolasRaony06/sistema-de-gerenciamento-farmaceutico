@@ -41,14 +41,20 @@ class Gerente(Funcionario,FuncionalidadesGerente,GerenciarEstoqueMixin,Gerenciar
         raise ValueError("Parametro tipo_funcionario deve receber um dos dois valores: atendente ou repositor")
     
     def excluir_funcionario(self,funcionario):
-        '''Remove o funcionario desejado da lista de funcionarios'''
-        # Implementaçao a ser discutida!!
-        validar_funcionario(funcionario) #Valida se foi passado um objeto funcionario
-        lista = self.getfarmacia().getFuncionarios()
-        if funcionario in lista:
-            lista.remove(funcionario)
+        '''Recebe objeto de funcionário e o remove de Farmácia.'''
+        validar_funcionario(funcionario)
+        if funcionario in self.getFarmacia().getFuncionarios():
+            self.getFarmacia().getFuncionarios().remove(funcionario)
+
+            log =(
+                f'excluir_funcionario()',
+                f'Data:{datetime.now()}',
+                f'{self.__str__()}'
+                f'{funcionario.__str__()}'
+            )
+            self.getFarmacia().getLogAlteracoes(self).append(log)
             return True
-        return False
+        raise ValueError("Funcionário não existe em Farmácia.")
 
     def registrarCliente(self, nome : str, cpf : str, data_nascimento = None):
         '''Recebe atributos de cliente, registra um novo cliente em farmacia e retorna seu id'''

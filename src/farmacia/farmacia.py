@@ -57,8 +57,9 @@ class Farmacia:
             if cpf == cpf_cliente:
                 return cliente
             
-    def getLogAlteracoes(self):
-        '''Retorna lista de tuplas sobre alterações em Farmacia'''
+    def getLogAlteracoes(self, gerente):
+        '''Recebe objeto de Gerente para validação. Retorna lista de tuplas sobre alterações em Farmacia'''
+        validar_gerente(gerente)
         return self.__logAlteracoes
 
     def _criarVenda(self, funcionario):
@@ -74,7 +75,8 @@ class Farmacia:
         log =(
             f'criarVenda()',
             f'Data:{datetime.now()}',
-            f'{venda.__repr__()}'
+            f'{funcionario.__str__()}',
+            f'{venda.__repr__()}',
         )
 
         self.__logAlteracoes.append(log)
@@ -156,6 +158,7 @@ class Farmacia:
         log =(
             f'registrarCliente()', 
             f'Data:{datetime.now()}',
+            f'{funcionario.__str__()}',
             f'{cliente.__repr__()}'
         )
 
