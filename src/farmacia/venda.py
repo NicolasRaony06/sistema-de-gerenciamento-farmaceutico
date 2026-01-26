@@ -131,7 +131,10 @@ class Venda:
         for itemVenda in self.__itens:
             subTotal += itemVenda.subTotal()
         return subTotal
-        
+    
+    def __str__(self):
+        return f'Venda: Id={self.__id}| Funcionario=({self.__funcionario.__str__()})| Data={self.__dataVenda.date()}'
+
     def __repr__(self):
         return f'Venda({self.__id}, {self.__funcionario.__repr__()})'
     

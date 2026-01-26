@@ -176,7 +176,7 @@ class Interface:
              
             if campo_dataNasc.get():
                 try:
-                    data_nascimento = datetime.strptime(self.dataNascimentoRegex(campo_dataNasc.get()), "%d%m%Y")
+                    data_nascimento = datetime.strptime(self.dataRegex(campo_dataNasc.get()), "%d%m%Y")
                 except Exception as erro:
                     messagebox.showerror("Erro ao tentar registrar Gerente.", f"{erro}")
                     return
@@ -258,7 +258,7 @@ class Interface:
              
             if campo_dataNasc.get():
                 try:
-                    data_nascimento = datetime.strptime(self.dataNascimentoRegex(campo_dataNasc.get()), "%d%m%Y")
+                    data_nascimento = datetime.strptime(self.dataRegex(campo_dataNasc.get()), "%d%m%Y")
                 except Exception as erro:
                     messagebox.showerror("Erro ao tentar registrar Gerente.", f"{erro}")
                     return
@@ -333,7 +333,7 @@ class Interface:
              
             if campo_dataNasc.get():
                 try:
-                    data_nascimento = datetime.strptime(self.dataNascimentoRegex(campo_dataNasc.get()), "%d%m%Y")
+                    data_nascimento = datetime.strptime(self.dataRegex(campo_dataNasc.get()), "%d%m%Y")
                 except Exception as erro:
                     messagebox.showerror("Erro ao tentar registrar Gerente.", f"{erro}")
                     return
@@ -404,7 +404,7 @@ class Interface:
              
             if campo_dataNasc.get():
                 try:
-                    data_nascimento = datetime.strptime(self.dataNascimentoRegex(campo_dataNasc.get()), "%d%m%Y")
+                    data_nascimento = datetime.strptime(self.dataRegex(campo_dataNasc.get()), "%d%m%Y")
                 except Exception as erro:
                     messagebox.showerror("Erro ao tentar registrar Gerente.", f"{erro}")
                     return
@@ -621,7 +621,8 @@ class Interface:
         self.__root.mainloop()
 
     def consultarVendasFarmacia(self):
-        self.__inciarRoot()
+        from tkinter import ttk
+        self.__inciarRoot(tamanho='700x300')
         self.__root.title('Consultar Vendas')
         self.__temFarmacia()
         self.__usuarioTipoGerente()
@@ -631,15 +632,89 @@ class Interface:
         if not vendas:
             Label(self.__root, text="Nenhuma venda foi feita ainda.").grid(row=2)
 
-        self.__botaoPadrao("Voltar", self.interface).grid(row=2, column=1)
+        def consultar():
+            consulta_valor = campo_consulta.get()
+            campo_consulta.delete(0,END)
+            vendas_consulta = None
+            venda_consulta = None
+
+            if menu.get() == 'Id':
+                self.__removerWidgets(self.__labels_venda)
+                try:
+                    venda_consulta = self.__farmacia.getVendaPorId(int(consulta_valor))
+                except Exception as erro:
+                    messagebox.showerror("Erro ao procurar por venda", f'{erro}')
+                    self.consultarVendasFarmacia()
+                    return
+            elif menu.get() == 'Funcionario ID':
+                self.__removerWidgets(self.__labels_venda)
+                try:
+                    vendas_consulta = self.__farmacia.getFuncionarioPorId(int(consulta_valor)).getVendasRealizadas()
+                except Exception as erro:
+                    messagebox.showerror("Erro ao procurar por venda", f'{erro}')
+                    self.consultarVendasFarmacia()
+                    return
+            elif menu.get() == 'Data':
+                try:
+                    consulta_valor = datetime.strptime(self.dataRegex(consulta_valor), "%d%m%Y").date()
+                except Exception as erro:
+                    messagebox.showerror("Erro ao procurar por venda", f'{erro}')
+                    self.consultarVendasFarmacia()
+                    return
+                
+                vendas_consulta = []
+                for venda in self.__farmacia.getListaVendas():
+                    if venda.getDataVenda().date() == consulta_valor:
+                        vendas_consulta.append(venda)
+
+            if (not venda_consulta) and (not vendas_consulta):
+                messagebox.showerror("Erro ao procurar por venda", f'Venda com {menu.get()}:{consulta_valor} não existe.')
+                self.consultarVendasFarmacia()
+                return
+
+            if vendas_consulta:
+                row_ = 4
+                for venda in vendas_consulta:
+                    label_venda = Label(self.__root, text=venda)
+                    label_venda.grid(row=row_, columnspan=10, padx=(25, 10))
+
+                    botao_venda = self.__botaoPadrao("Ver venda", lambda: self.__showVenda(venda), pady=5)
+                    botao_venda.grid(row=row_, column=11)
+
+                    self.__labels_venda.append(label_venda)
+                    self.__labels_venda.append(botao_venda)
+                    row_ += 1
+                return
+
+            label_venda = Label(self.__root, text=venda_consulta)
+            label_venda.grid(row=4, columnspan=10, padx=(25, 10))
+
+            botao_venda = self.__botaoPadrao("Ver venda", lambda: self.__showVenda(venda_consulta), pady=5)
+            botao_venda.grid(row=4, column=11)
+
+            self.__labels_venda.append(label_venda)
+            self.__labels_venda.append(botao_venda)
+
+        Label(self.__root, text="Consultar Venda:").grid(row=0, column=0, pady=(10, 1), padx=0, sticky='w')
+        opcoes_consulta = ["Id", "Funcionario ID", "Data"]
+        menu = ttk.Combobox(self.__root, values=opcoes_consulta, state="readonly", width=15)
+        menu.set("Id")
+        menu.grid(row=1, column=1, pady=(0, 20))
+
+        campo_consulta = Entry(self.__root, width=25, borderwidth=1)
+        campo_consulta.grid(row=1, column=0, pady=(0, 20))
+
+        self.__botaoPadrao("Consultar", consultar, pady=4).grid(row=1, column=2, pady=(0, 20))
+        self.__botaoPadrao("Limpar", self.consultarVendasFarmacia, pady=4).grid(row=1, column=3, pady=(0, 20))
+        self.__botaoPadrao("Voltar", self.interface, pady=4).grid(row=1, column=4, pady=(0, 20))
 
         row_ = 4
         for venda in vendas:
             label_venda = Label(self.__root, text=venda)
-            label_venda.grid(row=row_, column=1, columnspan=2)
+            label_venda.grid(row=row_, columnspan=10, padx=(25, 10))
 
             botao_venda = self.__botaoPadrao("Ver venda", lambda: self.__showVenda(venda), pady=5)
-            botao_venda.grid(row=row_, column=3)
+            botao_venda.grid(row=row_, column=11)
 
             self.__labels_venda.append(label_venda)
             self.__labels_venda.append(botao_venda)
@@ -653,7 +728,7 @@ class Interface:
         self.__temFarmacia()
         self.__usuarioTipoGerente()
         
-        self.__botaoPadrao("Voltar", self.interface).grid(row=2, column=1)
+        self.__botaoPadrao("Voltar", self.consultarVendasFarmacia).grid(row=2, column=1)
         Label(self.__root, text=f"Id: {venda.getId()}").grid(row=3, column=1, sticky='w')
         Label(self.__root, text=f"Data da Venda: {venda.getDataVenda()}").grid(row=4, column=1, sticky='w')
         Label(self.__root, text=f"Funcionario: {venda.getFuncionario()}").grid(row=5, column=1, sticky='w')
@@ -771,10 +846,10 @@ class Interface:
             self.__root.destroy()
             self.interface()
 
-    def dataNascimentoRegex(self, data_nascimento):
+    def dataRegex(self, data):
         import re
-        data_nascimento = re.sub(r'[-/\.]','', data_nascimento)
-        return data_nascimento
+        data = re.sub(r'[-/\.]','', data)
+        return data
         
     def __usuarioTipoGerente(self):
         funcionario = self.__farmacia.getFuncionarioPorId(self.__idFuncionarioLogado)
