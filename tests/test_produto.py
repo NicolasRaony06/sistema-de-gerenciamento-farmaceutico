@@ -1,4 +1,4 @@
-# teste de implementacoes 
+'''# teste de implementacoes 
 # python -m tests.test_produto
 from src.farmacia.produto import Produto
 from src.farmacia.farmacia import Farmacia
@@ -23,4 +23,4 @@ print(f'ID: {produto_teste.getId()}')
 print(f'NOME: {produto_teste.nome}')
 print(f'PREÇO: {produto_teste.getPreco()}')
 print(f'FABRICANTE: {produto_teste.fabricante}')
-print(50*'-')
+print(50*'-')'''

@@ -1,4 +1,4 @@
-# python -m tests.test_gerente
+'''# python -m tests.test_gerente
 from datetime import datetime
 from src.farmacia.farmacia import Farmacia
 from src.core.atendente import Atendente
@@ -20,3 +20,4 @@ print(farmacia.getGerente().get_bonus())
 # g.adicionar_produto_estoque(p1,12,estoque)
 # g.adicionar_produto_estoque(p2,2,estoque)
 # print(estoque.produto_disponibilidade(p2,11))
+'''

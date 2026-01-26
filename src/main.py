@@ -141,7 +141,18 @@ def listar_funcionarios():
 # ---------------- VENDAS ----------------
 def vender_produto():
     venda = gerente.registrar_venda()
-
+    opc_cliente = input("Deseja Adicionar Cliente a Venda?(S/N) ")
+    if opc_cliente == 'S':
+        cpf = str(input("Digite o Cpf do cliente: "))
+        if not farmacia.getClientePorCpf(cpf):
+            print("Cliente não cadrastado no sistema!")
+            nome = str(input("Nome do cliente: "))
+            data_str = input("Data de nascimento (dd-mm-aaaa): ")
+            data_nas = datetime.strptime(data_str, "%d-%m-%Y").date()
+            cliente = gerente.registrarCliente(nome,cpf,data_nas)
+            gerente.adicionar_cliente_venda(cliente)
+        else:
+            gerente.adicionar_cliente_venda(cliente)
     while True:
         id_produto = int(input("ID do produto (0 para finalizar): "))
 
@@ -149,7 +160,7 @@ def vender_produto():
             break
 
         quantidade = int(input("Quantidade: "))
-
+        
         try:
             # busca no estoque
             produto, qtd_estoque = gerente.consultar_produto_por_id(id_produto)
@@ -173,7 +184,12 @@ def vender_produto():
         print(item)
     print("PREÇO TOTAL")
     print(venda.getPrecoTotal())
-    
+    print("CLIENTE")
+    if venda.getCliente() is not None:
+        print(venda.getCliente())
+    else:
+        print("Cliente não adicionado à compra!")
+
     input("\nPressione Enter para voltar ao menu...")
 
 

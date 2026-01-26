@@ -33,12 +33,12 @@ class Gerente(Funcionario,FuncionalidadesGerente,GerenciarEstoqueMixin,Gerenciar
         '''Recebe como um dos parametros se o método deve cadastrar um Atendente('atendente') ou Repositor('repositor'). Cadrasta funcionario e retorna o id do objeto criado'''
         from random import randint
 
-        if tipo_funcionario == 'atendente':
+        if tipo_funcionario == 'Atendente':
             return self.getFarmacia()._registrarAtendente(self,nome,cpf,data_nasc,salario,cpf)
-        elif tipo_funcionario == 'repositor':
+        elif tipo_funcionario == 'Repositor':
             return self.getFarmacia()._registrarRepositor(self,nome,cpf,data_nasc,salario,cpf)
             
-        raise ValueError("Parametro tipo_funcionario deve receber um dos dois valores: atendente ou repositor")
+        raise ValueError("Parametro tipo_funcionario deve receber um dos dois valores: Atendente ou Repositor")
     
     def excluir_funcionario(self,funcionario):
         '''Remove o funcionario desejado da lista de funcionarios'''

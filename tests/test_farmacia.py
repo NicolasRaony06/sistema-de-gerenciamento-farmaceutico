@@ -1,10 +1,10 @@
 # usar para tests: python -m tests.test_farmacia
-from src.farmacia.farmacia import Farmacia
+'''from src.farmacia.farmacia import Farmacia
 from src.farmacia.produto import Produto
 
 farmacia = Farmacia("Pague mais")
 
-farmacia._registrarGerente("Teste Gerente", '598.487.125-08', '02072004', 1899) # teste registro de gerente
+farmacia._registrarGerente("Teste Gerente", '598.487.125-08', '02072004', 1899,'123') # teste registro de gerente
 print(farmacia.getGerente())
 
 id_funcionario = farmacia._registrarAtendente("Teste Atendente", '64785412698', '01061999', 1550) # teste registro de Atendente
@@ -66,3 +66,4 @@ for log in logs:
 # print(f'Cliente por cpf: {farmacia.getClientePorCpf(cliente.get_cpf())}')
 # #print(f'Log de alteracoes: {farmacia.getLogAlteracoes()}')
 # print(50*'=')
+'''

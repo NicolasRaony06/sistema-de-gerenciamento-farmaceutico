@@ -1,4 +1,4 @@
-# teste de implementacoes - python -m tests.test_venda
+'''# teste de implementacoes - python -m tests.test_venda
 from datetime import datetime
 from src.farmacia.farmacia import Farmacia
 from src.core.atendente import Atendente
@@ -89,4 +89,4 @@ for log in logs:
 # venda2.finalizarVenda()
 
 # print(farmacia.getListaVendas())
-# print(venda.getLogAlteracoes())
+# print(venda.getLogAlteracoes())'''

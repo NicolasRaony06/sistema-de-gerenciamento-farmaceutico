@@ -24,8 +24,7 @@ class Funcionario(Pessoa):
     def get_salario_base(self):
         '''Retorna salario do funcionario'''
         return self.__salario_base.quantize(Decimal('0.01'))
-    def getsenha(self):
-        return self.__senha
+
     def get_id(self):
         '''Retorna Id do funcionario'''
         return self.__id
@@ -51,7 +50,7 @@ class Funcionario(Pessoa):
 
     def setNovaSenha(self, senhaAntiga:str, senhaNova:str):
         '''Altera senha de funcionario. Recebe confirmacao de senha antiga e uma nova senha, ambas strings.'''
-        if not senhaAntiga == self.__senha: # Verifica se a senha passada e a senha do usuarui 
+        if not senhaAntiga == self.__senha: # Verifica se a senha passada e a senha do usuario
             raise ValueError("Confirmação de senha não corresponde à senha antiga")
         
         if not len(senhaNova) >= 5:
