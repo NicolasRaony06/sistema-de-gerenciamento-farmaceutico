@@ -38,6 +38,7 @@ class Interface:
         self.__botaoPadrao("Registrar Cliente", self.registrarCliente).grid(row=4, column=0)
         self.__botaoPadrao("Registrar Venda", self.registrarVenda).grid(row=4, column=1)
         self.__botaoPadrao("Consultar Vendas", self.consultarVendasFarmacia).grid(row=5, column=1)
+        self.__botaoPadrao("Consultar Funcionarios", self.consultarFuncionarios).grid(row=5, column=0)
 
         self.__root.mainloop()
 
@@ -176,7 +177,7 @@ class Interface:
              
             if campo_dataNasc.get():
                 try:
-                    data_nascimento = datetime.strptime(self.dataRegex(campo_dataNasc.get()), "%d%m%Y")
+                    data_nascimento = datetime.strptime(self.__dataRegex(campo_dataNasc.get()), "%d%m%Y")
                 except Exception as erro:
                     messagebox.showerror("Erro ao tentar registrar Gerente.", f"{erro}")
                     return
@@ -258,7 +259,7 @@ class Interface:
              
             if campo_dataNasc.get():
                 try:
-                    data_nascimento = datetime.strptime(self.dataRegex(campo_dataNasc.get()), "%d%m%Y")
+                    data_nascimento = datetime.strptime(self.__dataRegex(campo_dataNasc.get()), "%d%m%Y")
                 except Exception as erro:
                     messagebox.showerror("Erro ao tentar registrar Gerente.", f"{erro}")
                     return
@@ -333,7 +334,7 @@ class Interface:
              
             if campo_dataNasc.get():
                 try:
-                    data_nascimento = datetime.strptime(self.dataRegex(campo_dataNasc.get()), "%d%m%Y")
+                    data_nascimento = datetime.strptime(self.__dataRegex(campo_dataNasc.get()), "%d%m%Y")
                 except Exception as erro:
                     messagebox.showerror("Erro ao tentar registrar Gerente.", f"{erro}")
                     return
@@ -404,7 +405,7 @@ class Interface:
              
             if campo_dataNasc.get():
                 try:
-                    data_nascimento = datetime.strptime(self.dataRegex(campo_dataNasc.get()), "%d%m%Y")
+                    data_nascimento = datetime.strptime(self.__dataRegex(campo_dataNasc.get()), "%d%m%Y")
                 except Exception as erro:
                     messagebox.showerror("Erro ao tentar registrar Gerente.", f"{erro}")
                     return
@@ -656,7 +657,7 @@ class Interface:
                     return
             elif menu.get() == 'Data':
                 try:
-                    consulta_valor = datetime.strptime(self.dataRegex(consulta_valor), "%d%m%Y").date()
+                    consulta_valor = datetime.strptime(self.__dataRegex(consulta_valor), "%d%m%Y").date()
                 except Exception as erro:
                     messagebox.showerror("Erro ao procurar por venda", f'{erro}')
                     self.consultarVendasFarmacia()
@@ -722,33 +723,102 @@ class Interface:
 
         self.__root.mainloop()
 
-    def __showVenda(self, venda):
-        self.__inciarRoot()
-        self.__root.title(f'Venda {venda.getId()}')
+    def consultarFuncionarios(self):
+        from tkinter import ttk
+        self.__inciarRoot(tamanho='700x300')
+        self.__root.title('Consultar Funcionario')
         self.__temFarmacia()
         self.__usuarioTipoGerente()
-        
-        self.__botaoPadrao("Voltar", self.consultarVendasFarmacia).grid(row=2, column=1)
-        Label(self.__root, text=f"Id: {venda.getId()}").grid(row=3, column=1, sticky='w')
-        Label(self.__root, text=f"Data da Venda: {venda.getDataVenda()}").grid(row=4, column=1, sticky='w')
-        Label(self.__root, text=f"Funcionario: {venda.getFuncionario()}").grid(row=5, column=1, sticky='w')
-        Label(self.__root, text=f"Cliente: {venda.getCliente()}").grid(row=6, column=1, sticky='w')
-        Label(self.__root, text=f"Preço total: {venda.getPrecoTotal()}").grid(row=7, column=1, sticky='w')
+        self.__labels_funcionarios = []
 
-        Label(self.__root, text=f"Produtos de venda:").grid(row=8, column=1, sticky='w', pady=(10, 0))
-        row_ = 9
-        for produto in venda.getProdutos():
-            Label(self.__root, text=produto).grid(row=row_, column=1, sticky='w', padx=(10, 0))
+        funcionarios = self.__farmacia.getFuncionarios()
+        if not funcionarios:
+            Label(self.__root, text="Nenhuma funcionario foi cadastrado ainda.").grid(row=2)
+
+        def consultar():
+            consulta_valor = campo_consulta.get()
+            campo_consulta.delete(0,END)
+            funcionarios_consulta = None
+            funcionario_consulta = None
+
+            if menu.get() == 'Id':
+                self.__removerWidgets(self.__labels_funcionarios)
+                try:
+                    funcionario_consulta = self.__farmacia.getFuncionarioPorId(int(consulta_valor))
+                except Exception as erro:
+                    messagebox.showerror("Erro ao procurar por funcionario", f'{erro}')
+                    self.consultarVendasFarmacia()
+                    return
+                
+            elif menu.get() == 'Cargo':
+                self.__removerWidgets(self.__labels_funcionarios)
+                funcionarios_consulta = []
+                for funcionario in self.__farmacia.getFuncionarios():
+                    if funcionario.__class__.__name__ == consulta_valor:
+                        funcionarios_consulta.append(funcionario)
+                
+            elif menu.get() == 'Nome':
+                self.__removerWidgets(self.__labels_funcionarios)
+                funcionarios_consulta = []
+                for funcionario in self.__farmacia.getFuncionarios():
+                    if (funcionario.nome).lower() == consulta_valor.lower():
+                        funcionarios_consulta.append(funcionario)
+
+            if (not funcionario_consulta) and (not funcionarios_consulta):
+                messagebox.showerror("Erro ao procurar por funcionario", f'Funcionario com {menu.get()}:{consulta_valor} não existe.')
+                self.consultarFuncionarios()
+                return
+
+            if funcionarios_consulta:
+                row_ = 4
+                for funcionario in funcionarios_consulta:
+                    funcionario_label = Label(self.__root, text=funcionario)
+                    funcionario_label.grid(row=row_, columnspan=10, padx=(25, 10))
+
+                    botao_remover = self.__botaoPadrao("Excluir", lambda: self.__removerFuncionario(funcionario, funcionario_label, botao_remover), pady=5)
+                    botao_remover.grid(row=row_, column=11)
+
+                    self.__labels_funcionarios.append(funcionario_label)
+                    self.__labels_funcionarios.append(botao_remover)
+                    row_ += 1
+                return
+
+            funcionario_label = Label(self.__root, text=funcionario_consulta)
+            funcionario_label.grid(row=4, columnspan=10, padx=(25, 10))
+
+            botao_remover = self.__botaoPadrao("Excluir", lambda: self.__removerFuncionario(funcionario, funcionario_label, botao_remover), pady=5)
+            botao_remover.grid(row=4, column=11)
+
+            self.__labels_funcionarios.append(funcionario_label)
+            self.__labels_funcionarios.append(botao_remover)
+
+        Label(self.__root, text="Consultar Funcionario:").grid(row=0, column=0, pady=(10, 1), padx=0, sticky='w')
+        opcoes_consulta = ["Id", "Cargo", "Nome"]
+        menu = ttk.Combobox(self.__root, values=opcoes_consulta, state="readonly", width=15)
+        menu.set("Id")
+        menu.grid(row=1, column=1, pady=(0, 20))
+
+        campo_consulta = Entry(self.__root, width=25, borderwidth=1)
+        campo_consulta.grid(row=1, column=0, pady=(0, 20))
+
+        self.__botaoPadrao("Consultar", consultar, pady=4).grid(row=1, column=2, pady=(0, 20))
+        self.__botaoPadrao("Limpar", self.consultarFuncionarios, pady=4).grid(row=1, column=3, pady=(0, 20))
+        self.__botaoPadrao("Voltar", self.interface, pady=4).grid(row=1, column=4, pady=(0, 20))
+
+        row_ = 4
+        for funcionario in funcionarios:
+            funcionario_label = Label(self.__root, text=funcionario)
+            funcionario_label.grid(row=row_, columnspan=10, padx=(25, 10))
+
+            botao_remover = self.__botaoPadrao("Excluir", lambda: self.__removerFuncionario(funcionario, funcionario_label, botao_remover), pady=5)
+            botao_remover.grid(row=row_, column=11)
+
+            self.__labels_funcionarios.append(funcionario_label)
+            self.__labels_funcionarios.append(botao_remover)
             row_ += 1
 
-        row_ += 1
-        Label(self.__root, text=f"Log de alterações:").grid(row=row_, column=1, sticky='w', pady=(10, 0))
-        for log in venda.getLogAlteracoes():
-            row_ += 1  
-            Label(self.__root, text=log).grid(row=row_, column=1, sticky='w', padx=(10, 0))
-               
-        self.__root.mainloop()
-       
+        self.__root.mainloop() 
+
     def consultarEstoque(self):
         from tkinter import ttk
         self.__inciarRoot(tamanho="800x400")
@@ -846,7 +916,7 @@ class Interface:
             self.__root.destroy()
             self.interface()
 
-    def dataRegex(self, data):
+    def __dataRegex(self, data):
         import re
         data = re.sub(r'[-/\.]','', data)
         return data
@@ -935,6 +1005,51 @@ class Interface:
 
         self.__root.mainloop()
 
+    def __showVenda(self, venda):
+        self.__inciarRoot()
+        self.__root.title(f'Venda {venda.getId()}')
+        self.__temFarmacia()
+        self.__usuarioTipoGerente()
+        
+        self.__botaoPadrao("Voltar", self.consultarVendasFarmacia).grid(row=2, column=1)
+        Label(self.__root, text=f"Id: {venda.getId()}").grid(row=3, column=1, sticky='w')
+        Label(self.__root, text=f"Data da Venda: {venda.getDataVenda()}").grid(row=4, column=1, sticky='w')
+        Label(self.__root, text=f"Funcionario: {venda.getFuncionario()}").grid(row=5, column=1, sticky='w')
+        Label(self.__root, text=f"Cliente: {venda.getCliente()}").grid(row=6, column=1, sticky='w')
+        Label(self.__root, text=f"Preço total: {venda.getPrecoTotal()}").grid(row=7, column=1, sticky='w')
+
+        Label(self.__root, text=f"Produtos de venda:").grid(row=8, column=1, sticky='w', pady=(10, 0))
+        row_ = 9
+        for produto in venda.getProdutos():
+            Label(self.__root, text=produto).grid(row=row_, column=1, sticky='w', padx=(10, 0))
+            row_ += 1
+
+        row_ += 1
+        Label(self.__root, text=f"Log de alterações:").grid(row=row_, column=1, sticky='w', pady=(10, 0))
+        for log in venda.getLogAlteracoes():
+            row_ += 1  
+            Label(self.__root, text=log).grid(row=row_, column=1, sticky='w', padx=(10, 0))
+               
+        self.__root.mainloop()
+
+    def __removerFuncionario(self, funcionario, funcionario_label, botao_remover):
+        verificacao = messagebox.askyesno("Remover Funcionario", f"Você realmente deseja remover funcionario, id={funcionario.get_id()}?")
+
+        if not verificacao:
+            self.consultarFuncionarios()
+            return
+        
+        try:
+            self.__farmacia.getFuncionarioPorId(self.__idFuncionarioLogado).excluir_funcionario(funcionario)
+        except Exception as erro:
+            messagebox.showerror("Erro ao tentar remover Funcionario.", f"{erro}")
+            self.consultarFuncionarios()
+
+        try:
+            funcionario_label.destroy()
+            botao_remover.destroy()
+        except:
+            return
 
     
 
