@@ -15,19 +15,36 @@ from src.farmacia.farmacia import Farmacia
 from src.farmacia.estoque import Estoque
 from src.farmacia.produto import Produto
 from src.farmacia.venda import Venda
-
+# ----------------------------------------
 def limpar_tela():
         """Limpa o console."""
         os.system('cls' if os.name == 'nt' else 'clear')   
-
+# CORES
 VERDE = '\033[92m'
 AZUL = '\033[94m'
 AMARELO = '\033[93m'
 VERMELHO = '\033[91m'
 RESET = '\033[0m'
 NEGRITO = '\033[1m'
+# ------------------
+#----------------------------------------
+def login():
+    limpar_tela()
+    print("=" * 40)
+    print("                 LOGIN     ")
+    print("=" * 40)
+                
+    id_login = int(input("Digite seu Id: "))
+    senha_login = input("Digite sua senha para login: ")
+                
+    gerente.setAutenticacao(id_login, senha_login)
 
+    if gerente.get_isautenticado():
 
+        iniciar_login_gerente(gerente, farmacia)
+    else:
+        print(f"{VERMELHO}Autenticação falhou!{RESET}")
+        time.sleep(2)
 
 limpar_tela()
 farmacia = Farmacia("Farmacia Holanda")
@@ -119,9 +136,9 @@ def iniciar_login_gerente(gerente,farmacia):
 
         salario = Decimal(input(f"{AZUL}Salário do funcionário: {RESET}"))
         cargo = str(input(f"{AZUL}Digite o cargo do funcionário: (atendente/repositor): {RESET}"))
-        gerente.cadrastar_funcionario(cargo,nome, cpf, data_nascimento, salario)
+        g = gerente.cadrastar_funcionario(cargo,nome, cpf, data_nascimento, salario)
 
-        print(f"{VERDE}Funcionário cadastrado!{RESET}")
+        print(f"{VERDE}Funcionário {g.nome}, com Id: {g.get_id()} cadastrado{RESET}")
         input("\nPressione Enter para voltar ao menu...")
 
 
@@ -190,7 +207,7 @@ def iniciar_login_gerente(gerente,farmacia):
                 print(f"Erro: {e}")
 
         gerente.finalizar_venda()
-        print("ITENS DA VENDA:")
+        print(f"{VERDE}ITENS DA VENDA:{RESET}")
         for item in venda.getProdutos():
             print(item)
         print(f"{VERDE}PREÇO TOTAL: {venda.getPrecoTotal()}{RESET}")
@@ -213,7 +230,7 @@ def iniciar_login_gerente(gerente,farmacia):
         print(f'| {'ID':<15} | {gerente.get_id():<23} |')
         print(f'| {'NOME':<15} | {gerente.nome:<23} |')
         print(f'| {'CPF':<15} | {gerente.get_cpf():<23} |')
-        print(f'| {'NASCIMENTO':<15} | {gerente.get_data_nascimento()} |')
+        print(f'| {'NASCIMENTO':<15} | {gerente.get_data_nascimento():}              |')
         print(f'| {'SALÁRIO':<15} | {gerente.get_salario_base():<23} |')
         print(f'| {'NÚMERO DE VENDAS':<15}| {len(gerente.getVendasRealizadas()):<23} |')
         print("-" * 45)
@@ -243,14 +260,14 @@ def iniciar_login_gerente(gerente,farmacia):
         print(f"\n{AMARELO}------------------  CAIXA  -------------------{RESET}")
         print(" [9]  Vender Produto")
         print(" [10] Informações Gerais")
+        print(" [11] Logout")
         print("-" * 40)
         print(f" {VERMELHO}[0]  Sair{RESET}")
         print("-" * 40)
 
     while gerente.get_isautenticado():
-        menu()
-        
-            
+
+        menu() 
         opcao = input("Escolha uma opção: ")
 
         if opcao == '1':
@@ -283,23 +300,8 @@ def iniciar_login_gerente(gerente,farmacia):
                 print("\nOpção inválida!")
                 time.sleep(1)
 
-def login():
-                    limpar_tela()
-                    print("=" * 40)
-                    print("                 LOGIN     ")
-                    print("=" * 40)
-                
-                    id_login = int(input("Digite seu Id: "))
-                    senha_login = input("Digite sua senha para login: ")
-                
-                    gerente.setAutenticacao(id_login, senha_login)
 
-                    if gerente.get_isautenticado():
 
-                        iniciar_login_gerente(gerente, farmacia)
-                    else:
-                        print(f"{VERMELHO}Autenticação falhou!{RESET}")
-                        time.sleep(2)
 # ---------------- PONTO DE ENTRADA ----------------
 if __name__ == "__main__":
         
@@ -322,28 +324,24 @@ if __name__ == "__main__":
                 print("\n--- CADASTRO DO GERENTE ---")
             
             # Nota: No seu código original, você cadastra um NOVO gerente toda vez que entra.
-            # Idealmente, você buscaria um gerente existente, mas mantive sua lógica original.
-                try:
-                    nome = input("Digite o Nome do Gerente: ")
-                    cpf = input("Digite o CPF: ")
-                    data_str = input("Data de nascimento (dd-mm-aaaa): ")
-                    data_nascimento = datetime.strptime(data_str, "%d-%m-%Y").date()
-                    salario = Decimal(input("Salário: "))
-                    senha = input("Digite a senha de login: ")
 
-                    gerente = farmacia._registrarGerente(
-                        nome, cpf, data_nascimento, salario, senha
-                    )
+                nome = input("Digite o Nome do Gerente: ")
+                cpf = input("Digite o CPF: ")
+                data_str = input("Data de nascimento (dd-mm-aaaa): ")
+                data_nascimento = datetime.strptime(data_str, "%d-%m-%Y").date()
+                salario = Decimal(input("Salário: "))
+                senha = input("Digite a senha de login: ")
 
-                    print(f"\n✔ Gerente cadastrado com sucesso, com Id:{gerente.get_id()}")
-                    time.sleep(1)
+                gerente = farmacia._registrarGerente(
+                    nome, cpf, data_nascimento, salario, senha
+                )
+
+                print(f"\n✔ Gerente cadastrado com sucesso, com Id:{gerente.get_id()}")
+                time.sleep(1)
                     
-                    login()
+                login()
 
-                except ValueError:
-                    print(f"{VERMELHO}Erro nos dados inseridos. Tente novamente.{RESET}")
-                    time.sleep(2)
-        
+
             else:
                 print("Opção inválida!")
                 time.sleep(1)
