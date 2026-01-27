@@ -51,6 +51,7 @@ class Interface:
         except:
             pass
         
+        self.__botaoPadrao("Meu Perfil", self.perfilFuncionario, pady=3, padx=5).grid(row=row_base, column=column_base+1, sticky='N')
         self.__botaoPadrao("Login", self.login, pady=3, padx=5).grid(row=row_base, column=column_base+2, sticky="NW", padx=0)
         self.__botaoPadrao("Logout", self.logout, pady=3, padx=5).grid(row=row_base, column=column_base+2, sticky="NW",padx=(60, 0))
         self.__botaoPadrao("Registrar Atendente", self.registrarAtendente).grid(row=row_base+1, column=column_base+1, sticky='SE')
@@ -919,6 +920,41 @@ class Interface:
             
         self.__root.mainloop()
 
+    def perfilFuncionario(self):
+        self.__temFarmacia()
+        self.__autenticacaoValidacao()
+        self.__inciarRoot()
+        self.__root.title("Meu Perfil")
+        
+        funcionario = self.__farmacia.getFuncionarioPorId(self.__idFuncionarioLogado)
+
+        self.__root.rowconfigure(0, weight=0)
+        # self.__root.rowconfigure(1, weight=0)
+        # self.__root.rowconfigure(2, weight=0)
+        # self.__root.rowconfigure(3, weight=0)
+        # self.__root.rowconfigure(4, weight=0)
+        self.__root.columnconfigure(0, weight=0)
+        self.__root.columnconfigure(1, weight=0)
+        self.__root.columnconfigure(2, weight=0)
+        row_base = 0
+        column_base = 0
+
+        self.__botaoPadrao('Voltar', self.interface, padx=5, pady=5).grid(row=row_base, column=column_base, sticky='W', padx=(10,0))
+        Label(self.__root, text=f'Seu perfil - {funcionario.__class__.__name__}: {funcionario.nome}', font=('', 15)).grid(row=row_base, columnspan=5, column=column_base+1)
+
+        Label(self.__root, text=f'Seus dados pessoais:', font=('', 12)).grid(row=row_base+1, column=0, columnspan=2, pady=(20, 0))
+        Label(self.__root, text=f'ID: {funcionario.get_id()}').grid(row=row_base+2, column=column_base, sticky='W', padx=(20,0))
+        Label(self.__root, text=f'Nome: {funcionario.nome}').grid(row=row_base+3, column=column_base, sticky='W', padx=(20,0))
+        Label(self.__root, text=f'CPF: {funcionario.get_cpf()}').grid(row=row_base+4, column=column_base, sticky='W', padx=(20,0))
+        Label(self.__root, text=f'Data Nascimento: {funcionario.get_data_nascimento().date()}').grid(row=row_base+5, column=column_base, sticky='W', padx=(20,0))
+
+        Label(self.__root, text=f'Dados salarial:', font=('', 12)).grid(row=row_base+6, column=0, columnspan=2, pady=(20,0))
+        Label(self.__root, text=f'Salário Base: R${funcionario.get_salario_base()}').grid(row=row_base+7, column=column_base, sticky='W', padx=(20,0))
+        Label(self.__root, text=f'Bonus salarial: R${funcionario.get_bonus()}').grid(row=row_base+8, column=column_base, sticky='W', padx=(20,0))
+
+        if self.__usuarioTipoAtendente(messagemBox=False):
+            Label(self.__root, text=f'Comissões por vendas: R${funcionario.get_comissao()}').grid(row=row_base+9, column=column_base, sticky='W', padx=(20,0))
+
     def __inciarRoot(self, tamanho = "500x300"):
         try:
             self.__root.destroy()
@@ -944,6 +980,8 @@ class Interface:
             messagebox.showerror("Erro de Autenticação", f"É preciso estar logado para conseguir prosseguir.")
             self.__root.destroy()
             self.interface()
+            return
+        return True
 
     def __dataRegex(self, data):
         import re
@@ -956,6 +994,17 @@ class Interface:
             messagebox.showerror("Erro de Autenticação", f"É preciso estar logado como Gerente para conseguir prosseguir.")
             self.__root.destroy()
             self.interface()
+        return True
+    
+    def __usuarioTipoAtendente(self, messagemBox = True):
+        funcionario = self.__farmacia.getFuncionarioPorId(self.__idFuncionarioLogado)
+        if not funcionario.__class__.__name__ == 'Atendente':
+            if messagemBox:
+                messagebox.showerror("Erro de Autenticação", f"É preciso estar logado como Atendente para conseguir prosseguir.")
+                self.__root.destroy()
+                self.interface()
+                return
+            return False
         return True
     
     def __usuarioTipoGerenteOuRepositor(self):
