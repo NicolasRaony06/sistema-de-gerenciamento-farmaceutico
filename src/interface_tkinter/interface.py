@@ -21,9 +21,9 @@ class Interface:
             self.registrarFarmacia()
             return
         
-        if not self.__farmacia.getGerente():
-            self.registrarGerente()
-            return
+        # if not self.__farmacia.getGerente():
+        #     self.registrarGerente()
+        #     return
 
         self.__root = Tk()
         self.__root.geometry("900x400")
@@ -43,19 +43,22 @@ class Interface:
 
         Label(self.__root, text=f"Farmácia {self.__farmacia.nome}", font=("Arial", 25, "bold")).grid(row=row_base+1, column=column_base)
 
-        funcionario = self.__farmacia.getFuncionarioPorId(self.__idFuncionarioLogado)
-        Label(self.__root, text=f"Bem vindo, {funcionario.nome}", font=("Arial", 15)).grid(row=row_base+2, column=column_base, sticky='N')
-
+        try:
+            funcionario = self.__farmacia.getFuncionarioPorId(self.__idFuncionarioLogado)
+            Label(self.__root, text=f"Bem vindo, {funcionario.nome}", font=("Arial", 15)).grid(row=row_base+2, column=column_base, sticky='N')
+        except:
+            pass
+        
         self.__botaoPadrao("Login", self.login, pady=3, padx=5).grid(row=row_base, column=column_base+2, sticky="NW", padx=0)
         self.__botaoPadrao("Logout", self.logout, pady=3, padx=5).grid(row=row_base, column=column_base+2, sticky="NW",padx=(60, 0))
         self.__botaoPadrao("Registrar Atendente", self.registrarAtendente).grid(row=row_base+1, column=column_base+1, sticky='SE')
-        self.__botaoPadrao("Registrar Repositor", self.registrarRepositor).grid(row=row_base+2, column=column_base+1, sticky='NE', pady=(0,0))
-        self.__botaoPadrao("Registrar Produto", self.registrarProduto).grid(row=row_base+2, column=column_base+1, sticky="SE", pady=(0,0))
-        self.__botaoPadrao("Consultar Estoque", self.consultarEstoque).grid(row=row_base+3, column=column_base+1, sticky="NE")
-        self.__botaoPadrao("Registrar Cliente", self.registrarCliente).grid(row=row_base+1, column=column_base+2,sticky='SW')
-        self.__botaoPadrao("Registrar Venda", self.registrarVenda).grid(row=row_base+2, column=column_base+2,sticky='NW',pady=(0,0))
-        self.__botaoPadrao("Consultar Vendas", self.consultarVendasFarmacia).grid(row=row_base+2, column=column_base+2, sticky="SW", pady=(0,0))
-        self.__botaoPadrao("Consultar Funcionarios", self.consultarFuncionarios).grid(row=row_base+3, column=column_base+2, sticky="NW")
+        self.__botaoPadrao("Registrar Repositor", self.registrarRepositor, padx=12.5).grid(row=row_base+2, column=column_base+1, sticky='NE', pady=(0,0))
+        self.__botaoPadrao("Registrar Produto", self.registrarProduto, padx=16.499).grid(row=row_base+2, column=column_base+1, sticky="SE", pady=(0,0))
+        self.__botaoPadrao("Consultar Estoque", self.consultarEstoque, padx=15.3).grid(row=row_base+3, column=column_base+1, sticky="NE")
+        self.__botaoPadrao("Registrar Cliente", self.registrarCliente, padx=21).grid(row=row_base+1, column=column_base+2,sticky='SW')
+        self.__botaoPadrao("Registrar Venda", self.registrarVenda, padx=23).grid(row=row_base+2, column=column_base+2,sticky='NW',pady=(0,0))
+        self.__botaoPadrao("Consultar Vendas", self.consultarVendasFarmacia, padx=18).grid(row=row_base+2, column=column_base+2, sticky="SW", pady=(0,0))
+        self.__botaoPadrao("Consultar Funcionarios", self.consultarFuncionarios, padx=3).grid(row=row_base+3, column=column_base+2, sticky="NW")
 
         self.__root.mainloop()
 
