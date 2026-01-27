@@ -17,7 +17,7 @@ class Atendente(Funcionario,GerenciarVendaMixin):
     
     def get_comissao(self):
         '''Retorna valor total de comissões de vendas realizadas pelo funcionario de acordo com uma porcentagem interna.'''
-        comissao = 0
+        comissao = Decimal(0)
         for venda in self.getVendasRealizadas():
             comissao += venda.getPrecoTotal() * Decimal(self.__porcetagemComissaoVenda)
         return comissao.quantize(Decimal('0.01'))
