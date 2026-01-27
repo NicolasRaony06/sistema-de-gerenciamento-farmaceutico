@@ -13,6 +13,8 @@ class Funcionario(Pessoa):
         self.__farmacia = farmacia
         self.__autenticado = False 
         
+    def getsenha(self):
+        return self.__senha
     def get_bonus(self):
         '''Retorna um bonus salarial base de 5%'''
         return self.__salario_base * Decimal(0.05)
