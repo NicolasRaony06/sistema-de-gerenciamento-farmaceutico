@@ -34,13 +34,8 @@ def login():
     print("                 LOGIN     ")
     print("=" * 40)
     
-    try:
-        id_login = int(input("Digite seu Id: "))
-        senha_login = input("Digite sua senha para login: ")
-    except ValueError:
-        print(f"{VERMELHO}O ID deve ser numérico!{RESET}")
-        time.sleep(2)
-        return
+    id_login = int(input("Digite seu Id: "))
+    senha_login = input("Digite sua senha para login: ")
 
     usuario_encontrado = None
 
@@ -52,7 +47,7 @@ def login():
         usuario_encontrado = farmacia.getFuncionarioPorId(id_login)
 
     if usuario_encontrado:
-        try:
+        
             # Tenta autenticar o usuário encontrado (seja Gerente ou Atendente)
             usuario_encontrado.setAutenticacao(id_login, senha_login)
             
@@ -66,9 +61,7 @@ def login():
             else:
                 print(f"{VERMELHO}Senha incorreta!{RESET}")
                 time.sleep(2)
-        except AttributeError:
-             print(f"{VERMELHO}Este usuário não tem permissão de login.{RESET}")
-             time.sleep(2)
+        
     else:
         print(f"{VERMELHO}Usuário não encontrado!{RESET}")
         time.sleep(2)
