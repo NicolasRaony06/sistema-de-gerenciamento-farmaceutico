@@ -921,10 +921,10 @@ class Interface:
         self.__root.mainloop()
 
     def perfilFuncionario(self):
+        self.__inciarRoot(tamanho='600x300')
+        self.__root.title("Meu Perfil")
         self.__temFarmacia()
         self.__autenticacaoValidacao()
-        self.__inciarRoot()
-        self.__root.title("Meu Perfil")
         
         funcionario = self.__farmacia.getFuncionarioPorId(self.__idFuncionarioLogado)
 
@@ -942,7 +942,7 @@ class Interface:
         self.__botaoPadrao('Voltar', self.interface, padx=5, pady=5).grid(row=row_base, column=column_base, sticky='W', padx=(10,0))
         Label(self.__root, text=f'Seu perfil - {funcionario.__class__.__name__}: {funcionario.nome}', font=('', 15)).grid(row=row_base, columnspan=5, column=column_base+1)
 
-        Label(self.__root, text=f'Seus dados pessoais:', font=('', 12)).grid(row=row_base+1, column=0, columnspan=2, pady=(20, 0))
+        Label(self.__root, text=f'Seus dados pessoais:', font=('', 12)).grid(row=row_base+1, column=column_base, columnspan=2, pady=(20, 0))
         Label(self.__root, text=f'ID: {funcionario.get_id()}').grid(row=row_base+2, column=column_base, sticky='W', padx=(20,0))
         Label(self.__root, text=f'Nome: {funcionario.nome}').grid(row=row_base+3, column=column_base, sticky='W', padx=(20,0))
         Label(self.__root, text=f'CPF: {funcionario.get_cpf()}').grid(row=row_base+4, column=column_base, sticky='W', padx=(20,0))
@@ -955,6 +955,18 @@ class Interface:
         if self.__usuarioTipoAtendente(messagemBox=False):
             Label(self.__root, text=f'Comissões por vendas: R${funcionario.get_comissao()}').grid(row=row_base+9, column=column_base, sticky='W', padx=(20,0))
 
+            vendas = funcionario.getVendasRealizadas()
+            row_base += 1
+            Label(self.__root, text=f'Suas Vendas (Total: {len(vendas)}):', font=('', 12)).grid(row=row_base, column=column_base+2, columnspan=2, pady=(20, 5))
+            if vendas:
+                for venda in vendas:
+                    row_base += 1
+                    Label(self.__root, text=f'Venda: Id={venda.getId()}| Data={venda.getDataVenda().date()}| Preço={venda.getPrecoTotal()}').grid(row=row_base, column=column_base+2, columnspan=4, sticky='W', padx=(0,0))
+            else:
+                Label(self.__root, text=f'Nenhuma Venda feita ainda.').grid(row=row_base+1, column=column_base+2, sticky='W', padx=(0,0))
+
+        self.__root.mainloop()
+        
     def __inciarRoot(self, tamanho = "500x300"):
         try:
             self.__root.destroy()

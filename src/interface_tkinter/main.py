@@ -2,6 +2,6 @@
 
 from src.interface_tkinter.interface import Interface
 
-interface = Interface("Pague menos")
+interface = Interface("Pague mais")
 
 interface.interface()
