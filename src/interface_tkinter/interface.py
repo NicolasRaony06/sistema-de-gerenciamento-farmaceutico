@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import messagebox
+from src.farmacia.salvar_farmacia import salvar_farmacia, carregar_farmacia, excluir_farmacia
 from src.farmacia.farmacia import Farmacia
 from src.farmacia.produto import Produto
 from decimal import Decimal
@@ -8,9 +9,9 @@ from datetime import datetime
 class Interface:
     def __init__(self, nome_farmacia: str):
         self.__root = None
-        self.__farmacia = Farmacia(nome_farmacia)
+        self.__farmacia = carregar_farmacia() if carregar_farmacia() else Farmacia(nome_farmacia)
         self.__idFuncionarioLogado = None
-    
+
     def interface(self):
         try:
             self.__root.destroy()
@@ -25,10 +26,15 @@ class Interface:
             self.registrarGerente()
             return
         
-        self.__atendenteRepositorPrimeiroAcesso()
-
-        self.__root = Tk()
-        self.__root.geometry("900x400")
+        if not self.__idFuncionarioLogado:
+            self.login()
+            return
+        
+        if self.__atendenteRepositorPrimeiroAcesso(retornarBool=True):
+            self.__atendenteRepositorPrimeiroAcesso()
+            return
+        
+        self.__inciarRoot(tamanho="900x400")
         self.__root.title(f'Farmacia {self.__farmacia.nome}')
 
         self.__root.rowconfigure(0, weight=1)
@@ -53,7 +59,8 @@ class Interface:
         
         self.__botaoPadrao("Meu Perfil", self.perfilFuncionario, pady=3, padx=5).grid(row=row_base, column=column_base+1, sticky='N')
         self.__botaoPadrao("Login", self.login, pady=3, padx=5).grid(row=row_base, column=column_base+2, sticky="NW", padx=0)
-        self.__botaoPadrao("Logout", self.logout, pady=3, padx=5).grid(row=row_base, column=column_base+2, sticky="NW",padx=(60, 0))
+        self.__botaoPadrao("Logout", self.logout, pady=3, padx=5).grid(row=row_base, column=column_base+2, sticky="NW",padx=(60, 0)) 
+        
         self.__botaoPadrao("Registrar Atendente", self.registrarAtendente).grid(row=row_base+1, column=column_base+1, sticky='SE')
         self.__botaoPadrao("Registrar Repositor", self.registrarRepositor, padx=12.5).grid(row=row_base+2, column=column_base+1, sticky='NE', pady=(0,0))
         self.__botaoPadrao("Registrar Produto", self.registrarProduto, padx=16.5).grid(row=row_base+2, column=column_base+1, sticky="SE", pady=(0,0))
@@ -75,7 +82,7 @@ class Interface:
         self.__idFuncionarioLogado = None
 
         messagebox.showinfo("Logout Sucesso", f"Você foi deslogado do sistema.")
-        self.interface()
+        self.login()
         return 
 
     def login(self):
@@ -88,7 +95,7 @@ class Interface:
         self.__inciarRoot()
         self.__root.title('Login')
 
-        Label(self.__root, text="Id de Funcionário:").grid(row=0)
+        Label(self.__root, text="ID de Funcionário:").grid(row=0)
         campo_id = Entry(self.__root, width=25, borderwidth=1)
         campo_id.grid(row=0, column=1, columnspan=2)
 
@@ -125,8 +132,7 @@ class Interface:
             self.interface()
             return
 
-        self.__botaoPadrao('Logar', instanciar).grid(row=2, column=1)
-        self.__botaoPadrao("Voltar", self.interface).grid(row=2, column=2)
+        self.__botaoPadrao('Logar', instanciar ,pady=5).grid(row=2, column=1, sticky='W', pady=(10,0))
 
         self.__root.mainloop()
 
@@ -921,7 +927,7 @@ class Interface:
         self.__root.mainloop()
 
     def perfilFuncionario(self):
-        self.__inciarRoot(tamanho='600x300')
+        self.__inciarRoot(tamanho='600x400')
         self.__root.title("Meu Perfil")
         self.__temFarmacia()
         self.__autenticacaoValidacao()
@@ -929,18 +935,14 @@ class Interface:
         funcionario = self.__farmacia.getFuncionarioPorId(self.__idFuncionarioLogado)
 
         self.__root.rowconfigure(0, weight=0)
-        # self.__root.rowconfigure(1, weight=0)
-        # self.__root.rowconfigure(2, weight=0)
-        # self.__root.rowconfigure(3, weight=0)
-        # self.__root.rowconfigure(4, weight=0)
         self.__root.columnconfigure(0, weight=0)
-        self.__root.columnconfigure(1, weight=0)
-        self.__root.columnconfigure(2, weight=0)
         row_base = 0
         column_base = 0
 
         self.__botaoPadrao('Voltar', self.interface, padx=5, pady=5).grid(row=row_base, column=column_base, sticky='W', padx=(10,0))
+        
         Label(self.__root, text=f'Seu perfil - {funcionario.__class__.__name__}: {funcionario.nome}', font=('', 15)).grid(row=row_base, columnspan=5, column=column_base+1)
+        
 
         Label(self.__root, text=f'Seus dados pessoais:', font=('', 12)).grid(row=row_base+1, column=column_base, columnspan=2, pady=(20, 0))
         Label(self.__root, text=f'ID: {funcionario.get_id()}').grid(row=row_base+2, column=column_base, sticky='W', padx=(20,0))
@@ -951,6 +953,10 @@ class Interface:
         Label(self.__root, text=f'Dados salarial:', font=('', 12)).grid(row=row_base+6, column=0, columnspan=2, pady=(20,0))
         Label(self.__root, text=f'Salário Base: R${funcionario.get_salario_base()}').grid(row=row_base+7, column=column_base, sticky='W', padx=(20,0))
         Label(self.__root, text=f'Bonus salarial: R${funcionario.get_bonus()}').grid(row=row_base+8, column=column_base, sticky='W', padx=(20,0))
+
+        if self.__usuarioTipoGerente(messagemBox=False):
+            Label(self.__root, text=f'Controle Farmácia:', font=('', 12)).grid(row=row_base+9, column=column_base, columnspan=2, pady=(20,5))
+            Button(self.__root, text="Excluir Farmacia", command=self.__excluirFarmacia, pady=3, padx=5, bg='red', fg='white', font=('','10','bold')).grid(row=row_base+10, column=column_base, sticky='E')
 
         if self.__usuarioTipoAtendente(messagemBox=False):
             Label(self.__root, text=f'Comissões por vendas: R${funcionario.get_comissao()}').grid(row=row_base+9, column=column_base, sticky='W', padx=(20,0))
@@ -973,7 +979,55 @@ class Interface:
         except:
             pass
         self.__root = Tk()
+        self.__root.protocol("WM_DELETE_WINDOW", self.__salvarFarmacia)
         self.__root.geometry(tamanho)
+
+    def __salvarFarmacia(self):
+        salvar_farmacia(self.__farmacia)
+        self.__root.destroy()
+        return
+
+    def __excluirFarmacia(self):
+            verificacao = messagebox.askyesno("Excluir Farmácia", f"Você realmente deseja excluir Farmácia, {self.__farmacia.nome}?")
+
+            if not verificacao:
+                self.perfilFuncionario()
+                return
+            
+            def excluir():
+                try:
+                    confirmacao = self.__farmacia.getGerente().setAutenticacao(self.__idFuncionarioLogado, campo_senha.get())
+                except Exception as erro:
+                    messagebox.showerror("Erro ao tentar confirmar senha.", f'{erro}')
+                    return
+
+                if confirmacao:
+                    try:
+                        excluir_farmacia()
+                        self.__farmacia = None
+                    except Exception as erro:
+                        messagebox.showerror("Erro ao tentar exluir Farmácia.", f"{erro}")
+                        self.perfilFuncionario()
+                        return
+                    self.interface()
+                    return
+                
+                messagebox.showerror("Erro ao tentar exluir Farmácia.", f"Autenticação de Gerente falhou.")
+                self.perfilFuncionario()
+                return
+
+            self.__inciarRoot(tamanho='250x150')
+            self.__root.title("Excluir Farmácia")
+
+            Label(self.__root, text="Confirme sua senha", font=("", '12', 'bold')).grid(row=0, column=0, columnspan=3, pady=(20,10))
+            Label(self.__root, text="Senha:").grid(row=1, sticky="W", padx=(10, 0))
+            campo_senha = Entry(self.__root, width='25', show="*")
+            campo_senha.grid(row=1, column=1)
+
+            Button(self.__root, text="Excluir", command=excluir, bg="red", fg="white", pady=2, font=('', '9', 'bold')).grid(row=2, column=1, sticky='W', pady=(10,0))
+            Button(self.__root, text="Voltar", command=self.perfilFuncionario, pady=3, padx=10, font=('', '9', '')).grid(row=2, column=1, sticky='E',pady=(10,0))
+
+            self.__root.mainloop()
 
     def __temFarmacia(self):
         if not self.__farmacia:
@@ -1000,12 +1054,15 @@ class Interface:
         data = re.sub(r'[-/\.]','', data)
         return data
         
-    def __usuarioTipoGerente(self):
+    def __usuarioTipoGerente(self, messagemBox = True):
         funcionario = self.__farmacia.getFuncionarioPorId(self.__idFuncionarioLogado)
         if not funcionario.__class__.__name__ == 'Gerente':
-            messagebox.showerror("Erro de Autenticação", f"É preciso estar logado como Gerente para conseguir prosseguir.")
-            self.__root.destroy()
-            self.interface()
+            if messagemBox:
+                messagebox.showerror("Erro de Autenticação", f"É preciso estar logado como Gerente para conseguir prosseguir.")
+                self.__root.destroy()
+                self.interface()
+                return
+            return False
         return True
     
     def __usuarioTipoAtendente(self, messagemBox = True):
@@ -1152,7 +1209,7 @@ class Interface:
         except:
             return
         
-    def __atendenteRepositorPrimeiroAcesso(self):
+    def __atendenteRepositorPrimeiroAcesso(self, retornarBool = False):
         self.__temFarmacia()
         if not self.__usuarioTipoAtendenteOuRepositor(messagemBox=False):
             return
@@ -1169,14 +1226,13 @@ class Interface:
             return 
 
         if funcionario.get_senha(self.__farmacia) == funcionario.get_cpf():
+            if retornarBool:
+                return True
+            
             self.__inciarRoot()
             self.__root.title("Alterar senha")
             self.__root.rowconfigure(0, weight=0)
-            self.__root.rowconfigure(1, weight=0)
-            self.__root.rowconfigure(2, weight=0)
-            self.__root.rowconfigure(3, weight=0)
             self.__root.columnconfigure(0, weight=0)
-            self.__root.columnconfigure(1, weight=0)
 
             Label(self.__root, text="Altere sua senha de primeiro acesso.", font=('',10,'')).grid(row=0, column=0, columnspan=2, sticky='W')
             Label(self.__root, text="Senha Antiga:").grid(row=1, column=0,sticky='W', pady=(5,2))
@@ -1190,6 +1246,7 @@ class Interface:
             self.__botaoPadrao("Alterar", alterarSenha).grid(row=3, column=1)
 
             self.__root.mainloop()
+
 
         
     

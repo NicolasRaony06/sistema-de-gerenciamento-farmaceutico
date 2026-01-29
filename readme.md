@@ -16,7 +16,7 @@ Desenvolver um sistema de gerenciamento farmacêutico com foco educacional, apli
 
 - **Nicolas Raony** – Desenvolvedor e mantenedor do repositório  
 - **Francisco Alvaro** – Desenvolvimento e apoio ([GitHub](https://github.com/rootAlvim))  
-- **Arthur Turizzi** – Desenvolvimento e apoio ([GitHub](https://github.com/Aruturiz))
+- **Arthur Fernades** – Desenvolvimento e apoio ([GitHub](https://github.com/Aruturiz))
 
 ---
 
@@ -41,6 +41,7 @@ sistema-de-gerenciamento-farmaceutico/
 │   │   ├── pessoa.py
 │   │   ├── funcionario.py
 │   │   ├── atendente.py
+|   |   ├── repositor.py
 │   │   ├── gerente.py
 │   │   ├── cliente.py
 │   │   ├── interface.py
