@@ -74,15 +74,18 @@ def iniciar_login_atendente(atendente,farmacia):
     def cadrastar_produto():
         limpar_tela()
         print("\n--- CADASTRAR NOVO PRODUTO ---")
-        nome = input("Nome: ")
-        preco = input("Preço: ")
-        fabricante = input("Fabricante: ")
-        qntd = int(input("Quantidade: "))
+        try:
+            nome = str(input("Nome: "))
+            preco = Decimal(input("Preço: "))
+            fabricante = input("Fabricante: ")
+            qntd = int(input("Quantidade: "))
 
-        produto = Produto(nome, preco, fabricante)
-        atendente.adicionar_produto_estoque(produto, qntd)
+            produto = Produto(nome, preco, fabricante)
+            atendente.adicionar_produto_estoque(produto, qntd)
 
-        print(f'{VERDE}Produto cadrastado com sucesso! {RESET}')
+            print(f'{VERDE}Produto cadrastado com sucesso! {RESET}')
+        except:
+            print("Erro")
         input("\nPressione Enter para voltar ao menu...")
 
 
@@ -279,49 +282,74 @@ def iniciar_login_gerente(gerente,farmacia):
 # ---------------- PRODUTOS ----------------
     def cadrastar_produto():
         limpar_tela()
-        print("\n--- CADASTRAR NOVO PRODUTO ---")
-        nome = input("Nome: ")
-        preco = input("Preço: ")
-        fabricante = input("Fabricante: ")
-        qntd = int(input("Quantidade: "))
+        try:
+            print("\n--- CADASTRAR NOVO PRODUTO ---")
+            nome = input("Nome: ")
+            preco = input("Preço: ")
+            fabricante = input("Fabricante: ")
+            qntd = int(input("Quantidade: "))
 
-        produto = Produto(nome, preco, fabricante)
-        gerente.adicionar_produto_estoque(produto, qntd)
+            produto = Produto(nome, preco, fabricante)
+            gerente.adicionar_produto_estoque(produto, qntd)
 
-        print(f'{VERDE}Produto cadrastado com sucesso! {RESET}')
-        input("\nPressione Enter para voltar ao menu...")
+        except Exception as erro:
+             print(f"{VERMELHO}Erro: {erro} Tente Novamente.....{RESET}")
+             time.sleep(3)
+             limpar_tela()
+             cadrastar_produto()
+        else:
+            print(f'{VERDE}Produto cadrastado com sucesso! {RESET}')
+            input("\nPressione Enter para voltar ao menu...")
 
 
+  
+        
     def remover_produto():
         limpar_tela()
         print("\n--- REMOVER PRODUTO ---")
-        id_produto = int(input("Digite o Id do Produto: "))
-        gerente.remover_produto(id_produto) 
-        print(f'{VERDE}Produto removido com sucesso! {RESET}')
-        input("\nPressione Enter para voltar ao menu...")
-
+        try:
+            id_produto = int(input("Digite o Id do Produto: "))
+            sucesso = gerente.remover_produto(id_produto)
+            if not sucesso:
+                print(f"{VERMELHO}Produto não encontrado{RESET}")
+                
+            else:
+                print(f'{VERDE}Produto removido com sucesso!{RESET}')
+        except ValueError:
+            print(f"{VERMELHO}Erro: Id inválido Tente Novamente{RESET}")
+            time.sleep(3)
+            remover_produto()
+        else:
+            input("\nPressione Enter para voltar ao menu...")
 
     def alterar_preco_produto():
         limpar_tela()
-        print("\n--- ALTERAR PREÇO ---")
-        id_produto = int(input("Digite o ID do produto: "))
-        novo_preco = Decimal(input("Digite o novo preço: "))
+        try:
+            print("\n--- ALTERAR PREÇO ---")
+            id_produto = int(input("Digite o ID do produto: "))
+            novo_preco = Decimal(input("Digite o novo preço: "))
 
-        produto , _ = gerente.consultar_produto_por_id(id_produto)
-        gerente.alterar_preco_produto(produto, novo_preco)
-        print(f'{VERDE}Preço alterado  com sucesso! {RESET}')
-        input("\nPressione Enter para voltar ao menu...")
+            produto , _ = gerente.consultar_produto_por_id(id_produto)
+            gerente.alterar_preco_produto(produto, novo_preco)
+        except Exception as erro:
+            print(f"{VERMELHO}Erro: {erro} Tente Novamente.....{RESET}")
+        else:
+            print(f'{VERDE}Preço alterado  com sucesso! {RESET}')
+            input("\nPressione Enter para voltar ao menu...")
 
 
     def listar_produtos():
         limpar_tela()
-        print("\n--- ESTOQUE ATUAL ---")
-        if not gerente.consultar_estoque():
-            print(f'{AMARELO}Estoque Vazio!{RESET}')
+        try:
+            print("\n--- ESTOQUE ATUAL ---")
+            if not gerente.consultar_estoque():
+                print(f'{AMARELO}Estoque Vazio!{RESET}')
+            else:
+                print(gerente.consultar_estoque())
+        except Exception as erro:
+            print(f"{VERMELHO}Erro: {erro} Tente Novamente.....{RESET}")
         else:
-            print(gerente.consultar_estoque())
-
-        input("\nPressione Enter para voltar ao menu...")
+            input("\nPressione Enter para voltar ao menu...")
 
 
     def buscar_produto():
