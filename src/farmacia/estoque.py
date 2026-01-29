@@ -30,14 +30,8 @@ class Estoque:
         produtos_estoque = self.__produtos
         for id_produto in produtos_estoque.keys():
             if id_produto == id:
-                if quantidade and quantidade > 0:
-                    if self.produto_disponibilidade(id, quantidade): #dupla verificacao, reutilizando metodo, pra caso seja um valor positivo, porem acima de permitido.
-                        produtos_estoque[id]["quantidade"] -= quantidade
-                        return True
-                    raise ValueError("Produto em quantidade indisponível.")
-                
                 del produtos_estoque[id]
-                return True    
+                return True   
      
     def consultar_produto_por_id(self, funcionario, id_produto):
         '''Recebe um objeto de funcionario para validação, id do produto e caso produto exista, retorna o seu objeto e quantidade em estoque.'''
