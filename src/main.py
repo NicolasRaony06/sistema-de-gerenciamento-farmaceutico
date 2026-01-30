@@ -315,71 +315,84 @@ def iniciar_login_gerente(gerente,farmacia):
 
         try:
             id_produto = int(input("Digite o Id do Produto: "))
-            sucesso = gerente.remover_produto(id_produto)
-
-            if sucesso:
-                print("Produto removido com sucesso!")
-            else:
-                print("Erro: produto não encontrado.")
+            gerente.remover_produto(id_produto)
 
         except ValueError:
             print("Erro: o ID deve ser um número inteiro.")
-
-        
         input("\nPressione Enter para voltar ao menu...")
 
     def alterar_preco_produto():
         limpar_tela()
+        print("\n--- ALTERAR PREÇO ---")
         try:
-            print("\n--- ALTERAR PREÇO ---")
             id_produto = int(input("Digite o ID do produto: "))
             novo_preco = Decimal(input("Digite o novo preço: "))
 
-            produto , _ = gerente.consultar_produto_por_id(id_produto)
-            gerente.alterar_preco_produto(produto, novo_preco)
-        except Exception as erro:
-            print(f"{VERMELHO}Erro: {erro} Tente Novamente.....{RESET}")
+            
+        except ValueError:
+            print(f"{VERMELHO}Id inválido{RESET}")
+            input("\nPressione Enter para tentar novamente..")
+            return alterar_preco_produto()
+        except InvalidOperation:
+            print(f"{VERMELHO}Preço inválido{RESET}")
+            input("\nPressione Enter para tentar novamente...")
+            return alterar_preco_produto()
         else:
-            print(f'{VERDE}Preço alterado  com sucesso! {RESET}')
-            input("\nPressione Enter para voltar ao menu...")
+            if not gerente.consultar_produto_por_id(id_produto):
+                print(f"{AMARELO}Produto não encontrado{RESET}")
+            else:
+                produto , _  = gerente.consultar_produto_por_id(id_produto)
+                gerente.alterar_preco_produto(produto, novo_preco)
+
+                print(f'{VERDE}Preço alterado com sucesso! {RESET}')
+        input("\nPressione Enter para voltar ao menu...")
 
 
     def listar_produtos():
         limpar_tela()
-        try:
-            print("\n--- ESTOQUE ATUAL ---")
-            if not gerente.consultar_estoque():
-                print(f'{AMARELO}Estoque Vazio!{RESET}')
-            else:
-                print(gerente.consultar_estoque())
-        except Exception as erro:
-            print(f"{VERMELHO}Erro: {erro} Tente Novamente.....{RESET}")
+        print("\n--- ESTOQUE ATUAL ---")
+        if not gerente.consultar_estoque():
+            print(f'{AMARELO}Estoque Vazio!{RESET}')
         else:
-            input("\nPressione Enter para voltar ao menu...")
+            print(gerente.consultar_estoque())
+        input("\nPressione Enter para voltar ao menu...")
 
 
     def buscar_produto():
         limpar_tela()
         print("\n--- BUSCAR PRODUTO ---")
         opc = input(f"{AZUL}Deseja consultar produto por: (Id)/(Nome) {RESET}")
-        if opc == "Id":
-            id_produto = int(input(f"{AZUL}Digite o Id do Produto: {RESET}"))
+        try:
+           
+            if opc == "Id":
+                id_produto = int(input(f"{AZUL}Digite o Id do Produto: {RESET}"))
+                resultado = gerente.consultar_produto_por_id(id_produto)
+                if resultado is None:
+                    print(f"{AMARELO}Produto não encontrado{RESET}")
+                    input("\nPressione Enter para voltar ao menu...")
+                else:
+                    print(resultado)
+                    input("\nPressione Enter para voltar ao menu...")
+            elif opc == "Nome":
+                nome = str(input(f"{AZUL}Digite o Nome do Produto: {RESET}"))
+                resultado = gerente.consultar_produto_por_nome(nome)
+                if resultado is None:
+                    print(f"{AMARELO}Produto não encontrado{RESET}")
+                    input("\nPressione Enter para voltar ao menu...")
+                else:
+                    print(resultado)
+                    input("\nPressione Enter para voltar ao menu...")
+            else:
+                print(f"{VERMELHO}Opção Incorreta{RESET}")
+                input("\nPressione Enter para tentar novamente...")
+                buscar_produto()
+        except ValueError:
+            print(f"{VERMELHO}ID inválido{RESET}")
+            input("\nPressione Enter para tentar novamente...")
+            buscar_produto()
+                
 
-            resultado = gerente.consultar_produto_por_id(id_produto)
-            if resultado is None:
-                print(f"{AMARELO}Produto não encontrado{RESET}")
-            else:
-                print(resultado)
-        elif opc == "Nome":
-            nome = input(f"{AZUL}Digite o Nome do Produto: {RESET}")
-            resultado = gerente.consultar_produto_por_nome(nome)
-            if resultado is None:
-                print(f"{AMARELO}Produto não encontrado{RESET}")
-            else:
-                print(resultado)
-        else:
-            print(f"{VERMELHO}Opção Incorreta{RESET}")
-        input("\nPressione Enter para voltar ao menu...")
+        
 
 
 
@@ -387,18 +400,42 @@ def iniciar_login_gerente(gerente,farmacia):
     def cadrastar_funcionario():
         limpar_tela()
         print("\n--- CADASTRAR FUNCIONÁRIO ---")
-        nome = input(f"{AZUL}Digite o nome do funcionário: {RESET}")
-        cpf = input(f"{AZUL}Digite o CPF do funcionário: {RESET}")
+        nome = input(f"{AZUL}Digite o nome do funcionário: {RESET}") 
+        cargo = str(input(f"{AZUL}Digite o cargo do funcionário: (Atendente/Repositor): {RESET}"))
+        if cargo != "Atendente" or cargo != "Repositor":
+            print(f"{VERMELHO}Opção inválida.")
+            input(f"{AZUL}Pressione Enter para tentar novamente...{RESET}")
+            cadrastar_funcionario()
+        else:
+            g = gerente.cadrastar_funcionario(cargo,nome, cpf, data_nascimento, salario)
+        try:
+            cpf = input(f"{AZUL}Digite o CPF do funcionário: {RESET}")
+            validar_formato_cpf(cpf)
+        except Exception as erro:
+            print(f"{erro}")
+            input(f"{AZUL}Pressione Enter para tentar novamente...{RESET}")
+            cadrastar_funcionario()
 
-        data_str = input(f"{AZUL}Data de nascimento (dd-mm-aaaa): {RESET}")
-        data_nascimento = datetime.strptime(data_str, "%d-%m-%Y").date()
-
-        salario = Decimal(input(f"{AZUL}Salário do funcionário: {RESET}"))
-        cargo = str(input(f"{AZUL}Digite o cargo do funcionário: (atendente/repositor): {RESET}"))
-        g = gerente.cadrastar_funcionario(cargo,nome, cpf, data_nascimento, salario)
-
-        print(f"{VERDE}Funcionário {g.nome}, com Id: {g.get_id()} cadastrado{RESET}")
-        input("\nPressione Enter para voltar ao menu...")
+        try:
+            data_str = input(f"{AZUL}Data de nascimento (dd-mm-aaaa): {RESET}")
+            data_nascimento = datetime.strptime(data_str, "%d-%m-%Y").date()
+        except ValueError:
+            print(f"{VERMELHO}Data inválida! Use o formato dd-mm-aaaa.{RESET}")
+            input(f"{AZUL}Pressione Enter para tentar novamente...{RESET}")
+            cadrastar_funcionario()
+        try:
+    
+            salario = Decimal(input(f"{AZUL}Salário do funcionário: {RESET}"))
+        except InvalidOperation:
+            print(f"{VERMELHO}Valor inválido.{RESET}")
+            input(f"{AZUL}Pressione Enter para tentar novamente...{RESET}")
+            cadrastar_funcionario()
+        else:
+            g = gerente.cadrastar_funcionario(cargo,nome, cpf, data_nascimento, salario)
+        
+            print(f"{VERDE}Funcionário {g.nome}, com Id: {g.get_id()} cadastrado{RESET}")
+            
+            input("\nPressione Enter para voltar ao menu...")
 
 
     def excluir_funcionario():
