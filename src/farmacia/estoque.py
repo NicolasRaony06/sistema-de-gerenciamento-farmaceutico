@@ -23,15 +23,16 @@ class Estoque:
                 "quantidade": quantidade
             }
 
-    def remover_produto(self, funcionario, id, quantidade = None):
+    def remover_produto(self, funcionario, id):
         '''Recebe um objeto de funcionario para validação, um inteiro do Id de Produto e, remove ou reduz sua quantidade do estoque, caso parametro 'quantidade' tenha um valor inteiro positivo.'''
         validar_funcionario(funcionario) # adicionei funcionario para servir de controle, e forçar que apenas via funcionario seja possivel remover em estoque
 
         produtos_estoque = self.__produtos
-        for id_produto in produtos_estoque.keys():
-            if id_produto == id:
-                del produtos_estoque[id]
-                return True   
+        if id in produtos_estoque.keys():
+            del produtos_estoque[id]
+            return True 
+            
+        return False
      
     def consultar_produto_por_id(self, funcionario, id_produto):
         '''Recebe um objeto de funcionario para validação, id do produto e caso produto exista, retorna o seu objeto e quantidade em estoque.'''
