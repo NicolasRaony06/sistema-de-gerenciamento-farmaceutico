@@ -2,13 +2,14 @@
 import os
 import time
 from datetime import datetime
-from decimal import Decimal
+from decimal import Decimal , InvalidOperation
 
 from src.core.atendente import Atendente
 from src.core.cliente import Cliente
 from src.core.funcionario import Funcionario
 from src.core.gerente import Gerente
 from src.core.pessoa import Pessoa
+from src.utils.validacoes import *
 from src.core.mixins_interfaces import *
 
 from src.farmacia.farmacia import Farmacia
@@ -74,18 +75,21 @@ def iniciar_login_atendente(atendente,farmacia):
     def cadrastar_produto():
         limpar_tela()
         print("\n--- CADASTRAR NOVO PRODUTO ---")
+        nome = str(input("Nome: "))
+        qntd = int(input("Quantidade: "))
+        fabricante = str(input("Fabricante: "))
         try:
-            nome = str(input("Nome: "))
             preco = Decimal(input("Preço: "))
-            fabricante = input("Fabricante: ")
-            qntd = int(input("Quantidade: "))
+        except Decimal.ConversionSyntax:
+            print("Digite um preço válido!")
+            cadrastar_produto()    
+            
 
-            produto = Produto(nome, preco, fabricante)
-            atendente.adicionar_produto_estoque(produto, qntd)
+        produto = Produto(nome, preco, fabricante)
+        atendente.adicionar_produto_estoque(produto, qntd)
 
-            print(f'{VERDE}Produto cadrastado com sucesso! {RESET}')
-        except:
-            print("Erro")
+        print(f'{VERDE}Produto cadrastado com sucesso! {RESET}')
+        
         input("\nPressione Enter para voltar ao menu...")
 
 
@@ -282,22 +286,23 @@ def iniciar_login_gerente(gerente,farmacia):
 # ---------------- PRODUTOS ----------------
     def cadrastar_produto():
         limpar_tela()
+        print("\n--- CADASTRAR NOVO PRODUTO ---")
+        nome = input("Nome: ")
+        fabricante = input("Fabricante: ")
         try:
-            print("\n--- CADASTRAR NOVO PRODUTO ---")
-            nome = input("Nome: ")
-            preco = input("Preço: ")
-            fabricante = input("Fabricante: ")
+            preco = Decimal(input("Preço: "))
             qntd = int(input("Quantidade: "))
-
+        except InvalidOperation:
+            print(f"{VERMELHO}Digite um preço válido!{RESET}")
+            input("Pressione Enter para tentar novamente...")
+            return cadrastar_produto()
+        except ValueError:
+            print(f"{VERMELHO}Quantidade inválida!{RESET}")
+            input("Pressione Enter para tentar novamente...")
+            return cadrastar_produto()
+        else:
             produto = Produto(nome, preco, fabricante)
             gerente.adicionar_produto_estoque(produto, qntd)
-
-        except Exception as erro:
-             print(f"{VERMELHO}Erro: {erro} Tente Novamente.....{RESET}")
-             time.sleep(3)
-             limpar_tela()
-             cadrastar_produto()
-        else:
             print(f'{VERDE}Produto cadrastado com sucesso! {RESET}')
             input("\nPressione Enter para voltar ao menu...")
 
@@ -307,20 +312,21 @@ def iniciar_login_gerente(gerente,farmacia):
     def remover_produto():
         limpar_tela()
         print("\n--- REMOVER PRODUTO ---")
+
         try:
             id_produto = int(input("Digite o Id do Produto: "))
             sucesso = gerente.remover_produto(id_produto)
-            if not sucesso:
-                print(f"{VERMELHO}Produto não encontrado{RESET}")
-                
+
+            if sucesso:
+                print("Produto removido com sucesso!")
             else:
-                print(f'{VERDE}Produto removido com sucesso!{RESET}')
+                print("Erro: produto não encontrado.")
+
         except ValueError:
-            print(f"{VERMELHO}Erro: Id inválido Tente Novamente{RESET}")
-            time.sleep(3)
-            remover_produto()
-        else:
-            input("\nPressione Enter para voltar ao menu...")
+            print("Erro: o ID deve ser um número inteiro.")
+
+        
+        input("\nPressione Enter para voltar ao menu...")
 
     def alterar_preco_produto():
         limpar_tela()
@@ -574,16 +580,47 @@ if __name__ == "__main__":
 
             if opc == "1":
                 limpar_tela()
-                print("\n--- CADASTRO DO GERENTE ---")
+    
             
             # Nota: No seu código original, você cadastra um NOVO gerente toda vez que entra.
-
+        
+                print("\n--- CADASTRO DO GERENTE ---")
+                
                 nome = input("Digite o Nome do Gerente: ")
-                cpf = input("Digite o CPF: ")
-                data_str = input("Data de nascimento (dd-mm-aaaa): ")
-                data_nascimento = datetime.strptime(data_str, "%d-%m-%Y").date()
-                salario = Decimal(input("Salário: "))
-                senha = input("Digite a senha de login: ")
+                while True:
+                    try:
+                        cpf = input("Digite o CPF: ")
+                        cpf = validar_formato_cpf(cpf)
+                        break
+                    except  ValueError as e:
+                        print(f"{VERMELHO}{e}{RESET}")
+                        input(f"{AZUL}Pressione Enter para tentar novamente...{RESET}")
+                        
+                while True:
+                    try:
+                        data_str = input("Data de nascimento (dd-mm-aaaa): ")
+                        data_nascimento = datetime.strptime(data_str, "%d-%m-%Y").date()
+                        break
+                    except ValueError:
+                        print(f"{VERMELHO}Data inválida! Use o formato dd-mm-aaaa.{RESET}")
+                        input(f"{AZUL}Pressione Enter para tentar novamente...{RESET}")
+                        
+                while True:
+                    try:
+                        salario = Decimal(input("Salário: "))
+                        break
+                    except InvalidOperation:
+                        print(f"{VERMELHO}Salário inválido.{RESET}")
+                        input(f"{AZUL}Pressione Enter para tentar novamente...{RESET}")
+                        
+                while True:
+                    try:
+                        senha = input("Digite a senha de login: ")
+                        break
+                    except ValueError:
+                        print(f"{VERMELHO}Senha inválida!.{RESET}")
+                        input(f"{AZUL}Pressione Enter para tentar novamente...{RESET}")
+                       
 
                 gerente = farmacia._registrarGerente(
                     nome, cpf, data_nascimento, salario, senha
@@ -593,8 +630,3 @@ if __name__ == "__main__":
                 time.sleep(1)
                     
                 login()
-
-
-            else:
-                print("Opção inválida!")
-                time.sleep(1)
