@@ -57,9 +57,12 @@ class Funcionario(Pessoa):
 
     def setNovaSenha(self, senhaAntiga:str, senhaNova:str):
         '''Altera senha de funcionario. Recebe confirmacao de senha antiga e uma nova senha, ambas strings.'''
-        if not senhaAntiga == self.__senha: # Verifica se a senha passada e a senha do usuarui 
+        if not senhaAntiga == self.__senha:
             raise ValueError("Confirmação de senha não corresponde à senha antiga")
         
+        if not senhaAntiga != senhaNova:
+            raise ValueError("A senha nova não pode ser igual à senha antiga")
+
         if not len(senhaNova) >= 5:
             raise ValueError("Nova senha deve conter no mínimo 5 caracteres")
         
