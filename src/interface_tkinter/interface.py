@@ -781,6 +781,21 @@ class Interface:
         if not funcionarios:
             Label(self.__root, text="Nenhuma funcionario foi cadastrado ainda.").grid(row=2, column=1, columnspan=2)
 
+        def resetSenha(funcionario):
+            verificacao = messagebox.askyesno("Resetar senha de funcionário.", f"Você realmente deseja resetar a senha do funcionario de ID {funcionario.get_id()}?")
+
+            if not verificacao:
+                return
+            
+            try:
+                funcionario.setNovaSenha(funcionario.get_senha(self.__farmacia), funcionario.get_cpf())
+            except Exception as erro:
+                messagebox.showerror(f'Erro ao tentar resetar senha.', erro)
+                return
+            
+            messagebox.showinfo(f"Resetar senha.", f'Senha resetada com sucesso, funcionario de ID {funcionario.get_id()}.')
+            return
+
         def consultar():
             consulta_valor = campo_consulta.get()
             campo_consulta.delete(0,END)
@@ -856,8 +871,11 @@ class Interface:
             funcionario_label = Label(self.__root, text=funcionario)
             funcionario_label.grid(row=row_, columnspan=10, padx=(25, 10))
 
-            botao_remover = self.__botaoPadrao("Excluir", lambda: self.__removerFuncionario(funcionario, funcionario_label, botao_remover), pady=5)
+            botao_remover = self.__botaoPadrao("Excluir", lambda: self.__removerFuncionario(funcionario, funcionario_label, botao_remover), corFundo="#ff3a3a", corTexto='white', pady=5)
             botao_remover.grid(row=row_, column=11)
+
+            botao_resetSenha = self.__botaoPadrao("Reset senha", lambda: resetSenha(funcionario), corFundo="#ffca3a", corTexto='white', pady=5)
+            botao_resetSenha.grid(row=row_, column=12)
 
             self.__labels_funcionarios.append(funcionario_label)
             self.__labels_funcionarios.append(botao_remover)
