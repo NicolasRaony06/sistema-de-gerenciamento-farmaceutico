@@ -986,9 +986,12 @@ class Interface:
     def __inciarRoot(self, tamanho = "500x300"):
         try:
             self.__root.destroy()
-        except:
-            pass
+        except: pass
         self.__root = Tk()
+        try:
+            # self.__root.iconphoto(True, PhotoImage(file=r"src\interface_tkinter\img\logo.png"))
+            self.__root.iconbitmap(r"src\interface_tkinter\img\favicon.ico")
+        except: pass
         self.__root.protocol("WM_DELETE_WINDOW", self.__salvarFarmacia)
         self.__root.geometry(tamanho)
 
