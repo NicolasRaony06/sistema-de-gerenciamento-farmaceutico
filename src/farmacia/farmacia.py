@@ -14,6 +14,7 @@ class Farmacia:
         self.__clientes = []
         self.__idFuncionarios = 0
         self.__idVendas = 0
+        self.__chamados = []
         self.__logAlteracoes = []
 
     def getGerente(self):
@@ -58,10 +59,50 @@ class Farmacia:
                 return cliente
             
     def getLogAlteracoes(self, gerente):
-        '''Recebe objeto de Gerente para validação. Retorna lista de tuplas sobre alterações em Farmacia'''
+        '''Recebe objeto de Gerente para validação. Retorna lista de tuplas sobre alterações em Farmácia.'''
         validar_gerente(gerente)
-        return self.__logAlteracoes
+        logs = self.__logAlteracoes
+        return logs
+    
+    def getChamados(self, gerente):
+        '''Recebe um objeto de gerente para validação e retorna lista de chamados.'''
+        validar_gerente(gerente)
+        chamados = self.__chamados.copy()
+        return chamados
+    
+    def setChamadoStatus(self, gerente, id_chamado: int, status: str):
+        '''Recebe um objeto de gerente para validação, o id do chamado e um status (Aberto, Em processo ou Finalizado). Altera o status de um chamado.'''
+        validar_gerente(gerente)
+        if not status in self.__statusChamado:
+            raise ValueError("Valor de status deve ser 'Aberto', 'Em processo' ou 'Finalizado'")
 
+        if status == self.__statusChamado[2]:
+            raise PermissionError("Chamado já foi finalizado. Não é mais possível alterar seu status")
+
+        for chamado in self.__chamados:
+            if chamado['id'] == id_chamado:
+                chamado['status'] = status
+                return True
+
+        raise ValueError(f"Chamado com o ID {id_chamado} não existe.")
+    
+    def _criarChamado(self, funcionario, mensagem: str):
+        '''Recebe um objeto de funcionario e uma mensagem. Adiciona novo chamado em lista de chamados de farmácia com o status Aberto.'''
+        validar_funcionario(funcionario)
+        if not str(mensagem):
+            raise ValueError('Mensagem não pode estar vázia')
+        
+        self.__statusChamado = ('Aberto', 'Em processo', 'Finalizado')
+        chamado = {
+            'id':len(self.__chamados) + 1,
+            'funcionario': funcionario,
+            'data': datetime.now(),
+            'status': self.__statusChamado[0],
+            'mensagem': str(mensagem)
+        }
+
+        self.__chamados.append(chamado)
+        
     def _criarVenda(self, funcionario):
         '''Cria um objeto do tipo Venda. Adiciona objeto em Lista de Vendas e retorna seu id'''
         from src.farmacia.venda import Venda

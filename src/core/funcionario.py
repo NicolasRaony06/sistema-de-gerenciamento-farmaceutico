@@ -40,6 +40,10 @@ class Funcionario(Pessoa):
         '''Retorna True para autenticado False para não autenticado'''
         return self.__autenticado
     
+    def abrir_chamado(self, mensagem: str):
+        '''Recebe uma mensagem e abre um chamado em farmácia.'''
+        self.getFarmacia()._criarChamado(self, mensagem)
+    
     def setAutenticacao(self, id:int, senha:str):
         '''Recebe Id e senha de Funcionario e verifica se são validos. Retorna true e altera atributo privado caso dados sejam verdadeiros.'''
         if not id == self.__id: # Se o id passado não for igual ao id do funcionario
