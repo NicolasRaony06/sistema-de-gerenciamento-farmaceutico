@@ -76,11 +76,11 @@ class Farmacia:
         if not status in self.__statusChamado:
             raise ValueError("Valor de status deve ser 'Aberto', 'Em processo' ou 'Finalizado'")
 
-        if status == self.__statusChamado[2]:
-            raise PermissionError("Chamado já foi finalizado. Não é mais possível alterar seu status")
-
         for chamado in self.__chamados:
             if chamado['id'] == id_chamado:
+                if chamado['status'] == self.__statusChamado[2]:
+                    raise PermissionError("Chamado já foi finalizado. Não é mais possível alterar seu status")
+                
                 chamado['status'] = status
                 return True
 
