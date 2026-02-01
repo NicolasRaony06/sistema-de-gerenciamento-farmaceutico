@@ -570,10 +570,9 @@ class Interface:
                     produto_label = Label(self.__root, text=itemVenda)
                     produto_label.grid(row=_row, column=2, padx=(10, 0))
 
-                    botao_remover = self.__botaoPadrao("Remover", lambda: removerProduto(itemVenda))
+                    botao_remover = self.__botaoPadrao("Remover", lambda iv=itemVenda: removerProduto(iv))
                     botao_remover.grid(row=_row, column=3)
-                    self.__labels_produto.append(produto_label)
-                    self.__labels_produto.append(botao_remover)
+                    self.__labels_produto.extend([produto_label, botao_remover])
                     _row += 1
 
         def adicionarProduto():
@@ -582,7 +581,7 @@ class Interface:
             
             if campo_menu == 'Id':
                 try:
-                    produto = self.__farmacia.__estoque.consultar_produto_por_id(funcionario, int(campo_produto.get()))
+                    produto = self.__farmacia.getEstoque().consultar_produto_por_id(funcionario, int(campo_produto.get()))
                 except Exception as erro:
                     messagebox.showerror(f'Erro ao procurar produto por ID.', f'{erro}')
                     # self.registrarVenda(id_venda)
@@ -590,7 +589,7 @@ class Interface:
                 
             elif campo_menu == 'Nome':
                 try:
-                    produto = self.__farmacia.__estoque.consultar_produto_por_nome(funcionario, campo_produto.get())
+                    produto = self.__farmacia.getEstoque().consultar_produto_por_nome(funcionario, campo_produto.get())
                 except Exception as erro:
                     messagebox.showerror(f'Erro ao procurar produto por Nome.', f'{erro}')
                     # self.registrarVenda(id_venda)
