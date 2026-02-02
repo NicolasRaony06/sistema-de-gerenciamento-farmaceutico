@@ -167,7 +167,7 @@ class Interface:
                 self.__root.destroy()
                 self.interface()
 
-        self.__botaoPadrao('Registrar Farmácia', instanciar).grid(row=1, column=1)
+        self.__botaoPadrao('Registrar Farmácia', instanciar, corFundo="#51c41c").grid(row=1, column=1, pady=(10,0))
         
         self.__root.mainloop()
 
@@ -257,7 +257,7 @@ class Interface:
             self.__root.destroy()
             self.interface()
 
-        self.__botaoPadrao('Registrar Gerente', instanciar).grid(row=5, column=1)
+        self.__botaoPadrao('Registrar Gerente', instanciar, corFundo="#51c41c").grid(row=5, column=1, pady=(10,0))
 
         self.__root.mainloop()
 
@@ -332,8 +332,8 @@ class Interface:
             self.__root.destroy()
             self.interface()
 
-        self.__botaoPadrao('Registrar Atendente', instanciar).grid(row=4, column=1)
-        self.__botaoPadrao("Voltar", self.interface).grid(row=4, column=2)
+        self.__botaoPadrao('Registrar Atendente', instanciar, corFundo="#51c41c").grid(row=4, column=1, pady=(10,0))
+        self.__botaoPadrao("Voltar", self.interface, corFundo="#C2BF14").grid(row=4, column=2, pady=(10,0))
 
         self.__root.mainloop()
 
@@ -407,8 +407,8 @@ class Interface:
             self.__root.destroy()
             self.interface()
 
-        self.__botaoPadrao('Registrar Repositor', instanciar).grid(row=4, column=1)
-        self.__botaoPadrao("Voltar", self.interface).grid(row=4, column=2)
+        self.__botaoPadrao('Registrar Repositor', instanciar, corFundo="#51c41c").grid(row=4, column=1, pady=(10,0))
+        self.__botaoPadrao("Voltar", self.interface, corFundo="#C2BF14").grid(row=4, column=2, pady=(10,0))
 
         self.__root.mainloop()
 
@@ -471,8 +471,8 @@ class Interface:
             self.__root.destroy()
             self.interface()
 
-        self.__botaoPadrao('Registrar Cliente', instanciar).grid(row=4, column=1)
-        self.__botaoPadrao("Voltar", self.interface).grid(row=4, column=2)
+        self.__botaoPadrao('Registrar Cliente', instanciar, corFundo="#51c41c").grid(row=4, column=1, pady=(10,0))
+        self.__botaoPadrao("Voltar", self.interface, corFundo="#C2BF14").grid(row=4, column=2, pady=(10,0))
 
         self.__root.mainloop()
 
@@ -527,8 +527,8 @@ class Interface:
             self.__root.destroy()
             self.interface()
 
-        self.__botaoPadrao('Registrar Produto', instanciar).grid(row=4, column=1)
-        self.__botaoPadrao("Voltar", self.interface).grid(row=4, column=2)
+        self.__botaoPadrao('Registrar Produto', instanciar, corFundo="#51c41c").grid(row=4, column=1, pady=(10,0))
+        self.__botaoPadrao("Voltar", self.interface, corFundo="#C2BF14").grid(row=4, column=2, pady=(10,0))
 
         self.__root.mainloop()
 
@@ -570,7 +570,7 @@ class Interface:
                     produto_label = Label(self.__root, text=itemVenda)
                     produto_label.grid(row=_row, column=2, padx=(10, 0))
 
-                    botao_remover = self.__botaoPadrao("Remover", lambda iv=itemVenda: removerProduto(iv))
+                    botao_remover = self.__botaoPadrao("Remover", lambda iv=itemVenda: removerProduto(iv), corFundo="#ee5151")
                     botao_remover.grid(row=_row, column=3)
                     self.__labels_produto.extend([produto_label, botao_remover])
                     _row += 1
@@ -644,7 +644,7 @@ class Interface:
         Label(self.__root, text="Adicionar cliente via CPF em venda:").grid(row=1)
         cliente_cpf = Entry(self.__root, width=25, borderwidth=1)
         cliente_cpf.grid(row=2, column=0)
-        self.__botaoPadrao("Adicionar cliente", adicionarCliente, pady=4).grid(row=3, column=0, pady=10)
+        self.__botaoPadrao("Adicionar cliente", adicionarCliente, pady=4, corFundo="#7bc79b").grid(row=3, column=0, pady=10)
 
         Label(self.__root, text="Adicionar produto em venda:").grid(row=4, column=0)
         campo_produto = Entry(self.__root, width=20, borderwidth=1)
@@ -659,10 +659,10 @@ class Interface:
         campo_qtd = Entry(self.__root, width=15, borderwidth=1)
         campo_qtd.insert(0, '1')
         campo_qtd.grid(row=5, column=1, padx=5)
-        self.__botaoPadrao("Adicionar Produto", adicionarProduto, pady=4).grid(row=6, column=0, pady=10)
+        self.__botaoPadrao("Adicionar Produto", adicionarProduto, pady=4, corFundo="#7bc79b").grid(row=6, column=0, pady=10)
 
-        self.__botaoPadrao('Finalizar Venda', finalizarVenda).grid(row=9, column=0)
-        self.__botaoPadrao("Voltar", voltar).grid(row=9, column=1)
+        self.__botaoPadrao('Finalizar Venda', finalizarVenda, corFundo="#47e661").grid(row=9, column=0)
+        self.__botaoPadrao("Voltar", voltar, corFundo="#C2BF14").grid(row=9, column=1)
 
         self.__root.mainloop()
 
@@ -721,21 +721,21 @@ class Interface:
             if vendas_consulta:
                 row_ = 4
                 for venda in vendas_consulta:
-                    label_venda = Label(self.__root, text=venda)
+                    label_venda = Label(self.__root, text=venda, wraplength=580)
                     label_venda.grid(row=row_, columnspan=17, padx=(25, 10), sticky='W')
 
-                    botao_venda = self.__botaoPadrao("Ver venda", lambda v=venda: self.__showVenda(v), pady=5)
-                    botao_venda.grid(row=row_, column=14, padx=(200, 0))
+                    botao_venda = self.__botaoPadrao("Ver venda", lambda v=venda: self.__showVenda(v), pady=5,corFundo="#37c271")
+                    botao_venda.grid(row=row_, column=18)
 
                     self.__labels_venda.extend([label_venda, botao_venda])
                     row_ += 1
                 return
 
-            label_venda = Label(self.__root, text=venda_consulta)
+            label_venda = Label(self.__root, text=venda_consulta,wraplength=580)
             label_venda.grid(row=4, columnspan=17, padx=(25, 10), sticky='W')
 
-            botao_venda = self.__botaoPadrao("Ver venda", lambda v=venda_consulta: self.__showVenda(v), pady=5)
-            botao_venda.grid(row=4, column=14, padx=(200, 0))
+            botao_venda = self.__botaoPadrao("Ver venda", lambda v=venda_consulta: self.__showVenda(v), pady=5, corFundo="#37c271")
+            botao_venda.grid(row=4, column=18)
 
             self.__labels_venda.extend([label_venda, botao_venda])
 
@@ -748,19 +748,19 @@ class Interface:
         campo_consulta = Entry(self.__root, width=25, borderwidth=1)
         campo_consulta.grid(row=1, column=0, pady=(0, 20), padx=(12,0))
 
-        self.__botaoPadrao("Consultar", consultar, pady=4).grid(row=1, column=2, pady=(0, 20))
-        self.__botaoPadrao("Limpar", self.consultarVendasFarmacia, pady=4).grid(row=1, column=3, pady=(0, 20))
-        self.__botaoPadrao("Voltar", self.interface, pady=4).grid(row=1, column=4, pady=(0, 20))
+        self.__botaoPadrao("Consultar", consultar, pady=4, corFundo="#37c271").grid(row=1, column=2, pady=(0, 20))
+        self.__botaoPadrao("Limpar", self.consultarVendasFarmacia, pady=4, corFundo="#cc5450").grid(row=1, column=3, pady=(0, 20))
+        self.__botaoPadrao("Voltar", self.interface, pady=4, corFundo="#C2BF14").grid(row=1, column=4, pady=(0, 20))
 
         row_ = 4
         for venda in vendas:
-            label_venda = Label(self.__root, text=venda)
+            label_venda = Label(self.__root, text=venda, wraplength=580)
             label_venda.grid(row=row_, columnspan=17, padx=(25, 10), sticky="W")
 
-            botao_venda = self.__botaoPadrao("Ver venda", None, pady=5)
+            botao_venda = self.__botaoPadrao("Ver venda", None, pady=5, corFundo="#37c271")
             botao_venda.configure(command=lambda v=venda: self.__showVenda(v))
 
-            botao_venda.grid(row=row_, column=14, padx=(200, 0))
+            botao_venda.grid(row=row_, column=18)
 
             self.__labels_venda.extend([label_venda, botao_venda])
             row_ += 1
@@ -870,9 +870,9 @@ class Interface:
         campo_consulta = Entry(self.__root, width=25, borderwidth=1)
         campo_consulta.grid(row=1, column=0, pady=(0, 20), padx=(10, 0))
 
-        self.__botaoPadrao("Consultar", consultar, pady=4).grid(row=1, column=2, pady=(0, 20))
-        self.__botaoPadrao("Limpar", self.consultarFuncionarios, pady=4).grid(row=1, column=3, pady=(0, 20))
-        self.__botaoPadrao("Voltar", self.interface, pady=4).grid(row=1, column=4, pady=(0, 20))
+        self.__botaoPadrao("Consultar", consultar, pady=4, corFundo="#37c271").grid(row=1, column=2, pady=(0, 20))
+        self.__botaoPadrao("Limpar", self.consultarFuncionarios, pady=4, corFundo="#cc5450").grid(row=1, column=3, pady=(0, 20))
+        self.__botaoPadrao("Voltar", self.interface, pady=4, corFundo="#C2BF14").grid(row=1, column=4, pady=(0, 20), padx=(5,0))
 
         row_ = 4
         for funcionario in funcionarios:
@@ -921,38 +921,38 @@ class Interface:
                 self.__removerWidgets(produto_labels)
                 self.__removerWidgets(botoes_remover)
 
-                produto_label = Label(self.__root, text=f"{produto[0]} | Quantidade: {produto[1]}")
-                produto_label.grid(row=2, column=0, columnspan=3)
+                produto_label = Label(self.__root, text=f"{produto[0]} | Quantidade: {produto[1]}",wraplength=480)
+                produto_label.grid(row=2, column=0, columnspan=10, padx=(25, 10))
 
-                botao_editar_preco = self.__botaoPadrao("Edit Preço", lambda: self.__editarPrecoProduto(produto[0]), pady=2, padx=6, corFundo="#ffca3a", corTexto='white',)
+                botao_editar_preco = self.__botaoPadrao("Edit Preço", lambda: self.__editarPrecoProduto(produto[0]), pady=4, padx=6, corFundo="#ffca3a", corTexto='white',)
                 
                 botao_remover = self.__botaoPadrao("Remover", lambda: self.__removerProduto(produto[0].getId(), produto_label, botao_remover, botao_editar_preco), pady=4, corFundo="#ff3a3a", corTexto='white')
 
-                botao_editar_preco.grid(row=2, column=4)
-                botao_remover.grid(row=2, column=5)
+                botao_editar_preco.grid(row=2, column=11)
+                botao_remover.grid(row=2, column=12)
 
                 produto_labels.append(produto_label)
                 return
             return
 
         consulta_campo = Entry(self.__root, width=25, borderwidth=1)
-        consulta_campo.grid(row=1, column=0, columnspan=1)
+        consulta_campo.grid(row=1, column=1, columnspan=1,pady=(0, 20))
 
-        Label(self.__root, text="Consultar por:").grid(row=0, column=2)
+        Label(self.__root, text="Consultar Produto:").grid(row=0, column=1)
         opcoes_consulta = ["Id", "Nome"]
-        menu = ttk.Combobox(self.__root, values=opcoes_consulta, state="readonly")
+        menu = ttk.Combobox(self.__root, values=opcoes_consulta, state="readonly", width=10)
         menu.set("Id")
-        menu.grid(row=1, column=2)
+        menu.grid(row=1, column=2,pady=(0, 20))
 
-        self.__botaoPadrao("Consultar", consultar, pady=4).grid(row=1, column=4)
-        self.__botaoPadrao("Limpar", self.consultarEstoque, pady=4).grid(row=1, column=5)
-        self.__botaoPadrao("Voltar", self.interface, pady=4).grid(row=1, column=6)
+        self.__botaoPadrao("Consultar", consultar, pady=4, corFundo="#37c271").grid(row=1, column=4,pady=(0, 20))
+        self.__botaoPadrao("Limpar", self.consultarEstoque, pady=4, corFundo="#cc5450").grid(row=1, column=5,pady=(0, 20))
+        self.__botaoPadrao("Voltar", self.interface, pady=4, corFundo="#C2BF14").grid(row=1, column=6, padx=(5,0),pady=(0, 20))
 
         produtos = self.__farmacia.getFuncionarioPorId(self.__idFuncionarioLogado).consultar_estoque()
         row_ = 2
         for produto, qtd in produtos.items():
-            produto_label = Label(self.__root, text=f"{produto} | Quantidade: {qtd}")
-            produto_label.grid(row=row_, column=0, columnspan=3)
+            produto_label = Label(self.__root, text=f"{produto} | Quantidade: {qtd}",wraplength=480)
+            produto_label.grid(row=row_, column=0, columnspan=10, padx=(25, 10))
 
             botao_editar_preco = self.__botaoPadrao("Edit Preço",None, pady=2, padx=6, corFundo="#ffca3a", corTexto='white')
             botao_remover = self.__botaoPadrao("Remover",None, pady=2, corFundo="#ff3a3a", corTexto='white')
@@ -960,8 +960,8 @@ class Interface:
             botao_editar_preco.configure(command=lambda p=produto: self.__editarPrecoProduto(p))
             botao_remover.configure(command=lambda p=produto, pl=produto_label, br=botao_remover,bep=botao_editar_preco: self.__removerProduto(p.getId(), pl, br, bep))
 
-            botao_editar_preco.grid(row=row_, column=4)
-            botao_remover.grid(row=row_, column=5)
+            botao_editar_preco.grid(row=row_, column=11)
+            botao_remover.grid(row=row_, column=12)
 
             produto_labels.append(produto_label)
             botoes_remover.extend([botao_remover, botao_editar_preco])
@@ -1000,7 +1000,7 @@ class Interface:
         if self.__usuarioTipoGerente(messagemBox=False):
             from tkinter import scrolledtext
             Label(self.__root, text=f'Controle Farmácia:', font=('', 12)).grid(row=row_base+9, column=column_base, columnspan=2, pady=(20,5))
-            Button(self.__root, text="Excluir Farmacia", command=self.__excluirFarmacia, pady=3, padx=5, bg='red', fg='white', font=('','10','bold')).grid(row=row_base+10, column=column_base, sticky='E')
+            Button(self.__root, text="Excluir Farmacia", command=self.__excluirFarmacia, pady=3, padx=5, bg='red', fg='white', font=('','10','bold')).grid(row=row_base+10, column=column_base)
 
             Label(self.__root, text=f'Logs de Alteração:', font=('', 12)).grid(row=row_base+1, column=column_base+3, columnspan=2, pady=(20,5), padx=(20,0))
 
@@ -1017,6 +1017,8 @@ class Interface:
 
             row_ = row_base + 2
             for chamado in self.__farmacia.getGerente().consultar_chamados():
+                if chamado['status'] == 'Finalizado':
+                    continue
                 label_chamado = Label(self.__root, text=f'ID: {chamado['id']} | Status: {chamado['status']} | Funcionário: {chamado['funcionario']}', font=('', '9'), wraplength=190, justify='left')
                 label_chamado.grid(row=row_, column=column_base+5, sticky='W', padx=(0, 10))
 
@@ -1027,10 +1029,10 @@ class Interface:
         
         if self.__usuarioTipoAtendenteOuRepositor(messagemBox=False):
             Label(self.__root, text=f'Login:', font=('', 12)).grid(row=row_base+10, column=column_base, columnspan=2, pady=(20,5))
-            Button(self.__root, text="Alterar Senha", command=self.__alterarSenhaFuncionario, pady=3, padx=5, bg="#dfd118", fg='white', font=('','10','bold')).grid(row=row_base+11, column=column_base, padx=(20,0))
+            Button(self.__root, text="Alterar Senha", command=self.__alterarSenhaFuncionario, pady=3, padx=5, bg="#dfd118", fg='white', font=('','10','bold')).grid(row=row_base+11, column=column_base, padx=(0,10), sticky='E')
 
             Label(self.__root, text=f'Farmácia:', font=('', 12)).grid(row=row_base+12, column=column_base, columnspan=2, pady=(20,5))
-            Button(self.__root, text="Abrir chamado", command=self.__abrirChamado, pady=3, padx=5, bg="#4ca70f", fg='white', font=('','10','bold')).grid(row=row_base+13, column=column_base, padx=(20,0))
+            Button(self.__root, text="Abrir chamado", command=self.__abrirChamado, pady=3, padx=5, bg="#4ca70f", fg='white', font=('','10','bold')).grid(row=row_base+13, column=column_base, padx=(0,10), sticky='E')
 
         if self.__usuarioTipoAtendente(messagemBox=False):
             Label(self.__root, text=f'Comissões por vendas: R${funcionario.get_comissao()}').grid(row=row_base+9, column=column_base, sticky='W', padx=(20,0))
@@ -1046,7 +1048,7 @@ class Interface:
                 Label(self.__root, text=f'Nenhuma Venda feita ainda.').grid(row=row_base+1, column=column_base+2, sticky='W', padx=(0,0))
 
         self.__root.mainloop()
-        
+    
     def __inciarRoot(self, tamanho = "500x300"):
         try:
             self.__root.destroy()
@@ -1058,6 +1060,21 @@ class Interface:
         except: pass
         self.__root.protocol("WM_DELETE_WINDOW", self.__salvarFarmacia)
         self.__root.geometry(tamanho)
+
+        tamanho = tamanho.split('x')
+        largura_janela = tamanho[0]
+        altura_janela = tamanho[1]
+
+        self.__centralizarJanela(int(largura_janela), int(altura_janela))
+    
+    def __centralizarJanela(self, largura, altura):
+        screen_width = self.__root.winfo_screenwidth()
+        screen_height = self.__root.winfo_screenheight()
+
+        x = (screen_width // 2) - (largura // 2)
+        y = (screen_height // 2) - (altura // 2)
+
+        self.__root.geometry(f'{largura}x{altura}+{x}+{y}')
 
     def __salvarFarmacia(self):
         salvar_farmacia(self.__farmacia)
