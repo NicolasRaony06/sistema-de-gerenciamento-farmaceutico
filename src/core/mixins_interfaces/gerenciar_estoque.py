@@ -12,7 +12,7 @@ class GerenciarEstoqueMixin:
         estoque = self.getFarmacia().getEstoque()
 
         return {
-        
+        #Para cada dados do estoque pegue o produto e  quantidadee e coloque isso em um novo dicionáio
             dados["produto"]: dados["quantidade"]
             for dados in estoque.get_produtos(self).values()
         }
