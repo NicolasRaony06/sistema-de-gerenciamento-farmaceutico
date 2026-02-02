@@ -2,7 +2,7 @@
 
 Projeto acadêmico desenvolvido para a disciplina de **Programação Orientada a Objetos (POO) com Python** do curso de **Análise e Desenvolvimento de Sistemas (ADS)**.
 
-O sistema simula o funcionamento básico de uma farmácia, aplicando conceitos fundamentais de POO como **herança, encapsulamento, abstração, polimorfismo**, além de **interfaces, mixins, organização modular e testes automatizados**.
+O sistema simula o funcionamento de uma farmácia, aplicando conceitos fundamentais de POO como **herança, encapsulamento, abstração e polimorfismo**, além de utilizar **Mixins** para organização de funcionalidades e **Pickle** para persistência de dados.
 
 ---
 
@@ -15,7 +15,7 @@ Desenvolver um sistema de gerenciamento farmacêutico com foco educacional, apli
 ## 🧑‍💻 Equipe
 
 - **Nicolas Raony** – Desenvolvedor e mantenedor do repositório  
-- **Francisco Alvaro** – Desenvolvimento e apoio ([GitHub](https://github.com/rootAlvim))  
+- **Francisco Álvaro** – Desenvolvimento e apoio ([GitHub](https://github.com/rootAlvim))  
 - **Artur Fernandes** – Desenvolvimento e apoio ([GitHub](https://github.com/Aruturiz))
 
 ---
@@ -24,7 +24,6 @@ Desenvolver um sistema de gerenciamento farmacêutico com foco educacional, apli
 
 - **Python 3.10+**
 - **Tkinter** (interface gráfica)
-- **Pytest** (testes automatizados)
 - **Git & GitHub**
 - Paradigma **POO**
 
@@ -57,7 +56,8 @@ sistema-de-gerenciamento-farmaceutico/
 │   ├── farmacia/
 │   │   ├── farmacia.py
 │   │   ├── estoque.py
-│   │   └── produto.py
+│   │   ├── produto.py
+│   │   └── venda.py
 │   │
 │   └── utils/
 │       ├── gerador_id.py
@@ -105,44 +105,36 @@ sistema-de-gerenciamento-farmaceutico/
   - Clientes
   - Vendas
 
-### 🖥️ Interface Gráfica (Tkinter)
-- Implementação gráfica simples utilizando **Tkinter**
-- Interface localizada em `src/core/interface.py`
-- Permite interação básica com o sistema sem uso do terminal
+## 🖥️ Interface e Funcionalidades (Tkinter)
+
+A interface gráfica, localizada em `src/interface_tkinter/`, é o ponto central de interação com o sistema.
+
+### 🔑 Autenticação e Primeiro Acesso
+- **Sistema de Login:** Acesso restrito baseado em credenciais de funcionários cadastrados.
+- **Configuração Inicial:** O sistema identifica se não há dados salvos e solicita o cadastro do primeiro Gerente para administrar a farmácia.
+
+### 🛡️ Gestão e Governança (Painel do Gerente)
+O Gerente possui permissões administrativas exclusivas dentro da interface:
+- **Logs do Sistema:** Visualização de um histórico detalhado de alterações críticas e movimentações na farmácia.
+- **Sistema de Chamados:** Gestão de solicitações e alertas enviados por Atendentes e Repositores diretamente pela interface.
+- **Gestão de Pessoal:** Controle total sobre o cadastro, exclusão e bonificação de funcionários.
+
+### 📦 Persistência de Dados com Pickle
+Para evitar a perda de dados ao fechar a aplicação, utilizamos o módulo **Pickle**. 
+- Toda a estrutura do objeto `Farmacia` (que compõe estoque, vendas, clientes e funcionários) é serializada.
+- Ao iniciar o `main.py`, o sistema verifica a existência de um arquivo de dados para restaurar o estado anterior da aplicação.
 
 ---
 
 ## 🧠 Conceitos de POO Aplicados
 
 ✔️ **Encapsulamento**  
-✔️ **Herança** (`Pessoa → Funcionario → Gerente / Atendente`)  
+✔️ **Herança** (`Pessoa → Funcionario → Gerente / Atendente / Repositor`)  
 ✔️ **Polimorfismo**  
-✔️ **Abstração** (classe abstrata `Pessoa` e interfaces)  
-✔️ **Interfaces** (`FuncionalidadesGerente`)  
-✔️ **Mixins** (`GerenciarEstoqueMixin`, `GerenciarVendaMixin`)  
+✔️ **Abstração:** Uso de classes e métodos abstratos para padronizar o comportamento das entidades.                                                                                       ✔️ **Mixins:** Implementação de `GerenciarEstoqueMixin` e `GerenciarVendaMixin` para modularizar comportamentos específicos.   
 ✔️ **Composição** (Farmácia → Estoque, Funcionários, Vendas)  
 ✔️ **Separação de responsabilidades**  
 ✔️ **Organização modular do projeto**
-
----
-
-## 🧪 Testes Automatizados
-
-O projeto utiliza **Pytest** para garantir a confiabilidade das regras de negócio.
-
-### Executar os testes:
-
-```bash
-pytest
-```
-
-Os testes cobrem:
-- Produtos
-- Estoque
-- Funcionários
-- Gerente
-- Vendas
-- Farmácia
 
 ---
 
@@ -172,7 +164,7 @@ pip install -r requirements.txt
 
 5. Execute o sistema:
 ```bash
-python src/main.py
+python -m src.interface_tkinter.main
 ```
 
 ---
@@ -180,11 +172,9 @@ python src/main.py
 ## 🚀 Melhorias Futuras
 
 - Evolução da interface gráfica
-- Persistência em banco de dados
-- Relatórios de vendas
-- Sistema de login com níveis de acesso
-- API REST
-- Documentação automática
+- Banco de Dados: Transição do Pickle para um banco de dados relacional (SQLite/PostgreSQL).
+- Testes Automatizados: Refatoração e implementação de suíte de testes completa utilizando Pytest para garantir a cobertura das regras de negócio.
+- Relatórios: Geração de arquivos PDF com o fechamento de vendas e inventário de estoque.
 
 ---
 
