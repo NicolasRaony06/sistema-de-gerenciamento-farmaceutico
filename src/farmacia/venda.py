@@ -95,13 +95,13 @@ class Venda:
 
         for itemVenda in self.__itens:   
             if int(id_produto) == itemVenda.id:
-                if not quantidade:
-                    self.__itens.remove(itemVenda)
+                if not quantidade: #qntd none
+                    self.__itens.remove(itemVenda) # ewmove todo o objeto
                     return True
-                
+                #se passei qntd
                 if quantidade > itemVenda.quantidade:
                     raise ValueError("Quantidade excede valor disponível para remoção")
-                
+                #atualiza item venda com quantidade retirada
                 itemVenda.quantidade = itemVenda.quantidade - quantidade
                 return True
         raise ValueError("Produto não está adicionado em venda")
