@@ -5,7 +5,6 @@ from src.utils.gerador_id import getIdProduto
 from src.utils.validacoes import validar_cliente, validar_produto, validar_funcionario
 
 class Venda:
-    allIds = []
     def __init__(self, id : int, funcionario):
         self.__id = id
         self.__funcionario = funcionario
