@@ -126,7 +126,6 @@ if __name__ == "__main__":
                     # 3. Verifica se logou e chama o menu correspondente
                     if usuario_logado.get_isautenticado():
                         if isinstance(usuario_logado,Gerente):
-    
                             iniciar_login_gerente(usuario_logado, Farmacia)
                         elif isinstance(usuario_logado,Atendente):
                             iniciar_login_atendente(usuario_logado,Farmacia)
