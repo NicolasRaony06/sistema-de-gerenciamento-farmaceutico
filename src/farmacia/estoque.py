@@ -60,7 +60,7 @@ class Estoque:
 
             if str(produto.nome).lower() == str(nome).lower():
                 return produto,quantidade #Tupla: (Nome,Quantidade) mudei para (Obj, quantidade)
-        
+        #lower transforma a string em minuscula
         # return False fica redundante
 
     def produto_disponibilidade(self, id_produto, quantidade):
