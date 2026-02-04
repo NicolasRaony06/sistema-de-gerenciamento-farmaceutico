@@ -13,33 +13,38 @@ from src.ui.menu_gerente import iniciar_login_gerente
 from src.ui.menu_repositor import iniciar_login_repositor
 #Funcao login
 def login(farmacia):
+    
     limpar_tela()
     print("=" * 40)
     print("                 LOGIN     ")
     print("=" * 40)
-    try:
+    while True:
+        try:
             id_login = int(input("Digite seu Id: "))
-    except ValueError:
+        except ValueError:
             print(f"{VERMELHO}Id inválido{RESET}")
-            return None
-    senha_login = input("Digite sua senha para login: ")
-    usuario_encontrado = None
+            continue
+        senha_login = input("Digite sua senha para login: ")
+        usuario_encontrado = None
 
     # Verifica se é o Gerente Principal (Global)
-    if gerente.get_id() == id_login:
-        usuario_encontrado = gerente
+        if gerente.get_id() == id_login:
+            usuario_encontrado = gerente
     # Se não, busca na lista de funcionários da farmácia
-    else:
-        usuario_encontrado = farmacia.getFuncionarioPorId(id_login)
+        else:
+            usuario_encontrado = farmacia.getFuncionarioPorId(id_login)
 
-    if not usuario_encontrado:
+        if not usuario_encontrado:
             print(f"{VERMELHO}Usuário não encontrado!{RESET}")
-            return None
-    usuario_encontrado.setAutenticacao(id_login,senha_login)
-    if not usuario_encontrado.get_isautenticado():
+            continue 
+        try:
+            usuario_encontrado.setAutenticacao(id_login,senha_login)
+        except ValueError:
             print(f"{VERMELHO}Senha incorreta{RESET}")
-            return None
-    return usuario_encontrado
+            continue
+        
+            
+        return usuario_encontrado
 
 Farmacia = Farmacia('HOLANDA')
 # ---------------- PONTO DE ENTRADA ----------------
@@ -107,7 +112,7 @@ if __name__ == "__main__":
                     nome, cpf, data_nascimento, salario, senha
                 )
 
-                print(f"\n Gerente cadastrado com sucesso, com Id:{gerente.get_id()}")
+                print(f"{VERDE}Gerente cadastrado com sucesso, com Id:{gerente.get_id()}{RESET}")
                 time.sleep(1)
                     
                 while True: 
@@ -127,7 +132,6 @@ if __name__ == "__main__":
                             iniciar_login_atendente(usuario_logado,Farmacia)
                         elif isinstance(usuario_logado,Repositor):
                             iniciar_login_repositor(usuario_logado,Farmacia)
-                        print(f"\n{AZUL}Logout realizado. Retornando ao login...{RESET}")
-                        time.sleep(1)
+                        
                     else:
                         print(f"{VERMELHO}Erro de autenticação.{RESET}")

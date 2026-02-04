@@ -38,6 +38,8 @@ class Estoque:
                 
                 del produtos_estoque[id]
                 return True 
+        raise ValueError("Produto não encontrado no estoque")
+
      
     def consultar_produto_por_id(self, funcionario, id_produto):
         '''Recebe um objeto de funcionario para validação, id do produto e caso produto exista, retorna o seu objeto e quantidade em estoque.'''

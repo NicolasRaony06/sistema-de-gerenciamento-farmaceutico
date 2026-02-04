@@ -28,10 +28,10 @@ class GerenciarEstoqueMixin:
         estoque = self.getFarmacia()._estoque
         return estoque.consultar_produto_por_nome(self, nome)
     
-    def subTotal_estoque(self, estoque):
+    def subTotal_estoque(self):
         '''Retorna o subtotal do estoque.'''
         from decimal import Decimal
-        
+        estoque = self.getFarmacia()._estoque
         produtos_estoque = estoque.get_produtos(self)
         total = 0
         for dados in produtos_estoque.values():

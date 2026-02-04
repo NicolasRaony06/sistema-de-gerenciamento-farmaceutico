@@ -47,11 +47,11 @@ def iniciar_login_gerente(gerente,farmacia):
             try:
                 id_produto = int(input("Digite o Id do Produto: "))
                 gerente.remover_produto(id_produto)
-
-            except ValueError:
-                print(f"{VERMELHO}O ID deve ser um número inteiro.{RESET}")
+            except Exception as erro:
+                print(f"{VERMELHO}{erro}{RESET}")
                 input("\nPressione Enter para tentar novamente...")
-                continue
+                return
+           
             else:
                 print(f"{VERDE}Produto removido com sucesso!{RESET}")
                 input("\nPressione Enter para voltar ao menu...")
@@ -192,6 +192,8 @@ def iniciar_login_gerente(gerente,farmacia):
             else:
                 if not gerente.getFarmacia().getFuncionarioPorId(id_funcionario):
                     print(f"{AMARELO}Funcionário não encontrado.{RESET}")
+                elif id_funcionario == gerente.get_id():
+                    print(f"{VERMELHO}Não e possivel se auto excluir{RESET}")
                 else:
                     funcionario = gerente.getFarmacia().getFuncionarioPorId(id_funcionario)
                     gerente.excluir_funcionario(funcionario)
@@ -290,7 +292,7 @@ def iniciar_login_gerente(gerente,farmacia):
         print(f'| {'ID':<15} | {gerente.get_id():<23} |')
         print(f'| {'NOME':<15} | {gerente.nome:<23} |')
         print(f'| {'CPF':<15} | {gerente.get_cpf():<23} |')
-        print(f'| {'NASCIMENTO':<15} | {gerente.get_data_nascimento():}               |')
+        print(f'| {'NASCIMENTO':<15} | {gerente.get_data_nascimento():}              |')
         print(f'| {'SALÁRIO':<15} | {gerente.get_salario_base():<23} |')
         print(f'| {'Nº DE VENDAS ':<15} | {len(gerente.getVendasRealizadas()):<23} |')
         print(f"{VERDE}-{RESET}" * 45)
@@ -320,9 +322,8 @@ def iniciar_login_gerente(gerente,farmacia):
         print(f"\n{AMARELO}------------------  CAIXA  -------------------{RESET}")
         print(" [9]  Vender Produto")
         print(" [10] Informações Gerais")
-        print(" [11] Logout")
         print("-" * 40)
-        print(f" {VERMELHO}[0]  Sair{RESET}")
+        print(f" {VERMELHO}[0]   Logout{RESET}")
         print("-" * 40)
 
     while gerente.get_isautenticado():
@@ -350,14 +351,12 @@ def iniciar_login_gerente(gerente,farmacia):
                 vender_produto()
         elif opcao == '10':
                 info_gerais()
-        elif opcao == '11':
-            gerente.desautenticar()
-            break
         elif opcao == '0':
-                gerente.desautenticar()
                 print("\nSaindo do menu... Até logo!")
+                time.sleep(1)
+                gerente.desautenticar()
                 break
         else:
-                print("\nOpção inválida!")
                 time.sleep(1)
-
+                print("\nOpção inválida!")
+                

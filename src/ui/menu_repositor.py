@@ -58,31 +58,9 @@ def iniciar_login_repositor(repositor,farmacia):
                 input("\nPressione Enter para voltar ao menu...")
                 break
 
-    def alterar_preco_produto():
-        while True:
-            limpar_tela()
-            print("\n--- ALTERAR PREÇO ---")
-            try:
-                id_produto = int(input("Digite o ID do produto: "))
-                novo_preco = Decimal(input("Digite o novo preço: "))     
-            except ValueError:
-                print(f"{VERMELHO}O ID deve ser um número inteiro.{RESET}")
-                input("\nPressione Enter para tentar novamente..")
-                continue
-            except InvalidOperation:
-                print(f"{VERMELHO}Preço inválido{RESET}")
-                input("\nPressione Enter para tentar novamente...")
-                continue
-            else:
-                if not repositor.consultar_produto_por_id(id_produto):
-                    print(f"{AMARELO}Produto não encontrado{RESET}")
-                else:
-                    produto , _  = repositor.consultar_produto_por_id(id_produto)
-                    repositor.alterar_preco_produto(produto, novo_preco)
-
-                    print(f'{VERDE}Preço alterado com sucesso! {RESET}')
-            input("\nPressione Enter para voltar ao menu...")
-            break
+    def subtotal():
+        print(f"{VERDE}SubTotal do Estoque: {repositor.subTotal_estoque()}{RESET}")
+        input("\nPressione Enter para voltar ao menu...")
 
 
     def listar_produtos():
@@ -157,19 +135,18 @@ def iniciar_login_repositor(repositor,farmacia):
 
         limpar_tela()
         print(f"{AZUL}=" * 40)
-        print(f"{NEGRITO}           Bem Vindo  {repositor.nome} {RESET}")
+        print(f"{NEGRITO}    Bem Vindo {repositor.nome} {RESET}")
         print(f"{AZUL}=" * 40 + f"{RESET}")
 
         print(f"\n{AMARELO}---------------    PRODUTOS  -----------------{RESET}")
         print(" [1]  Cadastrar Produto")
         print(" [2]  Remover Produto")
-        print(" [3]  Alterar Preço")
+        print(" [3]  SubTotal do Estoque")
         print(" [4]  Consultar Estoque")
         print(" [5]  Buscar Produto")
-        print(" [6] Informações Gerais")
-        print(" [7] Logout")
+        print(" [6]  Informações Gerais")
         print("-" * 40)
-        print(f" {VERMELHO}[0]  Sair{RESET}")
+        print(f" {VERMELHO}[0]  Logout{RESET}")
         print("-" * 40)
 
     while repositor.get_isautenticado():
@@ -182,19 +159,17 @@ def iniciar_login_repositor(repositor,farmacia):
         elif opcao == '2':
                 remover_produto()
         elif opcao == '3':
-                alterar_preco_produto()
+                subtotal()
         elif opcao == '4':
                 listar_produtos()
         elif opcao == '5':
                 buscar_produto()
         elif opcao == '6':
                 info_gerais()
-        elif opcao == '7':
-                repositor.desautenticar()
-                break
         elif opcao == '0':
-                repositor.desautenticar()
                 print("\nSaindo do menu... Até logo!")
+                time.sleep(1)
+                repositor.desautenticar()
                 break
         else:
                 print("\nOpção inválida!")
