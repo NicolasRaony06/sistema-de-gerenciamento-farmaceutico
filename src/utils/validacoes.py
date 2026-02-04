@@ -25,7 +25,8 @@ def validar_cliente(cliente):
     from src.core.cliente import Cliente
     if not isinstance(cliente, Cliente):
         raise TypeError('Método deve receber um objeto do tipo Cliente')
-    
+        #TYPE: TIPO DE DADO ERRADO
+        #VALUE: VALOR PASSADO ERRADO
 def validar_produto(produto):
     from src.farmacia.produto import Produto
     if not isinstance(produto, Produto):
